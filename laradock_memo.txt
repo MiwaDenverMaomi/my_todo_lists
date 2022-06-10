@@ -1,0 +1,79 @@
+＜参考サイト＞
+https://reffect.co.jp/laravel/laradock-laravel-macos#Laravel
+https://qiita.com/mineaki27th/items/ad774a41b7a0a68761bd->こっちのほうがいいかも
+
+１.localhostでLaravelのトップ画面が表示されず、権限に関するエラーが出た場合：
+php-fpmフォルダ->Dockerfile->これに以下の文章を追記する。
+
+【解決策】
+RUN apt-get update && apt-get install -y libmcrypt-dev mysql-client && docker-php-ext-install mcrypt pdo_mysql
+ADD . /var/www
+RUN chown -R laradock:laradock /var/www　※laradock:laradockをwww-data:www-dataにしてもOKだった。よくわからん、、、。
+＜参考＞
+https://www.edureka.co/community/86899/stream-storage-laravel-opened-failed-stream-permission-denied
+https://qiita.com/HiMinmeg/items/b1d0e6c717891e35674f
+
+2.The stream or file "/var/www/storage/logs/laravel.log" could not be opened in append mode: failed to open stream: Permission denied The exception occurred while attempting to log: The stream or file "/var/www/storage/logs/laravel.log" could not be opened in append mode: failed to open stream: Permission denied The exception occurred while attempting to log: require(/var/www/routes/web.php): failed to open stream: No such file or directory Context: {"exception":{}} Context: {"exception":{}}
+というエラーが出た。
+【解決策】
+docker内でchown $USER:laradock storage
+
+＜参考＞
+https://www.codegrepper.com/code-examples/shell/laravel.log%22+could+not+be+opened+in+append+mode%3A+failed+to+open+stream%3A+Permission+denied
+
+3.tscコマンドが効かない
+コンテナ内で./node_modules/.bin/tsc --initとするとOK
+
+4.The mix-manifext not foundエラーが出る
+C:\Users\Miwa\React\portfolio\laradock_2\bucket_list_materialui\app\Providers＞AppServiceProvider.php
+で以下を記述
+   public function boot()
+    {
+       $this->app->bind('path.public', function() {
+       return base_path().'/public/';
+    });
+    }
+
+5. npm run watchすると@material/uiが見つからないと言われる
+->  "moduleResolution": "node"をts.configに追記。
+※ts関連のエラーが続くようなので、最終形態のts.configを参照すべし。
+->"include": [
+  "src/**/*"
+]を追記※場所に注意
+
+6.material uiを使っている場合、@material/coreと@mui/materialは共存できないので注意。
+7.@mui/stylesは使えない模様。->makeStylesが使えないので、const classes={}普通にオブジェクトで指定した。
+8.コンパイルエラーがmixで出なくても、ブラウザコンソールでjsのエラーがあれば、正常にブラウザに表示されないので注意。コンソール上のエラーも解決すべし。
+
+gitへのアップロード
+1.laradockと同階層に.gitignoreを作成した。テンプレは以下を使用。これを使用してPUSHしたところ、プロジェクトのあるフォルダだけが
+pushされた。
+＜.gitignoreテンプレ＞ｄ
+.idea
+/logs
+/data
+.env
+/.project
+.docker-sync
+/jenkins/jenkins_home
+
+/logstash/pipeline/*.conf
+/logstash/config/pipelines.yml
+
+/nginx/ssl/*.crt
+/nginx/ssl/*.key
+/nginx/ssl/*.csr
+
+/apache2/ssl/*.crt
+/apache2/ssl/*.key
+/apache2/ssl/*.csr
+/apache2/ssl/*.org
+
+/.devcontainer/*
+!/.devcontainer/devcontainer.example.json
+!/.devcontainer/docker-compose.extend-example.yml
+
+docker-compose.custom.yml
+
+.DS_Store
+
