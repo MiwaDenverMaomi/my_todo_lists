@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateBucketListsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name',50)->nullable();
-            $table->string('email',50)->unique();
-            $table->string('password',50);
-            $table->rememberToken();
+        Schema::create('bucket_lists', function (Blueprint $table) {
+            $table-> id();
+            $table->foreignId('author_id')->constrained('users');
+            $table->string('bucket_list_item',1000);
+            $table->boolean('is_done');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('bucket_lists');
     }
 }
