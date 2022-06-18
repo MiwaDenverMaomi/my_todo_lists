@@ -17,9 +17,9 @@ class CreateProfilesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('photo')->nullable();
-            $table->string('question_1',1000)->nullable();
-            $table->string('question_2',1000)->nullable();
-            $table->string('question_3',1000)->nullable();
+            $table->string('question_1',500)->nullable();
+            $table->string('question_2',500)->nullable();
+            $table->string('question_3',500)->nullable();
             $table->timestamps();
         });
     }

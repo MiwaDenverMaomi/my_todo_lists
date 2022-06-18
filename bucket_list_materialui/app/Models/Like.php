@@ -9,4 +9,8 @@ class Like extends Model
 {
     use HasFactory;
     protected $fillable=['from_user','to_user'];
+
+    public function countLikes(){
+        return $this->count();
+    }
 }

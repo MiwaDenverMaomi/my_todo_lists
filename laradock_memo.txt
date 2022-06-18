@@ -77,3 +77,36 @@ docker-compose.custom.yml
 
 .DS_Store
 
+<Laravel>
+・logが出ないときは、権限を変更。
+chmod -R 777　なんちゃら
+
+・画面作成以降のながれ
+①画面作成（react,react-router）
+②表示してみる
+③MysqlでDB作成。mysql は、docker-compose exec mysql bash
+④mysql -default -secretでmysqlに入る。※ユーザー、パスワードを変更しようと思ったが、ダメだった。
+⑤DB名はデフォルトでdefaultとなっている。※変更のしかたは不明
+⑥マイグレーション、フェイカーを使ってseeder。
+⑦laravelでルーティング作成
+⑧ルーティングに沿ってコントローラ作成
+⑨テスト
+
+・web.php　laravel 8ではこういう書き方をするらしい
+Route::prefix('/bucket-lists')->group(function(){
+    Route::get('/',[BucketListController::class,'index'])->name('bucket-lists.index');
+
+・withでhasmanyやhasoneを取得したとき、必要なカラムのみ取得するにはどうしたらいいか
+
+・$bucket_lists=User::with([
+            'profile','bucket_list','likes'
+            // 'profile:id,photo,question_1,question_2,question_3',
+            // 'bucket_list:id,bucket_list_item,is_done,updated_at',
+            // 'likes:id,from_user'
+            ])->select('id','name','email')->get();
+とりあえず、上のような書き方に落ち着いたが、必要なカラムのみ抽出できていない。
+
+.更新のあった人のリストを最新に持っていきたい。
+・入力ないpostrequestでのfrom_user,to_userなどのバリデーションは必要か
+
+

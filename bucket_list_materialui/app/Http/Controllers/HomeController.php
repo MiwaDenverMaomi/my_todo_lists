@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Bucket_list;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $bucket_lists=Bucket_list::with(['likes'])->get();
+        \Log::info('home index');
+        \Log::debug($bucket_lists);
         return view('home');
     }
 }
