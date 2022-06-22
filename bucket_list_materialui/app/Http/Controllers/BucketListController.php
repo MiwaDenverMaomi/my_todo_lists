@@ -44,7 +44,6 @@ class BucketListController extends Controller
         \Log::info('BucketListController store');
         $bucket_listRequest->merge([
             'user_id'=>Auth::id(),
-            'bucket_list_item'=>$bucket_listRequest
         ]);
         $buckt_list_item=Bucket_list::create($bucket_listRequest->all());
         $bucket_list_item?response()->json($bucket_list_item,201):response()->json([],500);

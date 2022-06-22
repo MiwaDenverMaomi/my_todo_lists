@@ -9,9 +9,9 @@ use App\Models\User;
 class Bucket_list extends Model
 {
     use HasFactory;
-    protected $fillable=['author_id','bucket_list_item','is_done'];
+    protected $fillable=['user_id','bucket_list_item','is_done'];
 
     public function user(){
-        return $this->belongsTo(User::class,'id','author_id');
+        return $this->belongsTo(User::class,'id','user_id');
     }
 }

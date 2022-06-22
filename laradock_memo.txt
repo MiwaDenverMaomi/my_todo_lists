@@ -108,5 +108,61 @@ Route::prefix('/bucket-lists')->group(function(){
 
 .更新のあった人のリストを最新に持っていきたい。
 ・入力ないpostrequestでのfrom_user,to_userなどのバリデーションは必要か
+・laradock＋laravelでテスト用DBを作成する。
+参考：https://qiita.com/yyy752/items/2252b26a2b1e03943ac2
+①.envから.env.testingを作成。
+APP_ENV=local
+↓
+APP_ENV=test
+
+APP_KEY= //空にしておく
+
+//接続したいテスト用DBの情報を記述
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=test_db
+DB_USERNAME=root
+DB_PASSWORD=?????
+
+②php artisan config:cache
+③mysql -u root //ログイン
+create database test_db名;　//データベース作成※ここで権限のエラーが出たら、exit->mysql -u root -p ->rootでログインする
 
 
+④phpunit.xmlの設定変更※この辺もっと良い設定方法があるけど分からなかった。https://www.youtube.com/watch?v=Un3MAWph64Mを参照。
+（DB_DATABASEがなければdatabase.sqliteが読まれる設定？ちょっと分からない。）
+次にphpunit.xmlを開き、APP_ENVの値をtestingに変更します。
+
+phpunit.xml
+<php>
+    <env name="APP_ENV" value="testing" force="true"/>
+    <env name="DB_CONNECTION" value="mysql"/>
+    <env name="BCRYPT_ROUNDS" value="4"/>
+    <env name="CACHE_DRIVER" value="array"/>
+    <env name="MAIL_DRIVER" value="array"/>
+    <env name="QUEUE_CONNECTION" value="sync"/>
+    <env name="SESSION_DRIVER" value="array"/>
+</php>
+
+⑤アプリケーションキーの設定
+最後にコマンドを実行して.env.testingに新規でアプリケーションキーを設定します。
+※これをしないと.envのAPP_KEYを参照してしまい、本番用のDBのデータが全部消えるので注意してください！
+
+
+php artisan key:generate --env=testing
+⑤ここで、 GRANT USAGE ON *.* TO `default`@`localhost`                  |
+| GRANT ALL PRIVILEGES ON `test_db`.* TO `defという権限エラーが出たので、
+
+⑥mysql でrootでログインし、grant all on test_db.* to 'defaut';としたが、
+ダメだった。仕方ないので、grant all on *.* on 'default'とし、全権限をdefaultに与えた。
+->test_dbアクセスやdd()で変数を参照できるようになった。
+
+⑦テスト用データベースはphp artisan db:seed --database=test_dbで作ってもよいが、これだと設定を変える必要がある。	
+use RefreshDatabase;を使うと、すべてのDBのデータが消えるので注意。
+
+⑦php artisan migrate --env=testingすると、テスト用ＤＢにテーブルが作成される。これでdb:seedもする。
+
+⑧php artinsa refresh　データベース削除、再作成
+
+⑨phpunit.xmlの <server name="DB_CONNECTION" value="sqlite"/>のコメントマークを外すとテスト用DBで RefreshDatabaseしても本番用のDBのデータは消えない。
