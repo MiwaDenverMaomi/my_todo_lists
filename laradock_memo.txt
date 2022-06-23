@@ -166,3 +166,54 @@ use RefreshDatabase;を使うと、すべてのDBのデータが消えるので�
 ⑧php artinsa refresh　データベース削除、再作成
 
 ⑨phpunit.xmlの <server name="DB_CONNECTION" value="sqlite"/>のコメントマークを外すとテスト用DBで RefreshDatabaseしても本番用のDBのデータは消えない。
+
+☆laravel メール機能の実装
+
+1)make:controller XXX（ContactController）でメールを飛ばすコントローラーを作る
+・バリデーション、バリデーションOKならメールするsend()し、['message'=>'OK','error'=>[]]を返す。（NGなら
+['message'=>'NG','error'=>['message was not sent']]など。）
+ここで、2)で作成したmailクラスをnewし、sendで送る
+
+Mail::to($request->input('email'))->send(new Inquiry());
+        Mail::to($request->config('MAIL_FROM_ADDRESS'))->send(new Respond());
+        return response()->json([
+            'result'=>'Email was sent!',
+            'errors'=>[]
+        ]);
+
+2)make:mail XXX(Inqury)　で何のメールテンプレートにviewし、どんなsubjectで,どんな変数をテンプレート送るかを
+定める。
+  public function build()
+    {
+        return $this->view('emails.inquiry')
+        ->subject('Thank you for your inquiry.')
+        ->with(['data'=>$this->data]);
+    }
+
+3)emails>inquiry.blade.phpを作成し、
+メールのテンプレートを作る。
+
+★ $user_data=User::with(['profile','likes'])->select('id','name','email')->find($user->id)->toArray();だと
+１人分のデータが取れるが
+ $user_data=User::with(['profile','likes'])->select('id','name','email')->get()->toArray();だと全員のデータが取れてしまう。
+
+★setUp():void関数を使おう。ここに記述した処理は、
+すべてのテストに適用される。
+protected $user;
+protected setUp():void{
+parent::setUp();//必要
+User::factory(1)->create();
+$user=User::find(4);
+}
+
+★requestをnewしたとき
+queryにキーと値を追加したい場合は、
+merge(['key'=>'sss'])を使う。$request->user_id=3とかやってはダメ。何も入らない。
+
+★テストはひとつひとつ実行しないとエラーになるのか？
+
+★複数create
+  $data=[  ['from_user'=>5,'to_user'=>4],  ['from_user'=>8,'to_user'=>4]];
+        $result=Like::insert($data);
+
+★複合キー制約（カラムの組み合わせを指定することで、重複データの作成を避ける。）を利用しよう。

@@ -57,4 +57,14 @@ class User extends Authenticatable
     public function bucket_lists(){
         return $this->hasMany(Bucket_list::class,'user_id');
     }
+
+    public function is_liked_by_auth(){
+        $likes=self::likes()->get()->toArray();
+        for($i=0;$i<count($likes);$i++){
+            if($likes[$i]['from_user']===4){
+                return true;
+            }
+        }
+        return false;
+    }
 }
