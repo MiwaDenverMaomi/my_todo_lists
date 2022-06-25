@@ -1,4 +1,5 @@
-interface bucketListItem {
+//state
+interface BucketListItem {
   id: string,
   description: string,
   isDone: boolean,
@@ -19,8 +20,30 @@ export type UserData = {
     idealLife?: string,
     lottery?: string
   }
-}
+};
+
 export type Data = {
   userData: UserData,
-  bucketListData: bucketListItem[]
-}
+  bucketListData: BucketListItem[]
+};
+
+export type UserState = {
+  users: UserData[],
+  user:UserData
+};
+
+export type BucketListState = {
+  allbucketLists: Data[],
+  singleBucketList:Data
+};
+
+//actions
+export type FetchAllBucketListsPayload = Data[];
+export type fetchAllBucketLists = {
+  type: 'string',
+  payload: FetchAllBucketListsPayload
+};
+
+export type RootStates = UserState & BucketListState;
+
+export type RootActions=FetchAllBucketListsPayload

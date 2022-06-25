@@ -19,6 +19,7 @@ class CreateBucketListsTable extends Migration
             $table->string('bucket_list_item',1000);
             $table->boolean('is_done');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -21,6 +21,7 @@ class CreateProfilesTable extends Migration
             $table->string('question_2',500)->nullable();
             $table->string('question_3',500)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

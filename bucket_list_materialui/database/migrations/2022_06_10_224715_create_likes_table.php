@@ -22,6 +22,7 @@ class CreateLikesTable extends Migration
             $table->unsignedBigInteger('to_user');
             $table->foreign('to_user')->references('id')->on('users');
             $table->timestamps();
+            $table->unique(['from_user','to_user']);
         });
     }
 

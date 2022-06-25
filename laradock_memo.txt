@@ -217,3 +217,25 @@ merge(['key'=>'sss'])を使う。$request->user_id=3とかやってはダメ。�
         $result=Like::insert($data);
 
 ★複合キー制約（カラムの組み合わせを指定することで、重複データの作成を避ける。）を利用しよう。
+★ Syntax error or access violation: 1061 Duplicate key name 'favorites_from_user_to_user_unique' (SQ
+  L: alter table `favorites` add unique `favorites_from_user_to_user_unique`(`from_user`, `to_user`))
+$table->unique(['from_user','to_user]);で複合ユニーク制約が追加されるはずだが、このエラーが出てしまった。
+よくわからないので、いろいろ試した結果、成功したのは以下２つ。
+１）favoritesテーブルを新規作成するファイルで$table->unique(['from_user','to_user]);と記述。
+２）追加のマイグレーションファイルで制約を追加する場合は、$table->unique(['from_user','to_user],'favorites_from_user_to_user')
+その後、以下のコマンドで確認する。（show columns文ではないので注意。）
+MySQL [test_db]> show index from favorites;
+
+★gmailからメールを送る設定：
+gmailアカウント->security->sign up->パスワード必要あれば変更->app passwordsを作成
+これを含めた情報を以下のように貼り付ける
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com//ここ必要
+MAIL_PORT=1025
+MAIL_USERNAME=hoge@example.com // メールアドレス
+MAIL_PASSWORD=hogehogehoge     // アプリパスワード
+MAIL_FROM_ADDRESS=hoge@example.com  // MAIL_USERNAMEと同じ
+MAIL_FROM_NAME=Laravel便り // メール送信元名
+
+★responseの中にはcontentというプロパティがあり、そこにエラーメッセージなどを入れることができる。
