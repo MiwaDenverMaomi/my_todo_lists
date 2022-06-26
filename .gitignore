@@ -5,10 +5,10 @@
 /.idea
 Homestead.json
 Homestead.yaml
-.env
-.env.testing
-config/mail.php
-config/database.php
+# .env
+# .env.testing
+# config/mail.php
+# config/database.php
 *.swp
 *.swn
 *.swo
