@@ -1,13 +1,19 @@
-import React, { useState } from 'react'
+import React,{useEffect} from 'react';
+import { connect } from 'react-redux';
+import { Dispatch,Action } from 'redux';
+import { ThunkDispatch} from 'redux-thunk';
 import { Box, Container, Grid, Typography, Card, CardContent, CardMedia, Avatar, List, ListItem, Checkbox, ListItemText, CardActions, Button, IconButton, formLabelClasses, styled, alpha, Modal } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { pink, grey } from '@mui/material/colors';
 import ListModal from './ListModal';
 import { Data, UserData } from '../types/types';
 import ProfileModal from './ProfileModal';
+// import { RootStates, RootActions } from '../types/types';
+// import { fetchAllBucketLists as fetchAllBucketListsAction} from '../actions/BucketListActions'
 
 
-const AllBucketLists = () => {
+
+const AllBucketLists = (/*props:Props*/) => {
   const data: Data[] = [
     {
       userData: {
@@ -142,7 +148,10 @@ const AllBucketLists = () => {
       setProfileModalOpen(false);
     }
   }
-
+  // useEffect(() => {
+  //   console.log('useEffect');
+  //   props.fetchAllBucketLists();
+  // });
   return (
     <Box sx={{ minHeight: '100vh' }}>
       <ListModal
@@ -159,7 +168,7 @@ const AllBucketLists = () => {
         <Typography variant="h5" color="textPrimary" align="center" gutterBottom>All Bucket Lists</Typography>
         <Box sx={{ marginBottom: 1 }}>
           <Grid container spacing={4}>
-            {data.map((item, index) => (
+            {data.map((item:Data, index:number) => (
               <Grid item key={item.userData.userId} xs={12} sm={6} md={4}>
                 <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <Box  >
@@ -200,5 +209,28 @@ const AllBucketLists = () => {
 
   )
 }
+// type DispatchToProps =any
+// type MapStateToProps = {
+//   allBucketLists:Data[]
+// }
+// type mapDispatchToProps = {
+//   fetchAllBucketLists: ThunkDispatch<Data[],undefined,Action<string>>
+// }
+// type Props = MapStateToProps & DispatchToProps;
 
-export default AllBucketLists
+// const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => {
+//   return {
+//     fetchAllBucketLists: dispatch(fetchAllBucketListsAction)
+//   };
+
+// };
+
+// const mapStateToProps = (state: RootStates) => {
+//   return {
+//     allBucketLists: state.allBucketLists
+//   };
+
+// };
+
+// export default connect(mapStateToProps, mapDispatchToProps)(AllBucketLists);
+export default AllBucketLists;

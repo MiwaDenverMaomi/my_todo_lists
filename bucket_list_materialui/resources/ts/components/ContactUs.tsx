@@ -6,11 +6,11 @@ import { Typography, TextField, FormGroup, Box, Container, Button, TextareaAutos
 
 const ContactUs = () => {
 
+  console.log('contactus');
   return (
     <Box sx={{ marginBottom: 4 }} component="main">
       <Container maxWidth="xs" sx={{ paddingTop: 10, paddingRight: 4, paddingLeft: 4, paddingBottom: 6 }}>
         <Typography variant="h5" align="center" color="textPrimary" gutterBottom>
-          Contact Us
         </Typography>
         <Container sx={{ pt: 4, pb: 2 }}>
           <Typography variant="h6" color="textPrimary" align="center" gutterBottom>

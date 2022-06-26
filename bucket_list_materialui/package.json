@@ -4,7 +4,7 @@
         "dev": "npm run development",
         "development": "mix",
         "watch": "mix watch",
-        "watch-poll": "mix watch -- --watch-options-poll=1000",
+        "watch-poll": "mix watch -- --watch-options-poll=5000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production"
@@ -34,6 +34,11 @@
     "dependencies": {
         "@emotion/react": "^11.9.0",
         "@emotion/styled": "^11.8.1",
-        "@mui/material": "^5.8.3"
+        "@mui/material": "^5.8.3",
+        "@reduxjs/toolkit": "^1.8.2",
+        "@types/react-redux": "^7.1.24",
+        "react-redux": "^8.0.2",
+        "redux": "^4.2.0"
     }
+
 }

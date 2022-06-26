@@ -16,6 +16,7 @@ import Notification from './components/Notification';
 import { messages } from './consts/messages';
 
 const Router = () => {
+  console.log('router');
   const isLogin = false;//Reduxアクセスし、直接authのログインステータスを取得する。
   return (
     <Routes>

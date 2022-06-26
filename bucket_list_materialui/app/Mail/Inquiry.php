@@ -29,6 +29,7 @@ class Inquiry extends Mailable
      */
     public function build()
     {
+        dump($this->data);
         return $this->view('emails.inquiry')
         ->subject('Thank you for your inquiry.')
         ->with(['data'=>$this->data]);

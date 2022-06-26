@@ -33,17 +33,18 @@ export type UserState = {
 };
 
 export type BucketListState = {
-  allbucketLists: Data[],
+  allBucketLists: Data[],
   singleBucketList:Data
 };
 
 //actions
-export type FetchAllBucketListsPayload = Data[];
-export type fetchAllBucketLists = {
-  type: 'string',
-  payload: FetchAllBucketListsPayload
-};
+// export type FetchAllBucketListsPayload = Data[];
 
-export type RootStates = UserState & BucketListState;
+// export type FetchAllBucketLists = {
+//   type: string,
+//   payload: FetchAllBucketListsPayload
+// };
 
-export type RootActions=FetchAllBucketListsPayload
+// export type RootStates = UserState & BucketListState;
+
+// export type RootActions = FetchAllBucketLists;

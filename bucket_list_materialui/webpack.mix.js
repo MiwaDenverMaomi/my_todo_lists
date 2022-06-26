@@ -10,7 +10,12 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-mix.webpackConfig({ stats: { children: true, }, });
+mix.webpackConfig({
+    stats: { children: true, },
+    watchOptions: {
+        ignored: /node_modules/
+    }
+});
 mix.ts('resources/ts/index.tsx', 'public/js')
     .react()
     // .sass('resources/sass/app.scss', 'public/css');

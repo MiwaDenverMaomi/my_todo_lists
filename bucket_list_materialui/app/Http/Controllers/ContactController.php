@@ -28,7 +28,7 @@ class ContactController extends Controller
         }
         //success
         Mail::to($request->input('email'))->send(new Inquiry());
-        Mail::to($request->config('MAIL_FROM_ADDRESS'))->send(new Respond());
+        Mail::to($request->config('MAIL_FROM_ADDRESS'))->send(new Notice());
         return response()->json([
             'result'=>'Email was sent!',
             'errors'=>[]

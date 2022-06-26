@@ -33,8 +33,8 @@ Route::prefix('user')->group(function(){
     Route::delete('/delete-like/{like}',[UserController::class,'deleteLike'])->name('user.deleteLike');
 });
 
+Route::get('/',[BucketListController::class,'index'])->name('bucket-lists.index');
 Route::prefix('bucket-lists')->group(function(){
-    Route::get('/',[BucketListController::class,'index'])->name('bucket-lists.index');
     Route::get('/{user}',[BucketListController::class,'show'])->name('bucket-lists.show');
     Route::post('/create',[BucketListController::class,'create'])->name('bucket-lists.create');
     Route::post('/store-like',[BucketListController::class,'storeLike'])->name('bucket-lists.store-like');
@@ -53,10 +53,9 @@ Route::prefix('bucket-lists')->group(function(){
 
 // Route::post('/logout','LogoutController@logout');
 
-Route::get('/', function () {
+ Route::get('/{any}',function(){
     return view('index');
-})->where(['all'=>'.*']);
-
+  } )->where(['any'=>'.*']);
 // Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -239,3 +239,12 @@ MAIL_FROM_ADDRESS=hoge@example.com  // MAIL_USERNAMEと同じ
 MAIL_FROM_NAME=Laravel便り // メール送信元名
 
 ★responseの中にはcontentというプロパティがあり、そこにエラーメッセージなどを入れることができる。
+★mix watchが遅すぎるので、https://qiita.com/suzu6/items/8a8246015e5b45e210c4を参照にしてみた。
+docker-compose.ymlに４行追記した。
+
+・キャメロンに聞きたいこと
+〇メールが届かない
+〇全リストを作成の場合、
+いきなり全データを取得するか？
+〇Laravel側でデータを加工するか？それともreact側で加工？
+〇mix run watchがとても遅い。

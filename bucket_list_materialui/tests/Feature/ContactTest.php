@@ -39,8 +39,10 @@ class ContactTest extends TestCase
         }
         //success
         dump($request->input('email'));
+        dump(config('mail.mailers.smtp.username'));
         Mail::to($request->input('email'))->send(new Inquiry($request));
-        Mail::to(config('MAIL_FROM_ADDRESS'))->send(new Notice($request));
+
+        Mail::to(config('mail.mailers.smtp.username'))->send(new Notice($request));
          return dump(response()->json([
             'result'=>'Email was sent!',
             'errors'=>[]

@@ -32658,6 +32658,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var App = function App() {
+  console.log('app');
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     id: "wrapper"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_mui_material__WEBPACK_IMPORTED_MODULE_4__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_MenuBar__WEBPACK_IMPORTED_MODULE_2__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Router__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_components_Footer__WEBPACK_IMPORTED_MODULE_1__["default"], null));
@@ -32706,6 +32707,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Router = function Router() {
+  console.log('router');
   var isLogin = false; //Reduxアクセスし、直接authのログインステータスを取得する。
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__.Routes, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_12__.Route, {
@@ -32806,9 +32808,12 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+ // import { RootStates, RootActions } from '../types/types';
+// import { fetchAllBucketLists as fetchAllBucketListsAction} from '../actions/BucketListActions'
 
-
-var AllBucketLists = function AllBucketLists() {
+var AllBucketLists = function
+  /*props:Props*/
+AllBucketLists() {
   var data = [{
     userData: {
       userId: '1',
@@ -32947,7 +32952,11 @@ var AllBucketLists = function AllBucketLists() {
     if (profileModalOpen) {
       setProfileModalOpen(false);
     }
-  };
+  }; // useEffect(() => {
+  //   console.log('useEffect');
+  //   props.fetchAllBucketLists();
+  // });
+
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_mui_material__WEBPACK_IMPORTED_MODULE_3__["default"], {
     sx: {
@@ -33049,7 +33058,26 @@ var AllBucketLists = function AllBucketLists() {
       src: "https://picsum.photos/200/300"
     })))));
   })))));
-};
+}; // type DispatchToProps =any
+// type MapStateToProps = {
+//   allBucketLists:Data[]
+// }
+// type mapDispatchToProps = {
+//   fetchAllBucketLists: ThunkDispatch<Data[],undefined,Action<string>>
+// }
+// type Props = MapStateToProps & DispatchToProps;
+// const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => {
+//   return {
+//     fetchAllBucketLists: dispatch(fetchAllBucketListsAction)
+//   };
+// };
+// const mapStateToProps = (state: RootStates) => {
+//   return {
+//     allBucketLists: state.allBucketLists
+//   };
+// };
+// export default connect(mapStateToProps, mapDispatchToProps)(AllBucketLists);
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AllBucketLists);
 
@@ -33154,6 +33182,7 @@ __webpack_require__.r(__webpack_exports__);
  // import { useStyles } from '../styles/styles';
 
 var ContactUs = function ContactUs() {
+  console.log('contactus');
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_mui_material__WEBPACK_IMPORTED_MODULE_1__["default"], {
     sx: {
       marginBottom: 4
@@ -33172,7 +33201,7 @@ var ContactUs = function ContactUs() {
     align: "center",
     color: "textPrimary",
     gutterBottom: true
-  }, "Contact Us"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], {
     sx: {
       pt: 4,
       pb: 2
@@ -72582,6 +72611,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+ // import reducers from './reducers';
+// const middlewares = [thunk];
+// const composeReduxDevToolsEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+// interface ExtendedWindow extends Window {
+//   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+// }
+// const store = createStore(
+//   reducers,
+//   applyMiddleware(thunk)
+//   // composeReduxDevToolsEnhancers(applyMiddleware(...middlewares))
+// );
+// declare var window: ExtendedWindow;
 
 react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.StrictMode, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.BrowserRouter, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_App__WEBPACK_IMPORTED_MODULE_3__["default"], null))), document.querySelector('#root'));
 })();

@@ -28,6 +28,8 @@ class Notice extends Mailable
      */
     public function build()
     {
+        dump('Notice');
+        dump($this->data);
         return $this->view('emails.notice')
         ->subject('We have got inquiry.')
         ->with(['data'=>$this->data]);

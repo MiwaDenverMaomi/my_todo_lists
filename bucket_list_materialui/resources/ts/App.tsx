@@ -4,10 +4,8 @@ import Footer from './components/Footer';
 import MenuBar from './components/MenuBar';
 import Router from './Router';
 
-
-
-
 const App = () => {
+  console.log('app');
   return (
     <div id="wrapper">
       <CssBaseline />

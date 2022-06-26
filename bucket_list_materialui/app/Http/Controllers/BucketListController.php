@@ -14,10 +14,7 @@ class BucketListController extends Controller
     public function index(){
         \Log::info('BucketLists index');
         $bucket_lists=User::with([
-            'profile','bucket_lists','likes',
-            // 'profile:id,photo,question_1,question_2,question_3',
-            // 'bucket_lists:id,bucket_list_item,is_done,updated_at',
-            // 'likes:id,from_user'
+            'profile','bucket_lists','likes'
            ])->select('id','name','email')->get()->toArray();
         \Log::debug($bucket_lists);
         for($i=0;$i<count($bucket_lists);$i++){
@@ -45,8 +42,8 @@ class BucketListController extends Controller
         $bucket_listRequest->merge([
             'user_id'=>Auth::id(),
         ]);
-        $buckt_list_item=Bucket_list::create($bucket_listRequest->all());
-        $bucket_list_item?response()->json($bucket_list_item,201):response()->json([],500);
+        // $buckt_list_item=Bucket_list::create($bucket_listRequest->all());
+        $bucket_list_item===true?response()->json($bucket_list_item,201):response()->json([],500);
     }
 
     public function storeLike(LikeRequest $likeRequest){
