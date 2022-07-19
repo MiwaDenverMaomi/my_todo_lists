@@ -248,3 +248,51 @@ docker-compose.ymlに４行追記した。
 いきなり全データを取得するか？
 〇Laravel側でデータを加工するか？それともreact側で加工？
 〇mix run watchがとても遅い。
+
+★エイリアス登録のしかた
+1)app/Library/Func.phpを作成、そこにファンクション記述
+namespace App\Library
+class Func extends Facade
+{
+
+  public function convertEmptyValueToNull($val){
+    $result=(strlen($value)>0)?$val:null;
+    return $result;
+  }
+
+}
+2)エイリアスに登録
+config/app.php
+'ailias'に
+'Func'=> App\Library\Func::class,
+※namespaceと実際のフォルダ構成が一致していないとエイリアスが動かないので注意。
+
+★laravel の認証用トークンとcsrfトークンは別ものらしい。
+認証用トークンは、ログイン時に使う。csrfトークンは、フォーム送信時に使う。
+"POST"、"PUT"、"PATCH"、"DELETE" HTMLフォームを定義するときはいつでも、CSRF保護ミドルウェアがリクエストを検証できるように、フォームに非表示のCSRF_tokenフィールドを含める必要があります。
+
+★サンクタムのしくみ
+①API認証②SPA認証がある。
+API認証の流れ：
+データベースにトークン保存用の単一のテーブル（personal_access_tokens）を作成する（※マイグレーションファイルは前述のコマンド実行時に作成済み）
+ユーザーがログインに成功した時にトークンを発行（トークンはランダムの40桁の文字列をsha256のハッシュアルゴリズムでハッシュ化したもの）
+発行したトークンをpersonal_access_tokensテーブルに保存
+発行したトークンをユーザーに知らせる
+トークン認証が必要なルーティングには->middleware('auth:sanctum')を定義する
+リクエストが来た時にミドルウェアでリクエスト中のAuthorizationヘッダーに設定されたトークンとデータベースのトークンの値を照合しユーザーを識別する（トークンがそもそもない場合、一致するトークンがない場合は401エラーを返す）
+トークンの照合に成功したユーザーは->middleware('auth:sanctum')内のルーティング処理を続行する
+->SPAではセキュリティ上使用すべきではない。（ローカルストレージから盗まれたら終わりだから）
+
+SPA認証の流れ：
+config/sanctum.phpにLaravelセッションクッキーを使用して「ステートフル」な認証を維持するドメインを定義する
+apiミドルウェアグループにsactumミドルウェアを追加する。→SPAからのリクエストをLaravelのセッションクッキーを使って認証できるようにする＆サードパーティまたはモバイルアプリケーションからのリクエストをAPIトークンを使用して認証できるようにする。
+SPAのログインページで初めに/sanctum/csrf-cookieにリクエストを送信して、アプリケーションのCSRF保護を初期化する。（この処理でLaravelは現在のCSRFトークンを含むXSRF-TOKENクッキーをセットする）
+ログイン成功後、Laravelがクライアントにセッションクッキーを発行し、後続の処理はこのセッションクッキーを介して自動的に認証される。（ログイン、後続の処理でのリクエスト時にはCSRF保護の初期化に発行されたXSRF-TOKENクッキーの値をX-XSRF-TOKENヘッダで送信する限り、後続のリクエストは自動的にCSRF保護が行える）
+セッションの期限切れになった状態で認証が必要なAPIエンドポイントにリクエストすると401 or 419エラーを返す。（SPAでログインページにリダイレクトさせる）
+->クッキーを使っている。
+
+注意：
+★C:\Users\Miwa\React\portfolio\laradock_2\bucket_list_materialui\app\Http\Middleware\VerifyCSRFToken
+後で、    protected $except = [
+            '*',//delete later
+    ];を削除する。今回はPOSTSMANテスト用のためここに追記した。

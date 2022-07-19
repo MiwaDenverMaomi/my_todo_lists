@@ -21,8 +21,7 @@ class BucketListController extends Controller
             $bucket_lists[$i]['countLikes']=count($bucket_lists[$i]['likes']);
         }
         \Log::debug($bucket_lists);
-        return $bucket_lists?response()->json($bucket_lists,201)
-        :response()->json([],500);
+        return view('allBucketLists')->with('bucket_lists',$bucket_lists);
     }
 
     /**

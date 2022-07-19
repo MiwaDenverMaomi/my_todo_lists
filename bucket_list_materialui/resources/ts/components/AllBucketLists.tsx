@@ -8,124 +8,124 @@ import { pink, grey } from '@mui/material/colors';
 import ListModal from './ListModal';
 import { Data, UserData } from '../types/types';
 import ProfileModal from './ProfileModal';
-// import { RootStates, RootActions } from '../types/types';
-// import { fetchAllBucketLists as fetchAllBucketListsAction} from '../actions/BucketListActions'
+import { RootStates, RootActions } from '../types/types';
+import { fetchAllBucketLists} from '../actions/BucketListActions'
 
 
 
-const AllBucketLists = (/*props:Props*/) => {
-  const data: Data[] = [
-    {
-      userData: {
-        userId: '1',
-        name: '',
-        photo: '#',
-        alt: 'Aria',
-        comment: 'abcdef',
-        good: 5000,
-        isGoodByAuth: false,
-        notes: {
-          motto: 'sssssssssssssssssssssssssssss',
-          idealLife: 'aaaaaaaaaaaaaaaaaa',
-          lottery: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-        }
+const AllBucketLists = ({fetchAllBucketLists,allBucketLists}:Props) => {
+  // const data: Data[] = [
+  //   {
+  //     userData: {
+  //       userId: '1',
+  //       name: '',
+  //       photo: '#',
+  //       alt: 'Aria',
+  //       comment: 'abcdef',
+  //       good: 5000,
+  //       isGoodByAuth: false,
+  //       notes: {
+  //         motto: 'sssssssssssssssssssssssssssss',
+  //         idealLife: 'aaaaaaaaaaaaaaaaaa',
+  //         lottery: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+  //       }
 
-      },
-      bucketListData: [
-        {
-          id: '1',
-          description: 'xxssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssx',
-          isDone: false,
-          updatedAt: '2022/02/10',
-          createdAt: '2022/02/10'
-        },
-        {
-          id: '2',
-          description: 'xxssssssssssssssssssssssssssssssssssssx',
-          isDone: true,
-          updatedAt: '2022/02/10',
-          createdAt: '2022/02/10'
-        },
-        {
-          id: '3',
-          description: 'xxssssssssssssssssssssssssssssssssssssx',
-          isDone: false,
-          updatedAt: '2022/02/10',
-          createdAt: '2022/02/10'
-        }
-        ,
-        {
-          id: '4',
-          description: 'xxssssssssssssssssssssssssssssssssssssx',
-          isDone: true,
-          updatedAt: '2022/02/10',
-          createdAt: '2022/02/10'
-        }
-      ]
-    },
-    {
-      userData: {
-        userId: '2',
-        name: 'Aika',
-        photo: '#',
-        alt: 'Aria',
-        comment: 'abcdef',
-        good: 5000,
-        isGoodByAuth: true,
-      },
-      bucketListData: [{
-        id: '2',
-        description: 'xxx',
-        isDone: true,
-        updatedAt: '2022/02/10',
-        createdAt: '2022/02/10'
-      }]
-    },
-    {
-      userData: {
-        userId: '3',
-        name: 'Akari',
-        photo: '#',
-        alt: 'Aria',
-        comment: 'abcdef',
-        good: 5000,
-        isGoodByAuth: false,
-      },
-      bucketListData: [{
-        id: '3',
-        description: 'xxx',
-        isDone: true,
-        updatedAt: '2022/02/10',
-        createdAt: '2022/02/10'
-      }]
-    },
-    {
-      userData: {
-        userId: '4',
-        name: 'Akatsuki',
-        photo: '#',
-        alt: 'Akatsuki',
-        comment: 'abcdef',
-        good: 5000,
-        isGoodByAuth: false,
-      },
-      bucketListData: [
-        {
-          id: '4',
-          description: 'xxx',
-          isDone: true,
-          updatedAt: '2022/02/10',
-          createdAt: '2022/02/10'
-        },
-        {
-          id: '5',
-          description: 'xxx',
-          isDone: true,
-          updatedAt: '2022/02/10',
-          createdAt: '2022/02/10'
-        }]
-    }
-  ];
+  //     },
+  //     bucketListData: [
+  //       {
+  //         id: '1',
+  //         description: 'xxssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssx',
+  //         isDone: false,
+  //         updatedAt: '2022/02/10',
+  //         createdAt: '2022/02/10'
+  //       },
+  //       {
+  //         id: '2',
+  //         description: 'xxssssssssssssssssssssssssssssssssssssx',
+  //         isDone: true,
+  //         updatedAt: '2022/02/10',
+  //         createdAt: '2022/02/10'
+  //       },
+  //       {
+  //         id: '3',
+  //         description: 'xxssssssssssssssssssssssssssssssssssssx',
+  //         isDone: false,
+  //         updatedAt: '2022/02/10',
+  //         createdAt: '2022/02/10'
+  //       }
+  //       ,
+  //       {
+  //         id: '4',
+  //         description: 'xxssssssssssssssssssssssssssssssssssssx',
+  //         isDone: true,
+  //         updatedAt: '2022/02/10',
+  //         createdAt: '2022/02/10'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     userData: {
+  //       userId: '2',
+  //       name: 'Aika',
+  //       photo: '#',
+  //       alt: 'Aria',
+  //       comment: 'abcdef',
+  //       good: 5000,
+  //       isGoodByAuth: true,
+  //     },
+  //     bucketListData: [{
+  //       id: '2',
+  //       description: 'xxx',
+  //       isDone: true,
+  //       updatedAt: '2022/02/10',
+  //       createdAt: '2022/02/10'
+  //     }]
+  //   },
+  //   {
+  //     userData: {
+  //       userId: '3',
+  //       name: 'Akari',
+  //       photo: '#',
+  //       alt: 'Aria',
+  //       comment: 'abcdef',
+  //       good: 5000,
+  //       isGoodByAuth: false,
+  //     },
+  //     bucketListData: [{
+  //       id: '3',
+  //       description: 'xxx',
+  //       isDone: true,
+  //       updatedAt: '2022/02/10',
+  //       createdAt: '2022/02/10'
+  //     }]
+  //   },
+  //   {
+  //     userData: {
+  //       userId: '4',
+  //       name: 'Akatsuki',
+  //       photo: '#',
+  //       alt: 'Akatsuki',
+  //       comment: 'abcdef',
+  //       good: 5000,
+  //       isGoodByAuth: false,
+  //     },
+  //     bucketListData: [
+  //       {
+  //         id: '4',
+  //         description: 'xxx',
+  //         isDone: true,
+  //         updatedAt: '2022/02/10',
+  //         createdAt: '2022/02/10'
+  //       },
+  //       {
+  //         id: '5',
+  //         description: 'xxx',
+  //         isDone: true,
+  //         updatedAt: '2022/02/10',
+  //         createdAt: '2022/02/10'
+  //       }]
+  //   }
+  // ];
   const [listModalOpen, setListModalOpen] = React.useState<boolean>(false);
   const [listModalData, setListModalData] = React.useState<Data | null>(null);
   const [profileModalOpen, setProfileModalOpen] = React.useState<boolean>(false);
@@ -148,10 +148,10 @@ const AllBucketLists = (/*props:Props*/) => {
       setProfileModalOpen(false);
     }
   }
-  // useEffect(() => {
-  //   console.log('useEffect');
-  //   props.fetchAllBucketLists();
-  // });
+  useEffect(() => {
+    console.log('useEffect');
+    fetchAllBucketLists();
+  });
   return (
     <Box sx={{ minHeight: '100vh' }}>
       <ListModal
@@ -168,7 +168,7 @@ const AllBucketLists = (/*props:Props*/) => {
         <Typography variant="h5" color="textPrimary" align="center" gutterBottom>All Bucket Lists</Typography>
         <Box sx={{ marginBottom: 1 }}>
           <Grid container spacing={4}>
-            {data.map((item:Data, index:number) => (
+            {allBucketLists.map((item:Data, index:number) => (
               <Grid item key={item.userData.userId} xs={12} sm={6} md={4}>
                 <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <Box  >
@@ -209,28 +209,27 @@ const AllBucketLists = (/*props:Props*/) => {
 
   )
 }
-// type DispatchToProps =any
-// type MapStateToProps = {
-//   allBucketLists:Data[]
-// }
-// type mapDispatchToProps = {
-//   fetchAllBucketLists: ThunkDispatch<Data[],undefined,Action<string>>
-// }
-// type Props = MapStateToProps & DispatchToProps;
+type DispatchToProps =any
+type MapStateToProps = {
+  allBucketLists:Data[]
+}
+type mapDispatchToProps = {
+  fetchAllBucketLists: ThunkDispatch<Data[],undefined,Action<string>>
+}
+type Props = MapStateToProps & DispatchToProps;
 
-// const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => {
-//   return {
-//     fetchAllBucketLists: dispatch(fetchAllBucketListsAction)
-//   };
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => {
+  return {
+    fetchAllBucketLists: dispatch(fetchAllBucketLists())
+  };
 
-// };
+};
 
-// const mapStateToProps = (state: RootStates) => {
-//   return {
-//     allBucketLists: state.allBucketLists
-//   };
+const mapStateToProps = (state: RootStates) => {
+  return {
+    allBucketLists: state.allBucketLists
+  };
 
-// };
+};
 
-// export default connect(mapStateToProps, mapDispatchToProps)(AllBucketLists);
-export default AllBucketLists;
+export default connect(mapStateToProps, mapDispatchToProps)(AllBucketLists);

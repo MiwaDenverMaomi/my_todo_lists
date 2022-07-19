@@ -6,27 +6,33 @@ import { createStore, applyMiddleware,compose } from '@reduxjs/toolkit';
 import ReactDOM from 'react-dom';
 import './css/index.css';
 import App from './App';
-// import reducers from './reducers';
+import reducers from './reducers';
 
-// const middlewares = [thunk];
-// const composeReduxDevToolsEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-// interface ExtendedWindow extends Window {
-//   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
-// }
-// const store = createStore(
-//   reducers,
-//   applyMiddleware(thunk)
-//   // composeReduxDevToolsEnhancers(applyMiddleware(...middlewares))
-// );
+interface ExtendedWindow extends Window {
+  __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+}
 
-// declare var window: ExtendedWindow;
+declare var window: ExtendedWindow;
+
+const composeReduxDevToolsEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const middlewares = [thunk];
+
+
+const store = createStore(
+  reducers,
+  composeReduxDevToolsEnhancers(applyMiddleware(...middlewares))
+  // composeReduxDevToolsEnhancers(applyMiddleware(...middlewares))
+);
+
+
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <Provider store={store}> */}
+    <Provider store={store}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    {/* </Provider> */}
+    </Provider>
   </React.StrictMode>,
   document.querySelector('#root'));

@@ -13,11 +13,12 @@ use Validator;
 
 class ContactTest extends TestCase
 {
-    const RULES=['name' => 'required|string|max:50',
+    protected $RULES=['name' => 'required|string|max:50',
         'title'=> 'required|string|max:100',
-        'email' => 'required|email|max:255',
+        'email' => 'required|email|max:50',
         'comment'=> 'required|max:1000',
     ];
+
     /**
      * A basic feature test example.
      *
@@ -28,11 +29,11 @@ class ContactTest extends TestCase
         $request=new Request();
         $request->merge(['name'=>'zaza','title'=>'toiawase','email'=>'miwamurata08@gmail.com','comment'=>'test']);
         //validation
-        $validator=Validator::make($request->all(),self::RULES);
+        $validator=Validator::make($request->all(),$this->RULES);
 
         //fail
         if($validator->fails()){
-           return dump(response()->json([
+           return (response()->json([
                 'result'=>false,
                 'errors'=>$validator->errors()
             ]));
@@ -43,7 +44,7 @@ class ContactTest extends TestCase
         Mail::to($request->input('email'))->send(new Inquiry($request));
 
         Mail::to(config('mail.mailers.smtp.username'))->send(new Notice($request));
-         return dump(response()->json([
+         return (response()->json([
             'result'=>'Email was sent!',
             'errors'=>[]
         ]));

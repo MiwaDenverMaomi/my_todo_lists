@@ -5,6 +5,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BucketListController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LoginController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +19,9 @@ use App\Http\Controllers\ContactController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::post('/register',[RegisterController::class,'register'])->name('register.register');
+Route::post('/login',[LoginController::class,'login'])->name('login.login');
+Route::post('/logout',[LoginController::class,'logout'])->name('login.logout');
 
 Route::prefix('contact')->group(function(){
     // Route::get('/','ContactController@index');
@@ -46,16 +52,10 @@ Route::prefix('bucket-lists')->group(function(){
     Route::delete('/{bucket_list}',[BucketListController::class,'delete'])->name('bucket-lists.delete');
 });
 
-// Route::group(['prefix'=>'login'],function(){
-//     Route::get('/','LoginController@index');
-//     Route::post('/','LoginController@store');
-// });
 
-// Route::post('/logout','LogoutController@logout');
-
- Route::get('/{any}',function(){
-    return view('index');
-  } )->where(['any'=>'.*']);
+//  Route::get('{all}',function(){
+//     return view('index');
+//   } )->where(['all'=>'.*']);
 // Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

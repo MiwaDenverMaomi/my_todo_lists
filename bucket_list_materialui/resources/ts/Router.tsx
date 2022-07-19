@@ -17,10 +17,10 @@ import { messages } from './consts/messages';
 
 const Router = () => {
   console.log('router');
-  const isLogin = false;//Reduxアクセスし、直接authのログインステータスを取得する。
+  const isLogin = true;//Reduxアクセスし、直接authのログインステータスを取得する。
   return (
     <Routes>
-      <Route path="/" element={<AllBucketLists />}></Route>
+      <Route path="/" element={<AllBucketLists />} />
       <Route path="/login" element={isLogin ? <Navigate to={"/"} /> : <Login />}></Route>
       <Route path="user/my-bucket-list" element={isLogin ? <MyBucketList /> : <Navigate to={"/"} />}></Route>
       <Route path="user/my-favorite" element={isLogin ? <MyFavorite /> : <Navigate to={"/"} />}></Route>
