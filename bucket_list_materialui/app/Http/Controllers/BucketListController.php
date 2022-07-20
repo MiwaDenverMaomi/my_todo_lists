@@ -100,10 +100,10 @@ class BucketListController extends Controller
 
 
 	}
-	public function deleteBucketList(Bucket_list $bucket_list){
+	public function delete(Bucket_list $bucket_list){
 		\Log::info('deleteBucketList');
-
-        $bucket_list->delete();
+        $user_auth_id=2;//auth::id()
+		$bucket_list->delete();
 
 		$user_data=User::with(['profile','bucket_lists','likes'])->find($user_auth_id)->toArray();
 		$user_data['countLikes']=count($user_data['likes']);

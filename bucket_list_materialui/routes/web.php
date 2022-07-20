@@ -49,7 +49,7 @@ Route::prefix('todo-list')->group(function(){
     Route::delete('/delete-favorite/{favorite}',[BucketListController::class,'deleteFavorite'])->name('bucket-lists.delete-favorite');
     Route::patch('/bucket-list-item/{bucket_list}',[BucketListController::class,'updateBucketListItem'])->name('bucket-lists.bucket-list-item');
     Route::patch('/is-done/{bucket_list}',[BucketListController::class,'updateIsDone'])->name('bucket-lists.is-done');
-    Route::post('/{bucket_list}',[BucketListController::class,'delete'])->name('bucket-lists.delete');
+    Route::get('/delete/{bucket_list}',[BucketListController::class,'delete'])->name('bucket-lists.delete');
 });
 
 
