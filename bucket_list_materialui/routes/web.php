@@ -40,8 +40,8 @@ Route::prefix('user')->group(function(){
 });
 
 Route::get('/',[BucketListController::class,'index'])->name('bucket-lists.index');
-Route::prefix('bucket-lists')->group(function(){
-    Route::get('/{user}',[BucketListController::class,'show'])->name('bucket-lists.show');
+Route::prefix('todo-list')->group(function(){
+    Route::get('/show/{user}',[BucketListController::class,'show'])->name('bucket-lists.show');
     Route::post('/create',[BucketListController::class,'create'])->name('bucket-lists.create');
     Route::post('/store-like',[BucketListController::class,'storeLike'])->name('bucket-lists.store-like');
     Route::delete('/delete-like/{like}',[BucketListController::class,'deleteLike'])->name('bucket-lists.delete-like');
@@ -49,7 +49,7 @@ Route::prefix('bucket-lists')->group(function(){
     Route::delete('/delete-favorite/{favorite}',[BucketListController::class,'deleteFavorite'])->name('bucket-lists.delete-favorite');
     Route::patch('/bucket-list-item/{bucket_list}',[BucketListController::class,'updateBucketListItem'])->name('bucket-lists.bucket-list-item');
     Route::patch('/is-done/{bucket_list}',[BucketListController::class,'updateIsDone'])->name('bucket-lists.is-done');
-    Route::delete('/{bucket_list}',[BucketListController::class,'delete'])->name('bucket-lists.delete');
+    Route::post('/{bucket_list}',[BucketListController::class,'delete'])->name('bucket-lists.delete');
 });
 
 

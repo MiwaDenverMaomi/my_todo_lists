@@ -16,6 +16,6 @@ mix.webpackConfig({
         ignored: /node_modules/
     }
 });
-mix.ts('resources/ts/index.tsx', 'public/js')
-    .react()
-    // .sass('resources/sass/app.scss', 'public/css');
+// mix.ts('resources/ts/index.tsx', 'public/js')
+//     .react()
+mix.sass('resources/sass/app.scss', 'public/css');

@@ -10,9 +10,14 @@ class UserController extends Controller
 {
     public function index(User $user){
         \Log::info('user/index');
-        $user=User::with(['profile','likes'])->find($user->id)->get()->toArray();
-        $user['countLikes']=count($user['likes']);
-       return  $user?response()->json($user,201):response()->json([],500);
+        // $user=User::with(['profile','likes'])->find($user->id)->get()->toArray();
+        $user_data=User::with(['profile','likes','bucket_lists'])->select('id','name','email')->find($user->id)->toArray();
+        \Log::debug($user);
+        $is_liked_by_auth=$user->is_liked_by_auth();
+        $user_data['countLikes']=count($user_data['likes']);
+        $user_data['is_liked_by_auth']=$is_liked_by_auth;
+        \Log::debug($user_data);
+       return  view('list_user')->with(['user_data'=>$user_data]);
     }
 
     public function editProfile(UserRequest $userRequest,User $user){

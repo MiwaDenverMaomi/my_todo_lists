@@ -1,5 +1,4 @@
-
-
+@extends('layouts.app')
 @section('header')
   <header>
     <div class="px-3 py-2 text-bg-dark">
