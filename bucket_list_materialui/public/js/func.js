@@ -10,16 +10,34 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "onHandleIsDone": () => (/* binding */ onHandleIsDone)
+/* harmony export */   "onChangeTitle": () => (/* binding */ onChangeTitle),
+/* harmony export */   "onHandleEditMode": () => (/* binding */ onHandleEditMode),
+/* harmony export */   "onHandleIsDone": () => (/* binding */ onHandleIsDone),
+/* harmony export */   "onSubmitTitle": () => (/* binding */ onSubmitTitle)
 /* harmony export */ });
 var onHandleIsDone = function onHandleIsDone($todo_id, route) {
   console.log('onHandleIsDone');
   console.log($todo_id);
-  console.log(route);
   document.querySelector("#check_todo_id").value = $todo_id;
-  document.querySelector("#todo_form").action = "{{ route(".concat(route, ",$todo_id) }}");
-  document.querySelector("#todo_form").method = 'post';
+  document.querySelector("#todo_form").action = "/todo-list/is-done/".concat($todo_id);
+  document.querySelector("#todo_form").method = 'post'; // document.querySelector<any>("#hidden_method_for_check_todo_id").value='patch';
+
   document.querySelector("#todo_form").submit();
+};
+var onHandleEditMode = function onHandleEditMode(todo_id) {
+  console.log('onHandleEditMode');
+  console.log(todo_id);
+  document.querySelector("#todo_display").innerHTML = "<input id=".concat(todo_id, "_title class=\"\" type=\"text\" valule=\"\" onChange=\"onChangeTitle(e)\"  ondblclick=onSubmitTitle(e)>");
+};
+var onChangeTitle = function onChangeTitle(e) {
+  document.querySelector(e.target.id).value = e.target.value;
+};
+var onSubmitTitle = function onSubmitTitle(e) {
+  if (e.keyCode === '13') {
+    document.querySelector("#todo_title_form").method = "post";
+    document.querySelector("#todo_title_form").action = "todo-list/update-title/".concat(e.target.id.replace('_title', ''));
+    document.querySelector("#todo_title_form").submit();
+  }
 };
 
 /***/ }),

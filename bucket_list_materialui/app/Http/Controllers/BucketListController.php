@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Models\Bucket_list;
 use App\Models\User;
 use App\Models\Like;
+use Validator;
 
 
 class BucketListController extends Controller
@@ -16,7 +17,7 @@ class BucketListController extends Controller
 		\Log::info('BucketLists index');
 		$bucket_lists=User::with([
 			'profile','bucket_lists','likes'
-		   ])->select('id','name','email')->get()->toArray();
+			 ])->select('id','name','email')->get()->toArray();
 		\Log::debug($bucket_lists);
 		for($i=0;$i<count($bucket_lists);$i++){
 			$bucket_lists[$i]['countLikes']=count($bucket_lists[$i]['likes']);
@@ -42,11 +43,42 @@ class BucketListController extends Controller
 		\Log::debug($request);
 		$user_auth_id=5; //Auth::id()
 
-		Bucket_list::create(["user_id"=>$user_auth_id,"bucket_list_item"=>$request->new_todo,"is_done"=>false]);
+		//validation
+		$validator=Validator::make($request->all(),[
+			"new_todo"=>'required | max:255',
+		],[
+			"new_todo.required"=>"Input todo.",
+			"new_todo.max"=>"Input less than 255 letters."
+		]);
 
-		$user_data=User::with(['profile','bucket_lists','likes'])->find($user_auth_id)->toArray();
-		$user_data['countLikes']=count($user_data['likes']);
-		return redirect()->route('bucket-lists.show',['user'=>$user_auth_id]);
+		if($validator->fails()){
+			\Log::info('create validator failed');
+			return back()
+			->withErrors($validator)
+			->withInput();
+
+		}else{
+		  	\Log::info('create validator success');
+				$result=Bucket_list::create(["user_id"=>$user_auth_id,"bucket_list_item"=>$request->new_todo,"is_done"=>false]);
+
+				if($result===true){
+						$user_data=User::with(['profile','bucket_lists','likes'])->find($user_auth_id)->toArray();
+				    $user_data['countLikes']=count($user_data['likes']);
+            if(!empty($user_data)){
+              return redirect()->route('bucket-lists.show',['user'=>$user_auth_id]);
+
+						}else
+						  return back()
+							->with('Failed to save data. Please try again later.')
+							->withInput();
+
+				}else{
+              return back()
+							->with('Failed to save data. Please try again later.')
+							->withInput();
+				}
+		}
+
 	}
 
 	public function storeLike(LikeRequest $likeRequest){
@@ -85,29 +117,21 @@ class BucketListController extends Controller
 
 	public function updateIsDone(Bucket_list $bucket_list){
 		\Log::info('updateIsDone');
-           $user_auth_id=5;//Auth::id();
 
-		   $bucket_list->is_done=!$bucket_list->is_done;
-		   $bucket_list->save();
-		   return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
+			 $bucket_list->is_done=!$bucket_list->is_done;
+			 $bucket_list->save();
+
+			 return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
 	}
 
-	public function updateTitle(Bucket_listRequest $bucket_listRequest,Bucket_list $bucket_lsit){
+	public function updateTitle(Request $request){
 		\Log::info('update');
-		$bucket_list->bucket_list_item=$bucket_listRequest->bucket_list_item;
-		$bucket_list->is_done=$bucket_listRequest->is_done;
+
+		Bucket_list::find($request->id)->bucket_list_item=$request->title->save();
 
 
 
 	}
-	//  'id'=>4,
-	//         'bucket_list_item'=>"xxxxx",
-	//     ];
-	//     $bucket_list=Bucket_list::find(4);
-	//     $bucket_list->id=$request['id'];
-	//     $bucket_list->bucket_list_item=$request['bucket_list_item'];
-	//     $result=$bucket_list->save()
-
 
 	public function delete(Bucket_list $bucket_list){
 		\Log::info('deleteBucketList');
