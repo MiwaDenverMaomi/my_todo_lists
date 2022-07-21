@@ -47,9 +47,9 @@ Route::prefix('todo-list')->group(function(){
     Route::delete('/delete-like/{like}',[BucketListController::class,'deleteLike'])->name('bucket-lists.delete-like');
     Route::post('/store-favorite',[BucketListController::class,'storeFavorite'])->name('bucket-lists.store-favorite');
     Route::delete('/delete-favorite/{favorite}',[BucketListController::class,'deleteFavorite'])->name('bucket-lists.delete-favorite');
-    Route::patch('/bucket-list-item/{bucket_list}',[BucketListController::class,'updateBucketListItem'])->name('bucket-lists.bucket-list-item');
-    Route::patch('/is-done/{bucket_list}',[BucketListController::class,'updateIsDone'])->name('bucket-lists.is-done');
-    Route::get('/delete/{bucket_list}',[BucketListController::class,'delete'])->name('bucket-lists.delete');
+    Route::patch('/bucket-list-item/{bucket_list}',[BucketListController::class,'updateTitle'])->name('bucket-lists.update-title');
+    Route::patch('/is-done/{bucket_list}',[BucketListController::class,'updateIsDone'])->name('bucket-lists.update-is-done');
+    Route::delete('/delete/{bucket_list}',[BucketListController::class,'delete'])->name('bucket-lists.delete');
 });
 
 

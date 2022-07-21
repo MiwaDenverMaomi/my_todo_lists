@@ -18,17 +18,23 @@
 				<div class="list-group w-auto">
 					@if(!empty($user_data['bucket_lists']))
 						@foreach($user_data['bucket_lists'] as $item)
-						<form method="get" action="{{route('bucket-lists.delete',['bucket_list' => $item['id']])}}">
 						 <label class="list-group-item d-flex gap-3">
-							<input class="form-check-input flex-shrink-0" type="checkbox" value="" style="font-size: 1.375em;">
+							<form id="todo_form" method="post">
+								@csrf
+								@method('patch')
+								  <input id="check_todo_id" class="form-check-input flex-shrink-0" name="is_done" type="checkbox" value="" style="font-size: 1.375em;" onClick="onHandleIsDone({{$item['id']}},'bucket-lists.update-is-done')">
+							</form>
 							<span class="pt-1 form-checked-content">
 							<p @class(['textdecoration-linethrough'=>$item['is_done']])>{{$item['bucket_list_item']}}</p>
 							</span>
 							<div class="text-center mb-4">
+						<form method="post" action="{{route('bucket-lists.delete',['bucket_list' => $item['id']])}}">
+							@csrf
+							@method('delete')
 							<button class="btn btn-danger" type="submit">Delete</button>
+						</form>
 						</div>
 						</label>
-          </form>
 						@endforeach
 					@else
 						<div class="text-center">No Bucket List</div>

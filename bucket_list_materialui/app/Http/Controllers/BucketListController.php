@@ -40,13 +40,13 @@ class BucketListController extends Controller
 	public function create(Request $request){
 		\Log::info('BucketListController create');
 		\Log::debug($request);
-		$user_auth_id=2; //Auth::id()
+		$user_auth_id=5; //Auth::id()
 
 		Bucket_list::create(["user_id"=>$user_auth_id,"bucket_list_item"=>$request->new_todo,"is_done"=>false]);
 
 		$user_data=User::with(['profile','bucket_lists','likes'])->find($user_auth_id)->toArray();
 		$user_data['countLikes']=count($user_data['likes']);
-		return view('my_page')->with('user_data',$user_data);
+		return redirect()->route('bucket-lists.show',['user'=>$user_auth_id]);
 	}
 
 	public function storeLike(LikeRequest $likeRequest){
@@ -83,32 +83,40 @@ class BucketListController extends Controller
 		response()->json([],500);
 	}
 
-	public function update(Bucket_listRequest $bucket_listRequest,Bucket_list $bucket_lsit){
+	public function updateIsDone(Bucket_list $bucket_list){
+		\Log::info('updateIsDone');
+           $user_auth_id=5;//Auth::id();
+
+		   $bucket_list->is_done=!$bucket_list->is_done;
+		   $bucket_list->save();
+		   return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
+	}
+
+	public function updateTitle(Bucket_listRequest $bucket_listRequest,Bucket_list $bucket_lsit){
 		\Log::info('update');
 		$bucket_list->bucket_list_item=$bucket_listRequest->bucket_list_item;
 		$bucket_list->is_done=$bucket_listRequest->is_done;
 
 
+
+	}
 	//  'id'=>4,
 	//         'bucket_list_item'=>"xxxxx",
 	//     ];
 	//     $bucket_list=Bucket_list::find(4);
 	//     $bucket_list->id=$request['id'];
 	//     $bucket_list->bucket_list_item=$request['bucket_list_item'];
-	//     $result=$bucket_list->save();
+	//     $result=$bucket_list->save()
 
 
-
-	}
 	public function delete(Bucket_list $bucket_list){
 		\Log::info('deleteBucketList');
-        $user_auth_id=2;//auth::id()
+		$user_auth_id=5;//auth::id()
 		$bucket_list->delete();
 
 		$user_data=User::with(['profile','bucket_lists','likes'])->find($user_auth_id)->toArray();
 		$user_data['countLikes']=count($user_data['likes']);
-		return view('my_page')->with('user_data',$user_data);
-	}
-
+		return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
+}
 
 }

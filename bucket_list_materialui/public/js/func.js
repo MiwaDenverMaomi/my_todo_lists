@@ -2,6 +2,28 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./resources/ts/func.ts":
+/*!******************************!*\
+  !*** ./resources/ts/func.ts ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "onHandleIsDone": () => (/* binding */ onHandleIsDone)
+/* harmony export */ });
+var onHandleIsDone = function onHandleIsDone($todo_id, route) {
+  console.log('onHandleIsDone');
+  console.log($todo_id);
+  console.log(route);
+  document.querySelector("#check_todo_id").value = $todo_id;
+  document.querySelector("#todo_form").action = "{{ route(".concat(route, ",$todo_id) }}");
+  document.querySelector("#todo_form").method = 'post';
+  document.querySelector("#todo_form").submit();
+};
+
+/***/ }),
+
 /***/ "./resources/ts/index.ts":
 /*!*******************************!*\
   !*** ./resources/ts/index.ts ***!
@@ -9,6 +31,7 @@
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
+window.onHandleIsDone = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onHandleIsDone);
 
 
 /***/ }),
@@ -87,6 +110,18 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
@@ -111,7 +146,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"/js/index": 0,
+/******/ 			"/js/func": 0,
 /******/ 			"css/app": 0
 /******/ 		};
 /******/ 		
@@ -162,6 +197,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/ts/func.ts")))
 /******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/ts/index.ts")))
 /******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/sass/app.scss")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);

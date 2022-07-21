@@ -18,4 +18,5 @@ mix.webpackConfig({
 });
 // mix.ts('resources/ts/index.tsx', 'public/js')
 //     .react()
-mix.sass('resources/sass/app.scss', 'public/css');
+mix.ts('resources/ts/**/*', 'public/js')
+.sass('resources/sass/app.scss', 'public/css');
