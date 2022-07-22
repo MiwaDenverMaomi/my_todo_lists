@@ -16,60 +16,50 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "onStartEditMode": () => (/* binding */ onStartEditMode),
 /* harmony export */   "onSubmitTitle": () => (/* binding */ onSubmitTitle)
 /* harmony export */ });
+//is_done:any->because the value passed from blade is 1 or 0. Convert them into string in php by wrapping '', and cast them to boolean in JavaScript.
 var onHandleIsDone = function onHandleIsDone($todo_id, route) {
   console.log('onHandleIsDone');
-  console.log($todo_id);
-  document.querySelector("#check_todo_id").value = $todo_id;
-  document.querySelector("#todo_form").action = "/todo-list/is-done/".concat($todo_id);
-  document.querySelector("#todo_form").method = 'post'; // document.querySelector<any>("#hidden_method_for_check_todo_id").value='patch';
-
-  document.querySelector("#todo_form").submit();
+  var $todo_form_element = document.querySelector("#todo_form");
+  var $check_todo_element = document.querySelector("#check_todo_id");
+  $check_todo_element.value = $todo_id;
+  $todo_form_element.action = "/todo-list/is-done/".concat($todo_id);
+  $todo_form_element.method = 'post';
+  $todo_form_element.submit();
 };
 var onStartEditMode = function onStartEditMode(todo_id, prev_title, is_done) {
   console.log('onStartEditMode');
-  console.log(todo_id);
-  console.log(prev_title);
-  console.log(is_done);
-  is_done === '1' ? true : false;
-  document.querySelector("#todo_display_".concat(todo_id)).addEventListener('click', function (e) {
-    document.querySelector("#todo_display_".concat(todo_id)).outerHTML = "<input id=todo_title_".concat(todo_id, " class=\"\" name=\"title\" type=\"text\" onChange=\"onChangeTitle(").concat(todo_id, ")\" onBlur={onEndEditMode(").concat(todo_id, ",'").concat(prev_title, "',").concat(is_done, ")} onKeydown=onSubmitTitle(").concat(todo_id, ",'").concat(prev_title, "',").concat(is_done, ")>");
-  });
+  is_done === '1' ? true : false; // document.querySelector<any>(`#todo_display_${todo_id}`).outerHTML=`<input id=todo_title_${todo_id} class="" name="title" type="text" onblur={onEndEditMode(${todo_id},'${prev_title}',${is_done})} onKeydown="(e)=>onSubmitTitle(${todo_id},'${prev_title}',${is_done},e)">`;
+
+  document.querySelector("#todo_display_".concat(todo_id)).outerHTML = "<input id=todo_title_".concat(todo_id, " class=\"\" name=\"title\" type=\"text\" onblur=\"onEndEditMode(").concat(todo_id, ",'").concat(prev_title, "',").concat(is_done, ")\">");
 };
 var onEndEditMode = function onEndEditMode(todo_id, prev_title, is_done) {
   console.log('onEndEditMode');
-  console.log(todo_id);
-  console.log(prev_title);
-  console.log(is_done);
   is_done === '1' ? true : false;
-  document.querySelector("#todo_title_".concat(todo_id)).addEventListener('blur', function (e) {
-    document.querySelector("#todo_title_".concat(todo_id)).outerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onClick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "',").concat(is_done, ")\">").concat(prev_title, "</p>");
-  });
+  document.querySelector("#todo_title_".concat(todo_id)).outerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onclick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "',").concat(is_done, ")\">").concat(prev_title, "</p>");
 };
 var onChangeTitle = function onChangeTitle(todo_id) {
   console.log('onChangeTitle');
-  console.log(todo_id);
   document.querySelector("#todo_title_".concat(todo_id)).addEventListener('change', function (e) {
     document.querySelector("#todo_title_".concat(todo_id)).value = e.target.value;
   });
 };
 var onSubmitTitle = function onSubmitTitle(todo_id, prev_title, is_done) {
   console.log('onSubmit');
-  console.log(todo_id);
-  console.log(prev_title);
-  console.log(is_done);
+  console.log('enter pressed!');
   is_done === '1' ? true : false;
-  document.querySelector("#todo_title_".concat(todo_id)).addEventListener('keydown', function (e) {
-    if (e.keyCode === 13) {
-      if (e.target.value.length === 0 || e.target.value === prev_title) {
-        document.querySelector("#todo_title_".concat(todo_id)).outerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onClick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "',").concat(is_done, ")\">").concat(prev_title, "</p>");
-      } else {
-        document.querySelector("#todo_title_form").method = "post";
-        document.querySelector("#todo_title_form").action = "/todo-list/update-title/".concat(todo_id); //Not working?
+  var $todo_title_form_element = document.querySelector("#todo_title_form");
 
-        document.querySelector("#todo_title_form").submit();
-      }
-    }
-  });
+  if ($todo_title_form_element.value.length === 0 || $todo_title_form_element.value === prev_title) {
+    console.log('$todo_title_form_element.value:' + $todo_title_form_element.value);
+    console.log('$todo_title_form_element.value.length:' + $todo_title_form_element.value.length);
+    console.log('prev.title===$todo_title_form_element.value:' + $todo_title_form_element.value === prev_title);
+    document.querySelector("#todo_title_".concat(todo_id)).outerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onclick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "','").concat(is_done, "')\">").concat(prev_title, "</p>");
+  } else {
+    $todo_title_form_element.method = "post";
+    $todo_title_form_element.action = "/todo-list/update-title/".concat(todo_id); //Not working?
+
+    $todo_title_form_element.submit();
+  }
 };
 
 /***/ }),

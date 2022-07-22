@@ -58,23 +58,24 @@ class BucketListController extends Controller
 			->withInput();
 
 		}else{
-		  	\Log::info('create validator success');
+				\Log::info('create validator success');
 				$result=Bucket_list::create(["user_id"=>$user_auth_id,"bucket_list_item"=>$request->new_todo,"is_done"=>false]);
 
 				if($result===true){
 						$user_data=User::with(['profile','bucket_lists','likes'])->find($user_auth_id)->toArray();
-				    $user_data['countLikes']=count($user_data['likes']);
-            if(!empty($user_data)){
-              return redirect()->route('bucket-lists.show',['user'=>$user_auth_id]);
+						$user_data['countLikes']=count($user_data['likes']);
+						if(!empty($user_data)){
+							return redirect()->route('bucket-lists.show',['user'=>$user_auth_id]);
 
-						}else
-						  return back()
-							->with('Failed to save data. Please try again later.')
+						}else{
+							return back()
+							->with(['create_error'=>'Failed to save data. Please try again later.'])
 							->withInput();
+						}
 
 				}else{
-              return back()
-							->with('Failed to save data. Please try again later.')
+							return back()
+							->with(['create_error'=>'Failed to save data. Please try again later.'])
 							->withInput();
 				}
 		}
@@ -118,28 +119,55 @@ class BucketListController extends Controller
 	public function updateIsDone(Bucket_list $bucket_list){
 		\Log::info('updateIsDone');
 
-			 $bucket_list->is_done=!$bucket_list->is_done;
-			 $bucket_list->save();
+			$bucket_list->is_done=!$bucket_list->is_done;
+			$result=$bucket_list->save();
 
-			 return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
+			if($result===true){
+				return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
+			}else{
+				return back()
+				->with(['update_is_done_error'=>'Failed to save data. Please try again later.']);
+			}
 	}
 
 	public function updateTitle(Request $request,Bucket_list $bucket_list){
 		\Log::info('update');
 
-		$bucket_list->bucket_list_item=$request->title;
-		$bucket_list->save();
-    return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
+		$validator=Validator::make($request->all(),[
+			"title"=>"required | max:255"
+		],[
+			"title.required"=>"Input todo.",
+			"tite.max"=>"Input less than 255 letters."
+		]);
+
+		if($validator->fails()){
+			return back()
+			->withErrors($validator)
+			->withInput();
+
+		}else{
+			 $bucket_list->bucket_list_item=$request->title;
+			 $result=$bucket_list->save();
+
+			 if($result===true){
+				 return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
+			 }else{
+         return back()->with(['update_title_error'=>'Failed to save data. Please try again later.']);
+			 }
+		}
 	}
 
 	public function delete(Bucket_list $bucket_list){
 		\Log::info('deleteBucketList');
-		$user_auth_id=5;//auth::id()
 		$bucket_list->delete();
 
-		$user_data=User::with(['profile','bucket_lists','likes'])->find($user_auth_id)->toArray();
-		$user_data['countLikes']=count($user_data['likes']);
-		return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
+		$user_data=User::with(['profile','bucket_lists','likes'])->find($bucket_list->user_id)->toArray();
+		if(!empty($user_data)){
+			 $user_data['countLikes']=count($user_data['likes']);
+			 return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
+		}else{
+			 return back()
+			 ->with(['delete_error','Failed to save data. Please try again later!']);
+		}
 }
-
 }
