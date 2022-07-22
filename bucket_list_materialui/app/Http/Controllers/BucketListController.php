@@ -124,13 +124,12 @@ class BucketListController extends Controller
 			 return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
 	}
 
-	public function updateTitle(Request $request){
+	public function updateTitle(Request $request,Bucket_list $bucket_list){
 		\Log::info('update');
 
-		Bucket_list::find($request->id)->bucket_list_item=$request->title->save();
-
-
-
+		$bucket_list->bucket_list_item=$request->title;
+		$bucket_list->save();
+    return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
 	}
 
 	public function delete(Bucket_list $bucket_list){

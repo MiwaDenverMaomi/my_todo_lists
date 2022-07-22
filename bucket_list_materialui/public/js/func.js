@@ -11,8 +11,9 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "onChangeTitle": () => (/* binding */ onChangeTitle),
-/* harmony export */   "onHandleEditMode": () => (/* binding */ onHandleEditMode),
+/* harmony export */   "onEndEditMode": () => (/* binding */ onEndEditMode),
 /* harmony export */   "onHandleIsDone": () => (/* binding */ onHandleIsDone),
+/* harmony export */   "onStartEditMode": () => (/* binding */ onStartEditMode),
 /* harmony export */   "onSubmitTitle": () => (/* binding */ onSubmitTitle)
 /* harmony export */ });
 var onHandleIsDone = function onHandleIsDone($todo_id, route) {
@@ -24,20 +25,51 @@ var onHandleIsDone = function onHandleIsDone($todo_id, route) {
 
   document.querySelector("#todo_form").submit();
 };
-var onHandleEditMode = function onHandleEditMode(todo_id) {
-  console.log('onHandleEditMode');
+var onStartEditMode = function onStartEditMode(todo_id, prev_title, is_done) {
+  console.log('onStartEditMode');
   console.log(todo_id);
-  document.querySelector("#todo_display").innerHTML = "<input id=".concat(todo_id, "_title class=\"\" type=\"text\" valule=\"\" onChange=\"onChangeTitle(e)\"  ondblclick=onSubmitTitle(e)>");
+  console.log(prev_title);
+  console.log(is_done);
+  is_done === '1' ? true : false;
+  document.querySelector("#todo_display_".concat(todo_id)).addEventListener('click', function (e) {
+    document.querySelector("#todo_display_".concat(todo_id)).outerHTML = "<input id=todo_title_".concat(todo_id, " class=\"\" name=\"title\" type=\"text\" onChange=\"onChangeTitle(").concat(todo_id, ")\" onBlur={onEndEditMode(").concat(todo_id, ",'").concat(prev_title, "',").concat(is_done, ")} onKeydown=onSubmitTitle(").concat(todo_id, ",'").concat(prev_title, "',").concat(is_done, ")>");
+  });
 };
-var onChangeTitle = function onChangeTitle(e) {
-  document.querySelector(e.target.id).value = e.target.value;
+var onEndEditMode = function onEndEditMode(todo_id, prev_title, is_done) {
+  console.log('onEndEditMode');
+  console.log(todo_id);
+  console.log(prev_title);
+  console.log(is_done);
+  is_done === '1' ? true : false;
+  document.querySelector("#todo_title_".concat(todo_id)).addEventListener('blur', function (e) {
+    document.querySelector("#todo_title_".concat(todo_id)).outerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onClick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "',").concat(is_done, ")\">").concat(prev_title, "</p>");
+  });
 };
-var onSubmitTitle = function onSubmitTitle(e) {
-  if (e.keyCode === '13') {
-    document.querySelector("#todo_title_form").method = "post";
-    document.querySelector("#todo_title_form").action = "todo-list/update-title/".concat(e.target.id.replace('_title', ''));
-    document.querySelector("#todo_title_form").submit();
-  }
+var onChangeTitle = function onChangeTitle(todo_id) {
+  console.log('onChangeTitle');
+  console.log(todo_id);
+  document.querySelector("#todo_title_".concat(todo_id)).addEventListener('change', function (e) {
+    document.querySelector("#todo_title_".concat(todo_id)).value = e.target.value;
+  });
+};
+var onSubmitTitle = function onSubmitTitle(todo_id, prev_title, is_done) {
+  console.log('onSubmit');
+  console.log(todo_id);
+  console.log(prev_title);
+  console.log(is_done);
+  is_done === '1' ? true : false;
+  document.querySelector("#todo_title_".concat(todo_id)).addEventListener('keydown', function (e) {
+    if (e.keyCode === 13) {
+      if (e.target.value.length === 0 || e.target.value === prev_title) {
+        document.querySelector("#todo_title_".concat(todo_id)).outerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onClick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "',").concat(is_done, ")\">").concat(prev_title, "</p>");
+      } else {
+        document.querySelector("#todo_title_form").method = "post";
+        document.querySelector("#todo_title_form").action = "/todo-list/update-title/".concat(todo_id); //Not working?
+
+        document.querySelector("#todo_title_form").submit();
+      }
+    }
+  });
 };
 
 /***/ }),
@@ -50,6 +82,10 @@ var onSubmitTitle = function onSubmitTitle(e) {
 
 __webpack_require__.r(__webpack_exports__);
 window.onHandleIsDone = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onHandleIsDone);
+window.onStartEditMode = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onStartEditMode);
+window.onEndEditMode = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onEndEditMode);
+window.onChangeTitle = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onChangeTitle);
+window.onSubmitTitle = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onSubmitTitle);
 
 
 /***/ }),
