@@ -39,7 +39,8 @@ var onEndEditMode = function onEndEditMode(todo_id, prev_title, is_done) {
   console.log('onEndEditMode');
   is_done === '1' ? true : false;
   var $todo_title_element = document.querySelector("#todo_title_".concat(todo_id));
-  $todo_title_element.outerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onclick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "','").concat(is_done, "')\">").concat(prev_title, "</p>");
+  console.log($todo_title_element);
+  $todo_title_element.innerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onclick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "','").concat(is_done, "')\">").concat(prev_title, "</p>");
 };
 var onChangeTitle = function onChangeTitle(todo_id, prev_title, is_done) {
   console.log('onChangeTitle');
@@ -52,6 +53,7 @@ var onChangeTitle = function onChangeTitle(todo_id, prev_title, is_done) {
 
     if (e.keyCode == 13) {
       //ひとつもキー入力しないでEnter->submitにいく。ひとつでもキー入力してEnter->e.keyCode==13判定
+      //ここにpreventDefault()を入れると、submitされてもnameに値が入っておらず（気がする）エラーとなる。
       console.log('enter pressed!');
 
       if ($todo_title_element.value.length === 0 || $todo_title_element.value === prev_title || $todo_title_element === undefined) {

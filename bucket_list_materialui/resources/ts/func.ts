@@ -31,8 +31,8 @@ export const onEndEditMode=(todo_id:number,prev_title:string,is_done:any)=>{
 
 	is_done==='1'?true:false;
 	const $todo_title_element=document.querySelector<any>(`#todo_title_${todo_id}`);
-
-	$todo_title_element.outerHTML=`<p id="todo_display_${todo_id}" class="${is_done?'textdecoration-linethrough':''}" onclick="onStartEditMode(${todo_id},'${prev_title}','${is_done}')">${prev_title}</p>`;
+  console.log($todo_title_element);
+	$todo_title_element.innerHTML=`<p id="todo_display_${todo_id}" class="${is_done?'textdecoration-linethrough':''}" onclick="onStartEditMode(${todo_id},'${prev_title}','${is_done}')">${prev_title}</p>`;//outerHTMLじゃダメなのでinnerHTMLにしたらエラー解決。
 };
 export const onChangeTitle=(todo_id:number,prev_title:string,is_done:any)=>{
 	console.log('onChangeTitle');
