@@ -30,7 +30,9 @@ Route::prefix('contact')->group(function(){
 
 Route::prefix('user')->group(function(){
     Route::get('/{user}',[UserController::class,'index'])->name('user.index');
-    Route::patch(`/{user}/edit-profile`,[UserController::class,'editProfile'])->name('user.editProfile');
+    Route::patch('/{user}/edit-profile',[UserController::class,'editProfile'])->name('user.editProfile');
+    Route::get('/{user}/show-profile',[UserController::class,'showProfile'])->name('user.showProfile');
+
     Route::patch(`/{user}/reset-password`,[UserController::class,'resetPassword'])->name('user.resetPassword');
     // Route::post(`/reset-password/send-email`,[UserController::class,'sendEmail']);
     Route::patch(`/store-favorite`,[UserController::class,'storeFavorite'])->name('user.storeFavorite');
@@ -43,14 +45,14 @@ Route::get('/',[BucketListController::class,'index'])->name('bucket-lists.index'
 Route::prefix('todo-list')->group(function(){
     Route::get('/show/{user}',[BucketListController::class,'show'])->name('bucket-lists.show');
     Route::post('/create',[BucketListController::class,'create'])->name('bucket-lists.create');
+    Route::patch('/update-title/{bucket_list}',[BucketListController::class,'updateTitle'])->name('bucket-lists.update-title');
+    Route::patch('/is-done/{bucket_list}',[BucketListController::class,'updateIsDone'])->name('bucket-lists.update-is-done');
+    Route::delete('/delete/{bucket_list}',[BucketListController::class,'delete'])->name('bucket-lists.delete');
+
     Route::post('/store-like',[BucketListController::class,'storeLike'])->name('bucket-lists.store-like');
     Route::delete('/delete-like/{like}',[BucketListController::class,'deleteLike'])->name('bucket-lists.delete-like');
     Route::post('/store-favorite',[BucketListController::class,'storeFavorite'])->name('bucket-lists.store-favorite');
     Route::delete('/delete-favorite/{favorite}',[BucketListController::class,'deleteFavorite'])->name('bucket-lists.delete-favorite');
-    Route::patch('/update-title/{bucket_list}',[BucketListController::class,'updateTitle'])->name('bucket-lists.update-title');
-    // Route::patch('/is-done/{bucket_list}',[BucketListController::class,'updateIsDone'])->name('bucket-lists.update-is-done');
-     Route::patch('/is-done/{bucket_list}',[BucketListController::class,'updateIsDone'])->name('bucket-lists.update-is-done');
-    Route::delete('/delete/{bucket_list}',[BucketListController::class,'delete'])->name('bucket-lists.delete');
 });
 
 

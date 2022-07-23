@@ -74,6 +74,16 @@
   text-decoration: line-through;
 }
 
+.profile-img {
+  width: 100px;
+  height: 100px;
+}
+
+.edit-img:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
 /* GLOBAL STYLES
 -------------------------------------------------- */
 /* Padding below the footer and lighter body text */

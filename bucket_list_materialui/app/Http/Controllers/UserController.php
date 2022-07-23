@@ -10,7 +10,6 @@ class UserController extends Controller
 {
     public function index(User $user){
         \Log::info('user/index');
-        // $user=User::with(['profile','likes'])->find($user->id)->get()->toArray();
         $user_data=User::with(['profile','likes','bucket_lists'])->select('id','name','email')->find($user->id)->toArray();
         \Log::debug($user);
         $is_liked_by_auth=$user->is_liked_by_auth();
@@ -19,6 +18,16 @@ class UserController extends Controller
         \Log::debug($user_data);
        return  view('list_user')->with(['user_data'=>$user_data]);
     }
+    public function showProfile(User $user){
+        \Log::info('showProfile');
+        $user_data=User::with(['profile','likes'])->select('id','name','email')->find($user->id)->toArray();
+        \Log::debug($user);
+        $is_liked_by_auth=$user->is_liked_by_auth();
+        $user_data['countLikes']=count($user_data['likes']);
+        $user_data['is_liked_by_auth']=$is_liked_by_auth;
+        \Log::debug($user_data);
+      return view('my_profile')->with(['user_data'=>$user_data]);
+    }
 
     public function editProfile(UserRequest $userRequest,User $user){
        \Log::info('user/editProfile');
@@ -26,6 +35,7 @@ class UserController extends Controller
        $profile=Profile::find($user->id);
        $result=$profile->fill(['photo'=>$userRequest->photo,'question_1'=>$userRequest->question_1,'question_2'=>$userRequest->question_2,'question_3'=>$userRequest->question_3])->save();
        $result?response()->json($user,$profile):response()->json([],500);
+       return view('my_profile')->with(['edit_mode'=>false]);
     }
 
     public function resetPassword(passwordRequest $passwordRequest,User $user){

@@ -25,7 +25,7 @@
     <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu</button>
     <div class="dropdown-menu">
         <a class="dropdown-item" href="#">My Todos</a>
-        <a class="dropdown-item" href="#">Profile</a>
+        <a class="dropdown-item" href="/user/5/show-profile">Profile</a>
         <a class="dropdown-item" href="#">Favorites</a>
         <a class="dropdown-item" href="#">Password Reset</a>
         <a class="dropdown-item" href="#">Cancel</a>
