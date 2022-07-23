@@ -141,6 +141,7 @@ class BucketListController extends Controller
 		]);
 
 		if($validator->fails()){
+			\Log::debug($validator);
 			return back()
 			->withErrors($validator)
 			->withInput();
@@ -152,7 +153,7 @@ class BucketListController extends Controller
 			 if($result===true){
 				 return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
 			 }else{
-         return back()->with(['update_title_error'=>'Failed to save data. Please try again later.']);
+         return back()->with([`update_title_error`=>'Failed to save data. Please try again later.']);
 			 }
 		}
 	}

@@ -28,38 +28,85 @@ var onHandleIsDone = function onHandleIsDone($todo_id, route) {
 };
 var onStartEditMode = function onStartEditMode(todo_id, prev_title, is_done) {
   console.log('onStartEditMode');
-  is_done === '1' ? true : false; // document.querySelector<any>(`#todo_display_${todo_id}`).outerHTML=`<input id=todo_title_${todo_id} class="" name="title" type="text" onblur={onEndEditMode(${todo_id},'${prev_title}',${is_done})} onKeydown="(e)=>onSubmitTitle(${todo_id},'${prev_title}',${is_done},e)">`;
+  is_done === '1' ? true : false; // document.querySelector<any>(`#todo_display_${todo_id}`).outerHTML=`<input id=todo_title_${todo_id} class="" name="title" type="text" onblur="onEndEditMode(${todo_id},'${prev_title}',${is_done})" onkeyup="(e)=>onChangeTitle(${todo_id},'${prev_title}','${is_done}',e)">`;
 
-  document.querySelector("#todo_display_".concat(todo_id)).outerHTML = "<input id=todo_title_".concat(todo_id, " class=\"\" name=\"title\" type=\"text\" onblur=\"onEndEditMode(").concat(todo_id, ",'").concat(prev_title, "',").concat(is_done, ")\">");
+  document.querySelector("#todo_display_".concat(todo_id)).outerHTML = "<input id=todo_title_".concat(todo_id, " class=\"\" name=\"title\" type=\"text\" onblur=\"onEndEditMode(").concat(todo_id, ",'").concat(prev_title, "','").concat(is_done, "')\">");
+  var $todo_title_element = document.querySelector("#todo_title_".concat(todo_id));
+  console.log($todo_title_element);
+  onChangeTitle(todo_id, prev_title, is_done);
 };
 var onEndEditMode = function onEndEditMode(todo_id, prev_title, is_done) {
   console.log('onEndEditMode');
   is_done === '1' ? true : false;
-  document.querySelector("#todo_title_".concat(todo_id)).outerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onclick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "',").concat(is_done, ")\">").concat(prev_title, "</p>");
+  var $todo_title_element = document.querySelector("#todo_title_".concat(todo_id));
+  $todo_title_element.outerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onclick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "','").concat(is_done, "')\">").concat(prev_title, "</p>");
 };
-var onChangeTitle = function onChangeTitle(todo_id) {
+var onChangeTitle = function onChangeTitle(todo_id, prev_title, is_done) {
   console.log('onChangeTitle');
-  document.querySelector("#todo_title_".concat(todo_id)).addEventListener('change', function (e) {
-    document.querySelector("#todo_title_".concat(todo_id)).value = e.target.value;
-  });
-};
-var onSubmitTitle = function onSubmitTitle(todo_id, prev_title, is_done) {
-  console.log('onSubmit');
-  console.log('enter pressed!');
-  is_done === '1' ? true : false;
-  var $todo_title_form_element = document.querySelector("#todo_title_form");
+  var $todo_title_element = document.querySelector("#todo_title_".concat(todo_id));
 
-  if ($todo_title_form_element.value.length === 0 || $todo_title_form_element.value === prev_title) {
-    console.log('$todo_title_form_element.value:' + $todo_title_form_element.value);
-    console.log('$todo_title_form_element.value.length:' + $todo_title_form_element.value.length);
-    console.log('prev.title===$todo_title_form_element.value:' + $todo_title_form_element.value === prev_title);
-    document.querySelector("#todo_title_".concat(todo_id)).outerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onclick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "','").concat(is_done, "')\">").concat(prev_title, "</p>");
-  } else {
-    $todo_title_form_element.method = "post";
-    $todo_title_form_element.action = "/todo-list/update-title/".concat(todo_id); //Not working?
+  $todo_title_element.onkeypress = function (e) {
+    is_done === '1' ? true : false;
+    var key = e.keyCode || e.charCode || 0;
+    console.log(e.keyCode);
 
-    $todo_title_form_element.submit();
-  }
+    if (e.keyCode == 13) {
+      //ひとつもキー入力しないでEnter->submitにいく。ひとつでもキー入力してEnter->e.keyCode==13判定
+      console.log('enter pressed!');
+
+      if ($todo_title_element.value.length === 0 || $todo_title_element.value === prev_title || $todo_title_element === undefined) {
+        e.preventDefault();
+        console.log('$todo_title_element.value:' + $todo_title_element.value);
+        console.log('$todo_title_element.value.length:' + $todo_title_element.value.length);
+        console.log('prev.title===$todo_title_form_element.value:' + $todo_title_element.value === prev_title);
+        console.log($todo_title_element);
+        onEndEditMode(todo_id, prev_title, is_done);
+      } else {
+        onSubmitTitle(todo_id); // $todo_title_form_element.method="post";
+        // $todo_title_form_element.action=`/todo-list/update-title/${todo_id}`;//Not working?
+        // $todo_title_form_element.submit();
+      }
+    }
+  };
+}; // export const onChangeTitle=(todo_id:number,prev_title:string,is_done:any,e:any)=>{
+// 	console.log('onChangeTitle');
+// 	// document.querySelector<any>(`#todo_title_${todo_id}`).addEventListener('change',(e:any)=>{
+// 	// 		document.querySelector<any>(`#todo_title_${todo_id}`).value=e.target.value;
+// 	// });
+//   is_done==='1'?true:false;
+//   if(e.keyCode===13){
+//   console.log('enter pressed!');
+//   const $todo_title_form_element=document.querySelector<any>("#todo_title_form");
+// 	 if($todo_title_form_element.value.length===0||$todo_title_form_element.value===prev_title){
+// 			console.log('$todo_title_form_element.value:'+$todo_title_form_element.value);
+// 			console.log('$todo_title_form_element.value.length:'+$todo_title_form_element.value.length);
+// 			console.log('prev.title===$todo_title_form_element.value:'+$todo_title_form_element.value===prev_title);
+// 			document.querySelector<any>(`#todo_title_${todo_id}`).outerHTML=`<p id="todo_display_${todo_id}" class="${is_done?'textdecoration-linethrough':''}" onclick="onStartEditMode(${todo_id},'${prev_title}','${is_done}')">${prev_title}</p>`;
+// 		 }else{
+// 			 onSubmitTitle(todo_id,prev_title,is_done);
+// 			// $todo_title_form_element.method="post";
+// 			// $todo_title_form_element.action=`/todo-list/update-title/${todo_id}`;//Not working?
+// 			// $todo_title_form_element.submit();
+// 		 }
+// 		 }
+// };
+
+var onSubmitTitle = function onSubmitTitle(todo_id) {
+  console.log('onSubmit'); // is_done==='1'?true:false;
+
+  var $todo_title_form_element = document.querySelector("#todo_title_form"); //  if($todo_title_form_element.value.length===0||$todo_title_form_element.value===prev_title){
+  // 	console.log('$todo_title_form_element.value:'+$todo_title_form_element.value);
+  // 	console.log('$todo_title_form_element.value.length:'+$todo_title_form_element.value.length);
+  // 	console.log('prev.title===$todo_title_form_element.value:'+$todo_title_form_element.value===prev_title);
+  // 	document.querySelector<any>(`#todo_title_${todo_id}`).outerHTML=`<p id="todo_display_${todo_id}" class="${is_done?'textdecoration-linethrough':''}" onclick="onStartEditMode(${todo_id},'${prev_title}','${is_done}')">${prev_title}</p>`;
+  // 	return false;
+  //  }else{
+
+  $todo_title_form_element.method = "post";
+  $todo_title_form_element.action = "/todo-list/update-title/".concat(todo_id); //Not working?
+
+  $todo_title_form_element.submit(); // return true;
+  //  }
 };
 
 /***/ }),
