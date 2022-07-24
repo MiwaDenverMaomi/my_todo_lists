@@ -3,32 +3,55 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 use Validator;
 use \Symfony\Component\HttpFoundation\Response;
 
 class RegisterController extends Controller
 {
     protected $RULES=[
-            'name'=>'max:50',
-            'email'=>'required|email|max:50|unique:users',
-            'password'=>'required'
+            'email'=>'required|email|max:255|unique:users',
+            'password'=>'required|max:255',
+            're_password'=>'required|confirmed'
         ];
 
-    public function register(Request $request){
-        $validator=Validator::make($request->all(),$this->RULES);
-    if($validator->fails()){
-        return (response()->json([
-            'result'=>$validator->messages(),'errors'=>$validator->errors(), 'status'=>Response::HTTP_UNPROCESSABLE_ENTITY
-        ]));
+    public function getRegister(){
+      \Log::Info('getRegister');
+      return view('register');
     }
 
-    $user=User::create([
+    public function postRegister(Request $request){
+      \Log::info('postRegister');
+      $validator=Validator::make($request->all(),$this->RULES,[
+        'email.required'=>'Input required.',
+        'email.email'=>'Input valid email.',
+        'email.max'=>'Input within 255 letters.',
+        'email.unique'=>'This email is already used.',
+        'passowrd.required'=>'Input required.',
+        'password.max'=>'Input within 255 letters.',
+        're_password.required'=>'Input required.',
+        're_password.confirmed'=>'Confirm your password.'
+      ]);
+      if($validator->fails()){
+        return back()
+        ->withErrors($validator)
+        ->withInput();
+     }else{
+        $user=User::create([
         'name'=>$request->name,
         'email'=>$request->email,
         'password'=>\Hash::make($request->password)
-    ]);
+        ]);
 
-    return $user?response()->json($user,201):json([],501);
-
+        if(!empty($user)){
+          return view('result')
+          ->with([
+            'is_success'=>true,
+            'message'=>'Your account was created!']);
+        }else{
+// 　　　　　 return back()->with(['register_error'=>'Failed to create your account. Please try again later!'])
+//           ->withInput();
+        }
+     }
     }
 }

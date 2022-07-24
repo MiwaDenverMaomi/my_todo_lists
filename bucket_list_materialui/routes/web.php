@@ -19,7 +19,8 @@ use App\Http\Controllers\LoginController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::post('/register',[RegisterController::class,'register'])->name('register.register');
+Route::get('/register',[RegisterController::class,'getRegister'])->name('register.getRegister');
+Route::post('/register',[RegisterController::class,'postRegister'])->name('register.postRegister');
 Route::post('/login',[LoginController::class,'login'])->name('login.login');
 Route::post('/logout',[LoginController::class,'logout'])->name('login.logout');
 
