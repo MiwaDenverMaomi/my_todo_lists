@@ -21,7 +21,8 @@ use App\Http\Controllers\LoginController;
 */
 Route::get('/register',[RegisterController::class,'getRegister'])->name('register.getRegister');
 Route::post('/register',[RegisterController::class,'postRegister'])->name('register.postRegister');
-Route::post('/login',[LoginController::class,'login'])->name('login.login');
+Route::get('/login',[RegisterController::class,'getLogin'])->name('login.getLogin');
+Route::post('/login',[LoginController::class,'postLogin'])->name('login.postLogin');
 Route::post('/logout',[LoginController::class,'logout'])->name('login.logout');
 
 Route::prefix('contact')->group(function(){
