@@ -19,16 +19,31 @@ class UserController extends Controller
 		\Log::debug($user_data);
 	   return  view('list_user')->with(['user_data'=>$user_data]);
 	}
-	public function showProfile(User $user){
+
+	public function editProfileMode(User $user,Request $request){
+	  \Log::info('editProfileMode');
+	  \Log::debug($request->edit_mode);
+	   $edit_mode=((bool) $request->edit_mode)===true?true:false;
+
+       return redirect()->route('user.showProfile',[
+		'user'=>$user->id,
+		'edit_mode'=>$edit_mode]);
+	}
+
+	public function showProfile(User $user,Request $request){
 		\Log::info('showProfile');
+		$edit_mode=((bool) $request->edit_mode)===true?true:false;
 		$user_data=User::with(['profile','likes'])->select('id','name','email')->find($user->id)->toArray();
 		\Log::debug($user);
 		$is_liked_by_auth=$user->is_liked_by_auth();
 		$user_data['countLikes']=count($user_data['likes']);
 		$user_data['is_liked_by_auth']=$is_liked_by_auth;
 		\Log::debug($user_data);
-	  return view('my_profile')->with(['user_data'=>$user_data]);
+	  return view('my_profile')->with([
+		'user_data'=>$user_data,
+	    'edit_mode'=>$edit_mode]);
 	}
+
 
 	public function editProfile(Request $request,User $user){
 	   \Log::info('user/editProfile');
@@ -54,28 +69,33 @@ class UserController extends Controller
 	   if($validator->fails()){
 		return back()
 		->withErrors($validator)
+		->with(['edit_mode'=>true])
 		->withInput();
 
 	   }else{
-         $photo=!empty($request->photo)?$request->photho:'./image/no_image.jpg';
-	     $name=!empty($request->name)?$request->name:'No name';
-	     $question_1=!empty($request->question_1)?$request->question_1:'No comment';
-	     $question_2=!empty($request->question_2)?$request->question_2:'No comment';
-	     $question_3=!empty($request->question_3)?$request->question_3:'No comment';
+		 $photo=!empty($request->photo)?$request->photho:'./image/no_image.jpg';
+		 $name=!empty($request->name)?$request->name:'No name';
+		 $question_1=!empty($request->question_1)?$request->question_1:'No comment';
+		 $question_2=!empty($request->question_2)?$request->question_2:'No comment';
+		 $question_3=!empty($request->question_3)?$request->question_3:'No comment';
 
-         $result=Profile::find($user->id)->fill([
+		 $result=Profile::find($user->id)->fill([
 		  'photo'=>$photo,
 		  'question_1'=>$question_1,
 		  'question_2'=>$question_2,
 		  'question_3'=>$question_3,
-	     ])->save();
+		 ])->save();
 
-	    if($result===true){
-         return redirect()->route('user.showProfile',['user'=>$user->id]);
+		if($result===true){
+		 return redirect()->route('user.showProfile',[
+			'user'=>$user->id,
+		    'edit_mode'=>false]);
 
 		}else{
 		  return back()
-		  ->with(['error_edit_profile'=>'Failed to save data. Please try again.']);
+		  ->with([
+			'error_edit_profile'=>'Failed to save data. Please try again.',
+		    'edit_mode'=>true]);
 	   }
 	  }
 	}
