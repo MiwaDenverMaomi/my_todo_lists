@@ -1,4 +1,10 @@
-@extends('layouts.app')
+@if (!empty(session('status')))
+    <div class="alert alert-success">
+        {{ session('status') }}
+    </div>
+@endif
+
+@extends('layouts.common')
 
 @section('content')
   <div class="container px-4 py-5" id="featured-3">

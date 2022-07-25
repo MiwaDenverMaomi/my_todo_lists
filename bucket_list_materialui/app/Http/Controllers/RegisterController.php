@@ -49,8 +49,7 @@ class RegisterController extends Controller
             'is_success'=>true,
             'message'=>'Your account was created!']);
         }else{
-// 　　　　　 return back()->with(['register_error'=>'Failed to create your account. Please try again later!'])
-//           ->withInput();
+// 　　　　　 return back()->with(['register_error'=>'Failed to create your account. Please try again later!']);
         }
      }
     }

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Validator;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use \Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +16,8 @@ class LoginController extends Controller
 		return view('login');
 	}
 
-	public function postLogin(Request $requset){
+	public function postLogin(Request $request){
+		\Log::debug($request);
 		//validation
 		$RULES=[
 			'email'=>'required|email|max:255',
@@ -33,24 +37,25 @@ class LoginController extends Controller
 			->withInput();
 		}else{
 
-			$user=User::where('email',$request->email);
+			$user=DB::table('users')->where('email',$request->email)->first();
+			\Log::debug($user->email);
+			\Log::debug($user->password);
+
 			if(empty($user)){
-				return back()->with(['error'=>'Email/password is invalid.'])
+
+				return back()->with(['error'=>'Email/password is invalid.']);
 			}
 
-			if(Hash::check($request->password,$user[0]->password)){
-				session([
-					'user_id'=>$user[0]->id,
-					'email'=>$user[0]->email
-				]);
-				session()->flash([
-					'flash_flag'=>true,
-					'flash_message'=>'Logged in'
-				]);
+			if(Hash::check($request->password,$user->password)){
+				session(['user_id'=>$user->id]);
+				session(['email'=>$user->email]);
+				session()->flash('status','Logged in');
+				\Log::info('Logged in');
+				\Log::debug(Auth::id());
 
 				return redirect()->route('bucket-lists.index');
 			}else{
-                return back()->with('error'=>'Email/password is invalid.');
+				return back()->with(['error'=>'Email/password is invalid.']);
 			}
 		}
 
@@ -59,6 +64,7 @@ class LoginController extends Controller
 	public function logout(Request $request){
 		session()->forget('email');
 		session()->forget('user_id');
+		session()->flash('status','Logged out.');
 		return redirect()->route('bucket-lists.index');
 	}
 }

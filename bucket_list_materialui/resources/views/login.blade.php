@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="container-sm w-25 p-3">
-	  <form method="post" action={{route('register.postRegister')}}>
-    <h1 class="h3 mb-3 fw-normal mb-5">Create your account</h1>
+	  <form method="post" action={{route('login.postLogin')}}>
+    <h1 class="h3 mb-3 fw-normal mb-5 text-center">Login</h1>
     <div class="mb-3">
       <div class="text-center text-danger mb-0">
 							@if (!empty($error))
@@ -28,12 +28,8 @@
       <input type="password" name="password" class="form-control" id="password" placeholder="Password">
       <label for="password">Password</label>
     </div>
-    <div class="form-floating mb-3">
-      <input type="password" class="form-control" id="re_password" name="re_password" placeholder="Confirm password">
-      <label for="floatingPassword">Re-type your password</label>
     </div>
-    </div>
-    <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Create account</button>
+    <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Log in</button>
   </form>
   <a class="btn btn-secondary" role="button" aria-disabled="false" href="{{route('bucket-lists.index')}}">Got to Top</a>
 	 </div>

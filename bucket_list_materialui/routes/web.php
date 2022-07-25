@@ -6,7 +6,7 @@ use App\Http\Controllers\BucketListController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Auth\LoginController;
 
 
 /*
@@ -21,14 +21,15 @@ use App\Http\Controllers\LoginController;
 */
 Route::get('/register',[RegisterController::class,'getRegister'])->name('register.getRegister');
 Route::post('/register',[RegisterController::class,'postRegister'])->name('register.postRegister');
-Route::get('/login',[RegisterController::class,'getLogin'])->name('login.getLogin');
+Route::get('/login',[LoginController::class,'getLogin'])->name('login.getLogin');
 Route::post('/login',[LoginController::class,'postLogin'])->name('login.postLogin');
-Route::post('/logout',[LoginController::class,'logout'])->name('login.logout');
+Route::get('/logout',[LoginController::class,'logout'])->name('login.logout');
 
 Route::prefix('contact')->group(function(){
     // Route::get('/','ContactController@index');
     Route::post('/',[ContactController::class,'send']);
 });
+
 
 Route::prefix('user')->group(function(){
     Route::get('/{user}',[UserController::class,'index'])->name('user.index');
@@ -45,6 +46,7 @@ Route::prefix('user')->group(function(){
 });
 
 Route::get('/',[BucketListController::class,'index'])->name('bucket-lists.index');
+Route::group(['middleware'=>'auth'],function(){
 Route::prefix('todo-list')->group(function(){
     Route::get('/show/{user}',[BucketListController::class,'show'])->name('bucket-lists.show');
     Route::post('/create',[BucketListController::class,'create'])->name('bucket-lists.create');
@@ -57,7 +59,7 @@ Route::prefix('todo-list')->group(function(){
     Route::post('/store-favorite',[BucketListController::class,'storeFavorite'])->name('bucket-lists.store-favorite');
     Route::delete('/delete-favorite/{favorite}',[BucketListController::class,'deleteFavorite'])->name('bucket-lists.delete-favorite');
 });
-
+});
 
 //  Route::get('{all}',function(){
 //     return view('index');

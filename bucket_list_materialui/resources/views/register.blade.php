@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-sm w-25 p-3">
 	  <form method="post" action={{route('register.postRegister')}}>
-    <h1 class="h3 mb-3 fw-normal mb-5">Create your account</h1>
+    <h1 class="h3 mb-3 fw-normal mb-5 text-center">Create your account</h1>
     <div class="mb-3">
       <div class="text-center text-danger mb-0">
 							@if (!empty($error))
