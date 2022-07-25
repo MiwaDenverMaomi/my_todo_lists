@@ -7,8 +7,8 @@
 @extends('layouts.common')
 
 @section('content')
-  <div class="container px-4 py-5" id="featured-3">
-    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+  <div class="container px-4 " id="featured-3">
+    <div class="row g-4 row-cols-1 row-cols-lg-3">
     @if(!empty($bucket_lists))
       @foreach($bucket_lists as $list)
       <div class="card pt-5 pb-3 g-col-4">

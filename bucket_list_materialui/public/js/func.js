@@ -1,87 +1,13 @@
 /******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./resources/ts/func.ts":
 /*!******************************!*\
   !*** ./resources/ts/func.ts ***!
   \******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (() => {
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "onChangeTitle": () => (/* binding */ onChangeTitle),
-/* harmony export */   "onEndEditMode": () => (/* binding */ onEndEditMode),
-/* harmony export */   "onHandleIsDone": () => (/* binding */ onHandleIsDone),
-/* harmony export */   "onStartEditMode": () => (/* binding */ onStartEditMode),
-/* harmony export */   "onSubmitTitle": () => (/* binding */ onSubmitTitle),
-/* harmony export */   "sanitize": () => (/* binding */ sanitize)
-/* harmony export */ });
-//is_done:any->because the value passed from blade is 1 or 0. Convert them into string in php by wrapping '', and cast them to boolean in JavaScript.
-var onHandleIsDone = function onHandleIsDone($todo_id, route) {
-  console.log('onHandleIsDone');
-  var $todo_form_element = document.querySelector("#todo_form");
-  var $check_todo_element = document.querySelector("#check_todo_id");
-  $check_todo_element.value = $todo_id;
-  $todo_form_element.action = "/todo-list/is-done/".concat($todo_id);
-  $todo_form_element.method = 'post';
-  $todo_form_element.submit();
-};
-var onStartEditMode = function onStartEditMode(todo_id, prev_title, is_done) {
-  console.log('onStartEditMode');
-  is_done === '1' ? true : false;
-  document.querySelector("#todo_display_".concat(todo_id)).outerHTML = "<input id=todo_title_".concat(todo_id, " class=\"\" name=\"title\" type=\"text\" onblur=\"onEndEditMode(").concat(todo_id, ",'").concat(prev_title, "','").concat(is_done, "')\"></input>");
-  var $todo_title_element = document.querySelector("#todo_title_".concat(todo_id));
-  console.log($todo_title_element);
-  onChangeTitle(todo_id, prev_title, is_done);
-};
-var onEndEditMode = function onEndEditMode(todo_id, prev_title, is_done) {
-  console.log('onEndEditMode');
-  is_done === '1' ? true : false;
-  var $todo_title_element = document.querySelector("#todo_title_".concat(todo_id));
-  console.log($todo_title_element);
-  $todo_title_element.innerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onclick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "','").concat(is_done, "')\">").concat(prev_title, "</p>"); //outerHTMLじゃダメなのでinnerHTMLにしたらエラー解決。<input><p></p>となっているがこれでOK？
-};
-var onChangeTitle = function onChangeTitle(todo_id, prev_title, is_done) {
-  console.log('onChangeTitle');
-  var $todo_title_element = document.querySelector("#todo_title_".concat(todo_id));
-
-  $todo_title_element.onkeypress = function (e) {
-    is_done === '1' ? true : false;
-    var key = e.keyCode || e.charCode || 0;
-    console.log(e.keyCode);
-
-    if (e.keyCode == 13) {
-      //ひとつもキー入力しないでEnter->submitにいく。ひとつでもキー入力してEnter->e.keyCode==13判定
-      //ここにpreventDefault()を入れると、submitされてもnameに値が入っておらず（気がする）エラーとなる。
-      $todo_title_element.value = sanitize($todo_title_element.value);
-      console.log('enter pressed!');
-
-      if ($todo_title_element.value.length === 0 || $todo_title_element.value === prev_title || $todo_title_element === undefined) {
-        e.preventDefault();
-        console.log('$todo_title_element.value:' + $todo_title_element.value);
-        console.log('$todo_title_element.value.length:' + $todo_title_element.value.length);
-        console.log('prev.title===$todo_title_form_element.value:' + $todo_title_element.value === prev_title);
-        console.log($todo_title_element);
-        onEndEditMode(todo_id, prev_title, is_done);
-      } else {
-        onSubmitTitle(todo_id);
-      }
-    }
-  };
-};
-var onSubmitTitle = function onSubmitTitle(todo_id) {
-  console.log('onSubmit');
-  var $todo_title_form_element = document.querySelector("#todo_title_form");
-  $todo_title_form_element.method = "post";
-  $todo_title_form_element.action = "/todo-list/update-title/".concat(todo_id); //Not working?
-
-  $todo_title_form_element.submit();
-}; //sanitize
-
-var sanitize = function sanitize(str) {
-  return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-};
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /var/www/resources/ts/func.ts: Identifier '$profile_form_element' has already been declared. (96:10)\n\n\u001b[0m \u001b[90m 94 |\u001b[39m onSubmitProfile \u001b[33m=\u001b[39m (user_id) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[0m \u001b[90m 95 |\u001b[39m     \u001b[36mconst\u001b[39m $profile_form_element \u001b[33m=\u001b[39m document\u001b[33m.\u001b[39mquerySelector(\u001b[32m'#profile_form'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 96 |\u001b[39m     \u001b[36mconst\u001b[39m $profile_form_element\u001b[33m,\u001b[39m method \u001b[33m=\u001b[39m \u001b[32m\"post\"\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 97 |\u001b[39m     \u001b[36mconst\u001b[39m $profile_form_element\u001b[33m,\u001b[39m action \u001b[33m=\u001b[39m \u001b[32m`\"/${user_id}/edit-profile\"`\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 98 |\u001b[39m     $profile_form_element\u001b[33m.\u001b[39msubmit()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 99 |\u001b[39m }\u001b[33m;\u001b[39m\u001b[0m\n    at instantiate (/var/www/node_modules/@babel/parser/lib/index.js:72:32)\n    at constructor (/var/www/node_modules/@babel/parser/lib/index.js:358:12)\n    at Parser.raise (/var/www/node_modules/@babel/parser/lib/index.js:3341:19)\n    at ScopeHandler.checkRedeclarationInScope (/var/www/node_modules/@babel/parser/lib/index.js:3525:19)\n    at ScopeHandler.declareName (/var/www/node_modules/@babel/parser/lib/index.js:3491:12)\n    at Parser.declareNameFromIdentifier (/var/www/node_modules/@babel/parser/lib/index.js:12154:16)\n    at Parser.checkIdentifier (/var/www/node_modules/@babel/parser/lib/index.js:12149:12)\n    at Parser.checkLVal (/var/www/node_modules/@babel/parser/lib/index.js:12075:12)\n    at Parser.parseVarId (/var/www/node_modules/@babel/parser/lib/index.js:15401:10)\n    at Parser.parseVar (/var/www/node_modules/@babel/parser/lib/index.js:15375:12)");
 
 /***/ }),
 
@@ -91,6 +17,7 @@ var sanitize = function sanitize(str) {
   \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 window.onHandleIsDone = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onHandleIsDone);
 window.onStartEditMode = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onStartEditMode);
@@ -98,6 +25,8 @@ window.onEndEditMode = (__webpack_require__(/*! ./func */ "./resources/ts/func.t
 window.onChangeTitle = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onChangeTitle);
 window.onSubmitTitle = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onSubmitTitle);
 window.sanitize = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").sanitize);
+window.onHandleSelectPhoto = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onHandleSelectPhoto);
+window.previewFile = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").previewFile);
 
 
 /***/ }),
@@ -108,6 +37,7 @@ window.sanitize = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").s
   \*********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
@@ -173,18 +103,6 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 				}
 /******/ 			}
 /******/ 			return result;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
 /******/ 		};
 /******/ 	})();
 /******/ 	

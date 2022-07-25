@@ -30,7 +30,7 @@ export const onEndEditMode=(todo_id:number,prev_title:string,is_done:any)=>{
 
 	is_done==='1'?true:false;
 	const $todo_title_element=document.querySelector<any>(`#todo_title_${todo_id}`);
-  console.log($todo_title_element);
+	console.log($todo_title_element);
 	$todo_title_element.innerHTML=`<p id="todo_display_${todo_id}" class="${is_done?'textdecoration-linethrough':''}" onclick="onStartEditMode(${todo_id},'${prev_title}','${is_done}')">${prev_title}</p>`;//outerHTMLじゃダメなのでinnerHTMLにしたらエラー解決。<input><p></p>となっているがこれでOK？
 };
 export const onChangeTitle=(todo_id:number,prev_title:string,is_done:any)=>{
@@ -44,10 +44,10 @@ export const onChangeTitle=(todo_id:number,prev_title:string,is_done:any)=>{
 	const key=e.keyCode||e.charCode||0;
 	console.log(e.keyCode);
 
-  if(e.keyCode==13){//ひとつもキー入力しないでEnter->submitにいく。ひとつでもキー入力してEnter->e.keyCode==13判定
-  //ここにpreventDefault()を入れると、submitされてもnameに値が入っておらず（気がする）エラーとなる。
+	if(e.keyCode==13){//ひとつもキー入力しないでEnter->submitにいく。ひとつでもキー入力してEnter->e.keyCode==13判定
+	//ここにpreventDefault()を入れると、submitされてもnameに値が入っておらず（気がする）エラーとなる。
 	$todo_title_element.value=sanitize($todo_title_element.value);
-  console.log('enter pressed!');
+	console.log('enter pressed!');
 
 	 if($todo_title_element.value.length===0||$todo_title_element.value===prev_title||$todo_title_element===undefined){
 		e.preventDefault();
@@ -75,8 +75,67 @@ export const onSubmitTitle=(todo_id:number)=>{
 
 //sanitize
 export const sanitize=(str:any)=>{
-  return String(str).replace(/&/g,"&amp;")
-    .replace(/"/g,"&quot;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
+	return String(str).replace(/&/g,"&amp;")
+		.replace(/"/g,"&quot;")
+		.replace(/</g,"&lt;")
+		.replace(/>/g,"&gt;")
 }
+
+export const onHandleSelectPhoto=(name:string|null)=>{
+	const sizeLimit=1024*1024*1;
+	const $inputPhoto=document.querySelector<any>('#input_photo');
+	const $photoFrame=document.querySelector<any>('#photo_frame');
+	const photos=$inputPhoto.files!==null?$inputPhoto.files:[
+		'./image/no_image.jpg'
+	];
+	photos.map((item:string)=>{
+		if(+(item.size)>sizeLimit){
+			alert('Select less than 1MB.');
+			$inputPhoto.value='';
+			return;
+		}else{
+			$photoFrame.innerHTML=`<img src="${item}" alt="${name===null?'No name':name}">`;
+		}
+
+	});
+}
+
+export const previewFile=(file:string)=>{
+ const preview=document.querySelector<any>('#preview');
+ const reader=new FileReader();
+ reader.onload=(e)=>{
+	const imageURL=e.target.result;
+	const img=document.createElement("img");
+	img.src=imageURL;
+	preview.appendChild(img);
+ };
+ reader.readAsDataURL(file);
+}
+
+export const checkEmail=(email:string)=>{};
+export const checkPassword=(password:string)=>{};
+export const checkName=(name:string)=>{};
+export const checkPhoto=(photo:string)=>{};
+export const checkComments=(comment:string)=>{};
+
+export const onSubmitProfile=(user_id:number)=>{
+	const $name_element=document.querySelector<any>('#name');
+	const $photo_element=document.querySelector<any>('#photo');
+	const $comment1_element=document.querySelector<any>('#comment1');
+	const $comment2_element=document.querySelector<any>('#comment2');
+	const $comment3_element=document.querySelector<any>('#comment3');
+  let errMsgs={
+		name:'',
+		photo:'',
+		comment1:'',
+		comment2:'',
+		comment3:'',
+	}
+
+
+	const $profile_form_element=document.querySelector<any>('#profile_form');
+	const $profile_form_element.method="post";
+	const $profile_form_element.action=`"/${user_id}/edit-profile"`;
+	$profile_form_element.submit();
+
+};

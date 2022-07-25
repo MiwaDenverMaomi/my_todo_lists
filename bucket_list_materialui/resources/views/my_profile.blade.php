@@ -9,13 +9,17 @@
 	@if($edit_mode===true)
 		@if(!empty($user_data))
  <div class="row mx-auto">
+	<div id="preview"></div>
 			<div class="col-lg-4 mx-auto">
-			<form method="post" action={{route('user.editProfile',['user'=>$user_data['id']])}}>
+			<form method="post" action={{route('user.editProfile',['user'=>$user_data['id']])}} enctype="multipart/form-data">
 				@csrf
 				@method('patch')
-
-				<div class="mx-auto mb-2 profile-img edit-img">
+				<div class="mx-auto mb-2 profile-img edit-img" id="photo_frame">
+				<label class="btn btn-outline-primary">Choose Photo
+					<input type="file" name="photo" accept=".png, .jpeg, .jpg" id="input_photo" onchange="onHandleSelectPhoto($user_data['name'])" style="opacity:0;">
+       </label>
 				@if(!empty($user_data['profile']))
+		    <iframe name="photo_response" style="display:none;"></iframe>
 				<img src="{{ asset($user_data['profile']['photo'])}}" class="rounded-circle d-block mx-auto" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
 				@else
 				<img src="xxx" class="img-circle d-block mx-auto" alt="{{$user_data['name'].'_photo'}}"  width="100" height="100">
