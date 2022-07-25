@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.common')
 
 @section('content')
 <div class="container-sm">
@@ -8,23 +8,14 @@
 			<form method="post" action="{{route('bucket-lists.create')}}">
 				<div class="mb-3">
 					<div class="list-unstyled text-center text-danger mb-0">
-							@if ($errors->has('new_todo'))
-							  {{$errors->first('new_todo')}}
-							@elseif(!empty(session('create_error')))
-							  {{session('create_error')}}
-							@elseif($errors->has("is_done"))
-									{{$errors->first("is_done")}}
-							@elseif(!empty(session('update_is_done_error')))
-									{{session('update_is_done_error')}}
-							@elseif($errors->has("title"))
-								 {{$errors->first("title")}}
-							@elseif(!empty(session('update_title_error')))
-								 {{session('update_title_error')}}
-							@elseif($errors->has("delete"))
-								 {{$errors->first(delete)}}
-							@elseif(!empty(session('delete_error')))
-								 {{session('delete_error')}}
-							@endif
+							{{$errors->has('new_todo')?$errors->first('new_todo'):''}}
+							{{$errors->has('is_done')?$errors->first('is_done'):''}}
+							{{$errors->has('title')?$errors->first('title'):''}}
+							{{$errors->has('delete')?$errors->first('delete'):''}}
+							{{!empty(session('create_error'))?session('create_error'):''}}
+							{{!empty(session('update_is_done_error'))?session('update_is_done_error'):''}}
+							{{!empty(session('update_title_error'))?session('update_title_error'):''}}
+							{{!empty(session('delete_error'))?session('delete_error'):''}}
 					</div>
 					<label for="todoFormControlInput1" class="form-label"></label>
 				 	<input type="text" name="new_todo"class="form-control" id="todoFortontrolInput1" placeholder="Input your todo...">
@@ -70,6 +61,5 @@
 		No user data
 	@endif
 	 </div>
-	 <a class="btn btn-secondary" role="button" aria-disabled="false" href="{{route('bucket-lists.index')}}">Back</a>
 </div>
 @endsection

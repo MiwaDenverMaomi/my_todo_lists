@@ -1,3 +1,30 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+body {
+  /* padding-top: 3rem; */
+  margin: 0;
+  padding: 0;
+  color: #5a5a5a;
+}
+
+/* nav.blade.php */
+.navbar {
+  margin-bottom: 20px;
+}
+
+/* all_bucket_lists.blade.php */
+.featurette-divider {
+  margin: 5rem 0; /* Space out the Bootstrap <hr> more */
+}
+
+/* Thin out the marketing headings */
+/* rtl:begin:remove */
+.featurette-heading {
+  letter-spacing: -0.05rem;
+}
+
+/* rtl:end:remove */
 .form-control-dark {
   border-color: var(--bs-gray);
 }
@@ -74,71 +101,28 @@
   text-decoration: line-through;
 }
 
-.profile-img {
-  width: 100px;
-  height: 100px;
+/* register.blade.php */
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
 }
 
-.edit-img:hover {
-  cursor: pointer;
-  opacity: 0.8;
+.form-signin .form-floating:focus-within {
+  z-index: 2;
 }
 
-/* GLOBAL STYLES
--------------------------------------------------- */
-/* Padding below the footer and lighter body text */
-body {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-  color: #5a5a5a;
+.form-signin input[type=email] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
-/* CUSTOMIZE THE CAROUSEL
--------------------------------------------------- */
-/* Carousel base class */
-.carousel {
-  margin-bottom: 4rem;
+.form-signin input[type=password] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
-/* Since positioning the image, we need to help out the caption */
-.carousel-caption {
-  bottom: 3rem;
-  z-index: 10;
-}
-
-/* Declare heights because of positioning of img element */
-.carousel-item {
-  height: 32rem;
-}
-
-/* MARKETING CONTENT
--------------------------------------------------- */
-/* Center align the text within the three columns below the carousel */
-.marketing .col-lg-4 {
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-/* rtl:begin:ignore */
-.marketing .col-lg-4 p {
-  margin-right: 0.75rem;
-  margin-left: 0.75rem;
-}
-
-/* rtl:end:ignore */
-/* Featurettes
-------------------------- */
-.featurette-divider {
-  margin: 5rem 0; /* Space out the Bootstrap <hr> more */
-}
-
-/* Thin out the marketing headings */
-/* rtl:begin:remove */
-.featurette-heading {
-  letter-spacing: -0.05rem;
-}
-
-/* rtl:end:remove */
 /* RESPONSIVE CSS
 -------------------------------------------------- */
 @media (min-width: 40em) {

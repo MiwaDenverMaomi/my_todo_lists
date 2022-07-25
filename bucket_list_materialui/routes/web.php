@@ -26,10 +26,14 @@ Route::post('/login',[LoginController::class,'postLogin'])->name('login.postLogi
 Route::get('/logout',[LoginController::class,'logout'])->name('login.logout');
 
 Route::prefix('contact')->group(function(){
-    // Route::get('/','ContactController@index');
-    Route::post('/',[ContactController::class,'send']);
+    Route::get('/','ContactController@index')->name('contact.getContact');
+    Route::post('/',[ContactController::class,'send'])->name('contact.postContact');
 });
 
+Route::prefix('general')->group(function(){
+    Route::get('/about',[GeneralController::class,'getAbout'])->name('general.getAbout');
+    Route::get('/help',[GeneralController::class,'getHelp'])->name('general.getHelp');
+});
 
 Route::prefix('user')->group(function(){
     Route::get('/{user}',[UserController::class,'index'])->name('user.index');
@@ -46,6 +50,7 @@ Route::prefix('user')->group(function(){
 });
 
 Route::get('/',[BucketListController::class,'index'])->name('bucket-lists.index');
+
 Route::group(['middleware'=>'auth'],function(){
 Route::prefix('todo-list')->group(function(){
     Route::get('/show/{user}',[BucketListController::class,'show'])->name('bucket-lists.show');

@@ -9,7 +9,7 @@
 @section('content')
   <div class="container px-4 py-5" id="featured-3">
     <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
-    @if(count($bucket_lists)>0)
+    @if(!empty($bucket_lists))
       @foreach($bucket_lists as $list)
       <div class="card pt-5 pb-3 g-col-4">
         @if(!empty($list['profile']))
@@ -23,7 +23,7 @@
         </div>
         <div class="container">
         <div class="list-group w-auto mb-3">
-          @if(count($list['bucket_lists'])>0)
+          @if(!empty($list['bucket_lists']))
             @foreach($list['bucket_lists'] as $item)
              <label class="list-group-item d-flex gap-3">
               <p @class(['textdecoration-linethrough'=>$item['is_done']])>{{$item['bucket_list_item']}}</p>
@@ -45,7 +45,7 @@
   </div>
 </div>
     @else
-      <div>No Bucket Lists</div>
+      <div>No Todo Lists</div>
     @endif
 </div>
 @endsection

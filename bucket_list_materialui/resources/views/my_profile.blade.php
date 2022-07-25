@@ -2,7 +2,7 @@
 	$name=!empty($user_data['name'])?$user_data['name']:'No name';
 @endphp
 
-@extends('layouts.app')
+@extends('layouts.common')
 
 @section('content')
 <div class="container-sm">
@@ -40,7 +40,9 @@
 					 <textarea class="form-control" id="question_3" name="question_3" rows="3">{{!empty($user_data['profile'])?$user_data['profile']['question_3']:
 						'No comment.'}}</textarea>
 				 </div>
-			 <button class="btn btn-secondary" type="submit" role="button" aria-disabled="false" >Submit</button>
+			 <div class="mb-3">
+			   <button class="btn btn-primary mx-auto d-block" type="submit" role="button" aria-disabled="false" >Submit</button>
+			 </div>
 			 </form>
 			 </div>
 		 @else
@@ -75,13 +77,14 @@
 						<p class="text-center">{{!empty($user_data['profile'])?
 							$user_data['profile']['question_3']:
 						'No comment.'}}</p>
-						<a class="btn btn-primary" href="{{route('user.editProfileMode',['user'=>$user_data['id'],'edit_mode'=>true])}}" role="button">Edit Profile</a>
+						<div class="mb-3">
+						  <a class="btn btn-primary mx-auto d-block" href="{{route('user.editProfileMode',['user'=>$user_data['id'],'edit_mode'=>true])}}" role="button">Edit Profile</a>
+						</div>
 			 </div>
 		 @else
 		No user data
 	@endif
 	@endif
 	 </div>
-	 <a class="btn btn-secondary" role="button" aria-disabled="false" href="{{route('bucket-lists.index')}}">Back</a>
 </div>
 @endsection

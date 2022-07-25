@@ -4,8 +4,14 @@
 
 body {
   /* padding-top: 3rem; */
-  padding-bottom: 3rem;
+  margin:0;
+  padding:0;
   color: #5a5a5a;
+}
+
+/* nav.blade.php */
+.navbar {
+  margin-bottom: 20px;
 }
 
 /* all_bucket_lists.blade.php */

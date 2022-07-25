@@ -1,5 +1,5 @@
 
-@extends('layouts.app')
+@extends('layouts.common')
 
 @section('content')
 <div class="container-sm">
@@ -49,6 +49,5 @@
     No user data
   @endif
    </div>
-   <a class="btn btn-secondary" role="button" aria-disabled="false" href="{{route('bucket-lists.index')}}">Back</a>
 </div>
 @endsection
