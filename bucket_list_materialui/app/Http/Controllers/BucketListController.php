@@ -9,12 +9,16 @@ use App\Models\Bucket_list;
 use App\Models\User;
 use App\Models\Like;
 use Validator;
+use Auth;
 
 
 class BucketListController extends Controller
 {
 	public function index(){
 		\Log::info('BucketLists index');
+		\Log::debug(Auth::user());
+		\Log::debug(Auth::id());
+
 		$bucket_lists=User::with([
 			'profile','bucket_lists','likes'
 			 ])->select('id','name','email')->get()->toArray();

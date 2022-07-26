@@ -104,7 +104,7 @@ export const onHandleSelectPhoto=(photo:string|null)=>{
 	}
 }
 
-export const previewFile=(file:string)=>{
+export const previewFile=(file:any)=>{
  const preview=document.querySelector<any>('#preview');
  const reader=new FileReader();
  reader.onload=(e:any)=>{
@@ -159,12 +159,7 @@ export const onSubmitProfile=(user_id:number)=>{
 		comment3:comment3CheckResult
 	}
 
-	const errs=errMsgs.map((item:any)=>{
-		if(item.length>0){
-			return false;
-		}});
-
-	if(errs===false){
+	if(errMsgs.name!==[]||errMsgs.photo!==[]||errMsgs.comment1!==[]||errMsgs.comment2!==[]||errMsgs.comment3!==[]){
 	  $photo_err_element.innerHTML=errMsgs.photo[1];
 	  $name_err_element.innerHTML=errMsgs.name[1];
 	  $comment1_err_element.innerHTML=errMsgs.comment1[1];
@@ -191,7 +186,9 @@ export const onSubmitProfile=(user_id:number)=>{
 //validation
 export const checkRequired=(str:string)=>{
 	if(str.length===0){
-		return 'Input required.'
+		return 'Input required.';
+	}else{
+		return '';
 	}
 };
 
@@ -216,7 +213,7 @@ export const checkValidEmail=(email:string)=>{
 	if(!pattern.test(email)){
 		return 'Input valid email address.'
 	}else{
-		return ''
+		return '';
 	}
 };
 

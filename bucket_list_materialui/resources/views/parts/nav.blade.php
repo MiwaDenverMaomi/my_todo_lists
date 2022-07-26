@@ -1,4 +1,9 @@
- <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-3 ps-3 pe-3" aria-label="Offcanvas navbar large">
+ <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-3 ps-3 pe-3 z-index-1" aria-label="Offcanvas navbar large">
+	@if (!empty(session('status')))
+    <div class="alert alert-success text-center flash z-index-2">
+        {{ session('status') }}
+    </div>
+  @endif
     <div class="container-fluid">
       <a class="navbar-brand" href={{route('bucket-lists.index')}}>My Todo Lists</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2">
@@ -21,13 +26,13 @@
 		              <a class="dropdown-item" href="#">Favorites</a>
 		              <a class="dropdown-item" href="#">Password Reset</a>
 		              <a class="dropdown-item" href="#">Cancel</a>
-		              <a class="dropdown-item" href={{route('login.logout')}}>Logout</a>
+		              <a class="dropdown-item" href="{{route('login.logout')}}">Logout</a>
 		              <div class="dropdown-divider"></div>
-		              <a class="dropdown-item" href={{route('bucket-lists.index')}}>Top</a>
-		              <a class="dropdown-item" href={{route('general.getAbout')}}>About</a>
-		              <a class="dropdown-item" href={{route('general.getHelp')}}>Help</a>
-		              <a class="dropdown-item" href={{route('register.getRegister')}}>Create account</a>
-		              <a class="dropdown-item" href={{route('login.getLogin')}}>Login</a>
+		              <a class="dropdown-item" href="{{route('bucket-lists.index')}}">Top</a>
+		              <a class="dropdown-item" href="{{route('general.getAbout')}}">About</a>
+		              <a class="dropdown-item" href="{{route('general.getHelp')}}">Help</a>
+		              <a class="dropdown-item" href="{{route('register.getRegister')}}">Create account</a>
+		              <a class="dropdown-item" href="{{route('login.getLogin')}}">Login</a>
 	             </div>
 	            </div>
 	          </li>
@@ -40,33 +45,3 @@
       </div>
     </div>
   </nav>
-
- <!-- <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-3 ps-3 pe-3">
-	<div class="btn-group">
-	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu</button>
-	<div class="dropdown-menu">
-		<a class="dropdown-item" href="">My Todos</a>
-		<a class="dropdown-item" href="/user/5/show-profile">Profile</a>
-		<a class="dropdown-item" href="#">Favorites</a>
-		<a class="dropdown-item" href="#">Password Reset</a>
-		<a class="dropdown-item" href="#">Cancel</a>
-		<a class="dropdown-item" href={{route('login.logout')}}>Logout</a>
-		<div class="dropdown-divider"></div>
-		<a class="dropdown-item" href={{route('bucket-lists.index')}}>Top</a>
-		<a class="dropdown-item" href={{route('general.getAbout')}}>About</a>
-		<a class="dropdown-item" href={{route('general.getHelp')}}>Help</a>
-		<a class="dropdown-item" href={{route('register.getRegister')}}>Create account</a>
-		<a class="dropdown-item" href={{route('login.getLogin')}}>Login</a>
-	</div>
-	</div>
-	 <a class="navbar-brand ms-3" href={{route('bucket-lists.index')}}>ToDo App</a>
-	 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav4" aria-controls="navbarNav4" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	  </button>
-	  <div class="collapse navbar-collapse justify-content-end" id="navbarNav4">
-		<form class="col-12 col-lg-auto mb-3 mb-lg-0" role="search">
-		<input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-	  </form>
-	</div>
-</div>
-</nav> -->

@@ -1,5 +1,5 @@
-return [
-  "tmp" => "/img/upload/tmp/",
+<!-- return [
+  "tmp" => "",
   "thumb" => "/img/upload/",
   "noimage" => "/img/upload/no_image.jpg",
-];
+]; -->

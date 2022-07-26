@@ -161,13 +161,8 @@ var onSubmitProfile = function onSubmitProfile(user_id) {
     comment2: comment2CheckResult,
     comment3: comment3CheckResult
   });
-  var errs = errMsgs.map(function (item) {
-    if (item.length > 0) {
-      return false;
-    }
-  });
 
-  if (errs === false) {
+  if (errMsgs.name !== [] || errMsgs.photo !== [] || errMsgs.comment1 !== [] || errMsgs.comment2 !== [] || errMsgs.comment3 !== []) {
     $photo_err_element.innerHTML = errMsgs.photo[1];
     $name_err_element.innerHTML = errMsgs.name[1];
     $comment1_err_element.innerHTML = errMsgs.comment1[1];
@@ -192,6 +187,8 @@ var onSubmitProfile = function onSubmitProfile(user_id) {
 var checkRequired = function checkRequired(str) {
   if (str.length === 0) {
     return 'Input required.';
+  } else {
+    return '';
   }
 };
 var checkMinLen = function checkMinLen(str) {

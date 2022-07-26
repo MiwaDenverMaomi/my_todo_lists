@@ -45,7 +45,7 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function getLogin(){
+   public function getLogin(){
 		return view('login');
 	}
 
@@ -69,34 +69,43 @@ class LoginController extends Controller
 			->withErrors($validators)
 			->withInput();
 		}else{
-
-			$user=DB::table('users')->where('email',$request->email)->first();
-			\Log::debug($user->email);
-			\Log::debug($user->password);
-
-			if(empty($user)){
-
-				return back()->with(['error'=>'Email/password is invalid.']);
-			}
-
-			if(Hash::check($request->password,$user->password)){
-				session(['user_id'=>$user->id]);
-				session(['email'=>$user->email]);
-				session()->flash('status','Logged in');
-				\Log::info('Logged in');
+            if(Auth::attempt(['email'=>$request->input('email'),'password'=>$request->input('password')],true)){
+				\Log::info('Login ok');
 				\Log::debug(Auth::id());
+				\Log::debug(Auth::user());
+				session()->flash('status','Logged in');
 
 				return redirect()->route('bucket-lists.index');
 			}else{
 				return back()->with(['error'=>'Email/password is invalid.']);
 			}
+			// $user=DB::table('users')->where('email',$request->email)->first();
+			// \Log::debug($user->email);
+			// \Log::debug($user->password);
+
+			// if(empty($user)){
+
+			// 	return back()->with(['error'=>'Email/password is invalid.']);
+			// }
+
+			// if(Hash::check($request->password,$user->password)){
+			// 	session(['user_id'=>$user->id]);
+			// 	session(['email'=>$user->email]);
+			// 	session()->flash('status','Logged in');
+			// 	\Log::info('Logged in');
+
+			// 	return redirect()->route('bucket-lists.index');
+			// }else{
+			// 	return back()->with(['error'=>'Email/password is invalid.']);
+			// }
 		}
 
 	}
 
 	public function logout(Request $request){
-		session()->forget('email');
-		session()->forget('user_id');
+		// session()->forget('email');
+		// session()->forget('user_id');
+		Auth::logout();
 		session()->flash('status','Logged out.');
 		return redirect()->route('bucket-lists.index');
 	}
