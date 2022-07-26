@@ -81,29 +81,33 @@ export const sanitize=(str:any)=>{
 		.replace(/>/g,"&gt;")
 }
 
-export const onHandleSelectPhoto=(name:string|null)=>{
-	const sizeLimit=1024*1024*1;
+export const onHandleSelectPhoto=(photo:string|null)=>{
+	const sizeLimit=2560*1920*1;
 	const $inputPhoto=document.querySelector<any>('#input_photo');
 	const $photoFrame=document.querySelector<any>('#photo_frame');
 	const photos=$inputPhoto.files!==null?$inputPhoto.files:[
-		'./image/no_image.jpg'
+		'./img/no_image.jpg'
 	];
-	photos.map((item:string)=>{
-		if(+(item.size)>sizeLimit){
-			alert('Select less than 1MB.');
+	if(photo!==null){
+		const $photo_err_element=document.querySelector<any>('#photo_err');
+		let photoErrMsgs:string[]=checkPhoto(photo);
+		photos.map((item:string)=>{
+		if(photoErrMsgs.length>0){
 			$inputPhoto.value='';
-			return;
+			$photo_err_element.innerText=photoErrMsgs[0];
 		}else{
 			$photoFrame.innerHTML=`<img src="${item}" alt="${name===null?'No name':name}">`;
+			$photo_err_element.innerText='';
+			photoErrMsgs=[];
 		}
-
 	});
+	}
 }
 
 export const previewFile=(file:string)=>{
  const preview=document.querySelector<any>('#preview');
  const reader=new FileReader();
- reader.onload=(e)=>{
+ reader.onload=(e:any)=>{
 	const imageURL=e.target.result;
 	const img=document.createElement("img");
 	img.src=imageURL;
@@ -112,30 +116,212 @@ export const previewFile=(file:string)=>{
  reader.readAsDataURL(file);
 }
 
-export const checkEmail=(email:string)=>{};
-export const checkPassword=(password:string)=>{};
-export const checkName=(name:string)=>{};
-export const checkPhoto=(photo:string)=>{};
-export const checkComments=(comment:string)=>{};
-
 export const onSubmitProfile=(user_id:number)=>{
 	const $name_element=document.querySelector<any>('#name');
 	const $photo_element=document.querySelector<any>('#photo');
 	const $comment1_element=document.querySelector<any>('#comment1');
 	const $comment2_element=document.querySelector<any>('#comment2');
 	const $comment3_element=document.querySelector<any>('#comment3');
-  let errMsgs={
-		name:'',
-		photo:'',
-		comment1:'',
-		comment2:'',
-		comment3:'',
+	const $photo_err_element=document.querySelector<any>('#photo_err');
+	const $name_err_element=document.querySelector<any>('#name_err');
+	const $comment1_err_element=document.querySelector<any>('#comment1_err');
+	const $comment2_err_element=document.querySelector<any>('#comment2_err');
+	const $comment3_err_element=document.querySelector<any>('#comment3_err');
+
+	type ErrMsgs={
+		email:string[],
+		name:string[],
+		photo:string[],
+		comment1:string[],
+		comment2:string[],
+		comment3:string[],
+	};
+	let errMsgs:ErrMsgs={
+		email:[],
+		name:[],
+		photo:[],
+		comment1:[],
+		comment2:[],
+		comment3:[],
 	}
 
+	const nameCheckResult=checkName($name_element.value);
+	const photoCheckResult=checkPhoto($photo_element.value);
+	const comment1CheckResult=checkComments($comment1_element.value);
+	const comment2CheckResult=checkComments($comment2_element.value);
+	const comment3CheckResult=checkComments($comment3_element.value);
 
-	const $profile_form_element=document.querySelector<any>('#profile_form');
-	const $profile_form_element.method="post";
-	const $profile_form_element.action=`"/${user_id}/edit-profile"`;
-	$profile_form_element.submit();
+	errMsgs={...errMsgs,
+	  name:nameCheckResult,
+		photo:photoCheckResult,
+		comment1:comment1CheckResult,
+		comment2:comment2CheckResult,
+		comment3:comment3CheckResult
+	}
 
+	const errs=errMsgs.map((item:any)=>{
+		if(item.length>0){
+			return false;
+		}});
+
+	if(errs===false){
+	  $photo_err_element.innerHTML=errMsgs.photo[1];
+	  $name_err_element.innerHTML=errMsgs.name[1];
+	  $comment1_err_element.innerHTML=errMsgs.comment1[1];
+	  $comment2_err_element.innerHTML=errMsgs.comment2[1];
+	  $comment3_err_element.innerHTML=errMsgs.comment3[1];
+
+	}else{
+		const $profile_form_element=document.querySelector<any>('#profile_form');
+		errMsgs={
+		  email:[],
+		  name:[],
+		  photo:[],
+		  comment1:[],
+		  comment2:[],
+		  comment3:[],
+  	};
+
+		$profile_form_element.method="post";
+		$profile_form_element.action=`"/${user_id}/edit-profile"`;
+		$profile_form_element.submit();
+	}
+};
+
+//validation
+export const checkRequired=(str:string)=>{
+	if(str.length===0){
+		return 'Input required.'
+	}
+};
+
+export const checkMinLen=(str:string,num:number=7)=>{
+	if(str.length<num){
+		return `Input more than ${num} letters.`;
+	}else{
+		return '';
+	}
+};
+
+export const checkMaxLen=(str:string,num:number=255)=>{
+	if(str.length>num){
+		return `Input less than ${num} letters.`;
+	}else{
+		return '';
+	}
+};
+
+export const checkValidEmail=(email:string)=>{
+	const pattern = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]+.[A-Za-z0-9]+$/;
+	if(!pattern.test(email)){
+		return 'Input valid email address.'
+	}else{
+		return ''
+	}
+};
+
+export const checkValidPhoto=(photo:any,sizeLimit:number=2560*1920*1,mb:number=5)=>{
+	if(photo.size>sizeLimit){
+		return `Upload less than ${mb} MB.`;
+	}else{
+		return '';
+	}
+};
+
+export const checkEmail=(email:string)=>{
+	let errs:string[]=[];
+	const checkValidEmailResult=checkValidEmail(email);
+	const checkMaxLenResult=checkMaxLen(email);
+	const checkMinLenResult=checkMinLen(email);
+	const checkRequiredResult=checkRequired(email);
+
+	if(checkValidEmailResult?.length>0){
+		errs.push(checkValidEmailResult);
+	}
+
+	if(checkMaxLenResult?.length>0){
+		errs.push(checkMaxLenResult);
+	}
+
+	if(checkMinLenResult?.length>0){
+		errs.push(checkMinLenResult);
+	}
+
+	if(checkRequiredResult?.length>0){
+		errs.push(checkRequiredResult);
+	}
+
+	return errs;
+};
+
+export const checkPassword=(password:string)=>{
+ let errs:string[]=[];
+
+	const checkMaxLenResult=checkMaxLen(password);
+	const checkMinLenResult=checkMinLen(password);
+	const checkRequiredResult=checkRequired(password);
+
+	if(checkMaxLenResult?.length>0){
+		errs.push(checkMaxLenResult);
+	}
+
+	if(checkMinLenResult?.length>0){
+		errs.push(checkMinLenResult);
+	}
+
+	if(checkRequiredResult?.length>0){
+		errs.push(checkRequiredResult);
+	}
+
+	return errs;
+}
+
+export const checkName=(name:string)=>{
+	let errs:string[]=[];
+
+	const checkMaxLenResult=checkMaxLen(name);
+
+	if(checkMaxLenResult?.length>0){
+		errs.push(checkMaxLenResult);
+	}
+	return errs;
+};
+
+
+export const checkPhoto=(photo:string)=>{
+	let errs:string[]=[];
+	const checkValidPhotoResult=checkValidPhoto(photo);
+	if(checkValidPhotoResult?.length>0){
+		errs.push(checkValidPhotoResult);
+	}
+	return errs;
+};
+
+export const checkComments=(comment:string)=>{
+	let errs:string[]=[];
+
+	const checkMaxLenResult=checkMaxLen(comment);
+
+	if(checkMaxLenResult?.length>0){
+		errs.push(checkMaxLenResult);
+	}
+
+	return errs;
+};
+
+export const checkTodo=(todo:string)=>{
+	let errs:string[]=[];
+
+	const checkMaxLenResult=checkMaxLen(todo);
+	const checkRequiredResult=checkRequired(todo);
+
+	if(checkMaxLenResult?.length>0){
+		errs.push(checkMaxLenResult);
+	}
+
+	if(checkRequiredResult?.length>0){
+		errs.push(checkRequiredResult);
+	}
+
+	return errs;
 };

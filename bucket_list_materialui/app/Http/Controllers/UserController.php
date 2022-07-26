@@ -49,14 +49,16 @@ class UserController extends Controller
 	   \Log::info('user/editProfile');
 
 	   $validator=Validator::make($request->all(),[
-		"photo"=>"string|max:255",
+		"photo"=>'image|mimes:jpeg,png,jpg|max:5120|dimensions:max_width=300',
 		"name"=>"string|max:255",
 		"question_1"=>"string |max:500",
 		"question_2"=>"string |max:500",
 		"question_3"=>"string |max:500",
 	   ],[
-		"photo.string"=>"Upload jpg or png file.",
-		"photo.max"=>"Upload the photo within XXX bytes.",
+		"photo.image"=>"Upload jpg or png file.",
+		"photo.mimes"=>"Upload jpg or png file.",
+		"photo.dimensions"=>"Maximum width is 300px",
+		"photo.max"=>"Upload the photo within 5120 bytes.",
 		"name.string"=>"Data type for name is not valid. ",
 		"name.max"=>"Input name within 255 letters. ",
 		"question_1.string"=>"Data type for answers are not valid. ",
@@ -79,8 +81,11 @@ class UserController extends Controller
 		 $question_2=!empty($request->question_2)?$request->question_2:'No comment';
 		 $question_3=!empty($request->question_3)?$request->question_3:'No comment';
 
+
+         $fileName=$request->file("img")!==null?$request->file("img")->store("public/img/uploads"):null;
+
 		 $result=Profile::find($user->id)->fill([
-		  'photo'=>$photo,
+		  'photo'=>$fileName,
 		  'question_1'=>$question_1,
 		  'question_2'=>$question_2,
 		  'question_3'=>$question_3,

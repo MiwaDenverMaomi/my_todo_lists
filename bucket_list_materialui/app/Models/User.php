@@ -68,4 +68,17 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    // public function pic_thum(){
+    //     $fnamebase=\Config::get('fpath.thum').$this->id."/"."thum";
+    //     if(file_exists(public_path().$fnamebase."jpg")){
+    //         return $fnamebase."jpg";
+    //     }elseif(file_exists(public_path().$fnamebase."jpeg")){
+    //         return $fnamebase."jpeg";
+    //     }elseif(file_exists(public_path()).$fnamebase."png"){
+    //         return $fnamebase."png";
+    //     }else{
+    //         return \Config::get('fpath.noimage');
+    //     }
+    // }
 }

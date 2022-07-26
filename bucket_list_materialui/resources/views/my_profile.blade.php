@@ -11,7 +11,8 @@
  <div class="row mx-auto">
 	<div id="preview"></div>
 			<div class="col-lg-4 mx-auto">
-			<form method="post" action={{route('user.editProfile',['user'=>$user_data['id']])}} enctype="multipart/form-data">
+			<div class="text-center text-danger" id="photo_err"></div>
+			<form method="post" action={{route('user.editProfile',['user'=>$user_data['id']])}} enctype="multipart/form-data" id="profile_form">
 				@csrf
 				@method('patch')
 				<div class="mx-auto mb-2 profile-img edit-img" id="photo_frame">
