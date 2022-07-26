@@ -69,7 +69,8 @@ class LoginController extends Controller
 			->withErrors($validators)
 			->withInput();
 		}else{
-            if(Auth::attempt(['email'=>$request->input('email'),'password'=>$request->input('password')],true)){
+            $remember=$request->rememtber===true?true:false;
+            if(Auth::attempt(['email'=>$request->input('email'),'password'=>$request->input('password')],$remember)){
 				\Log::info('Login ok');
 				\Log::debug(Auth::id());
 				\Log::debug(Auth::user());

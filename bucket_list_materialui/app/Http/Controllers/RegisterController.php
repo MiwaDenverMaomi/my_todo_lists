@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Validator;
+use Auth;
 use \Symfony\Component\HttpFoundation\Response;
 
 class RegisterController extends Controller
 {
     protected $RULES=[
-            'email'=>'required|email|max:255|unique:users',
-            'password'=>'required|max:255',
-            're_password'=>'required|confirmed'
+            'email'=>'required|string|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',//userテーブルでemailのカラムがidカラムがNULLのものを除き、deleted_atがNULLのものが存在するかを確認するという内容になる。
+            'password'=>'required|max:255|confirmed',
         ];
 
     public function getRegister(){
@@ -22,15 +22,16 @@ class RegisterController extends Controller
 
     public function postRegister(Request $request){
       \Log::info('postRegister');
+      \Log::debug($request);
       $validator=Validator::make($request->all(),$this->RULES,[
         'email.required'=>'Input required.',
+        'email.string'=>'Input string.',
         'email.email'=>'Input valid email.',
         'email.max'=>'Input within 255 letters.',
         'email.unique'=>'This email is already used.',
         'passowrd.required'=>'Input required.',
         'password.max'=>'Input within 255 letters.',
-        're_password.required'=>'Input required.',
-        're_password.confirmed'=>'Confirm your password.'
+        'password.confirmed'=>'Confirm your password.'
       ]);
       if($validator->fails()){
         return back()
@@ -38,12 +39,12 @@ class RegisterController extends Controller
         ->withInput();
      }else{
         $user=User::create([
-        'name'=>$request->name,
         'email'=>$request->email,
         'password'=>\Hash::make($request->password)
         ]);
 
         if(!empty($user)){
+          Auth::attempt(['email'=>$request->input('email'),'password'=>$request->input('password')]);
           return view('result')
           ->with([
             'is_success'=>true,
@@ -52,5 +53,24 @@ class RegisterController extends Controller
 // 　　　　　 return back()->with(['register_error'=>'Failed to create your account. Please try again later!']);
         }
      }
+    }
+
+    public function getCancel(){
+        return view('cancel');
+    }
+
+    public function cancel(User $user){
+        \Log::info('cancel');
+        $result=$user->delete();
+        \Log::debug($result);
+        if($result===true){
+           return view('result')
+           ->with([
+            'is_success'=>true,
+            'message'=>'You canceled the membership.']);
+        }else{
+           return back()->with(
+            ['cancel_err'=>'You failed to cancel. Please try again later!']);
+        }
     }
 }

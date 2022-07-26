@@ -25,8 +25,12 @@ Login
       <input type="password" name="password" class="form-control" id="password" placeholder="Password">
       <label for="password">Password</label>
     </div>
+    <label>
+        <input type="checkbox" name="remember" value="remember-me"> Remember me
+    </label>
     </div>
     <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Log in</button>
+    <a class="d-block mb-3" href="{{route('register.getRegister')}}">Create your account</a>
   </form>
 </div>
 @endsection

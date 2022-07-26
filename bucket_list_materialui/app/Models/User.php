@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Profile;
 use App\Models\Like;
 use App\Models\Bucket_list;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
@@ -46,6 +47,9 @@ class User extends Authenticatable
 
         'email_verified_at' => 'datetime',
     ];
+
+    use SoftDeletes;
+    protected $dates=['deleted_at'];//carbon instance
 
     public function profile(){
        return $this->hasOne(Profile::class,'user_id','id');

@@ -21,18 +21,21 @@
               <div class="btn-group">
 	              <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu</button>
 	              <div class="dropdown-menu">
-		              <a class="dropdown-item" href="">My Todos</a>
-		              <a class="dropdown-item" href="/user/5/show-profile">Profile</a>
+								 @auth
+		              <a class="dropdown-item" href="{{route('bucket-lists.show',['user'=>Auth::id()])}}">My Todos</a>
+		              <a class="dropdown-item" href="{{route('user.showProfile',['user'=>Auth::id()])}}">Profile</a>
 		              <a class="dropdown-item" href="#">Favorites</a>
 		              <a class="dropdown-item" href="#">Password Reset</a>
-		              <a class="dropdown-item" href="#">Cancel</a>
+		              <a class="dropdown-item" href="{{route('register.getCancel')}}">Cancel</a>
 		              <a class="dropdown-item" href="{{route('login.logout')}}">Logout</a>
+								 @endauth
 		              <div class="dropdown-divider"></div>
 		              <a class="dropdown-item" href="{{route('bucket-lists.index')}}">Top</a>
 		              <a class="dropdown-item" href="{{route('general.getAbout')}}">About</a>
 		              <a class="dropdown-item" href="{{route('general.getHelp')}}">Help</a>
-		              <a class="dropdown-item" href="{{route('register.getRegister')}}">Create account</a>
-		              <a class="dropdown-item" href="{{route('login.getLogin')}}">Login</a>
+								 @guest
+								  <a class="dropdown-item" href="{{route('login.getLogin')}}">Login</a>
+		             @endguest
 	             </div>
 	            </div>
 	          </li>

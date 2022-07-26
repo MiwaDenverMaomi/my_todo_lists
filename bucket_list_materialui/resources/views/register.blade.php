@@ -25,11 +25,8 @@ Create your account
       <input type="password" name="password" class="form-control" id="password" placeholder="Password">
       <label for="password">Password</label>
     </div>
-    <div class="text-center text-danger mb-0">
-						 {{$errors->has('re_password')?$errors->first('re_password'):''}}
-		</div>
     <div class="form-floating mb-3">
-      <input type="password" class="form-control" id="re_password" name="re_password" placeholder="Confirm password">
+      <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm password">
       <label for="floatingPassword">Re-type your password</label>
     </div>
     </div>
