@@ -45,6 +45,7 @@ class RegisterController extends Controller
 
         if(!empty($user)){
           Auth::attempt(['email'=>$request->input('email'),'password'=>$request->input('password')]);
+          session()->flash('is_userinfo_hide',true);
           return view('result')
           ->with([
             'is_success'=>true,
@@ -64,6 +65,7 @@ class RegisterController extends Controller
         $result=$user->delete();
         \Log::debug($result);
         if($result===true){
+            session()->flash('is_userinfo_hide',true);
            return view('result')
            ->with([
             'is_success'=>true,

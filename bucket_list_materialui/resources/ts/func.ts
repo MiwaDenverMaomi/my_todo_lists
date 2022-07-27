@@ -1,3 +1,4 @@
+import axios from '../apis/axios';
 
 //is_done:any->because the value passed from blade is 1 or 0. Convert them into string in php by wrapping '', and cast them to boolean in JavaScript.
 
@@ -152,7 +153,7 @@ export const onSubmitProfile=(user_id:number)=>{
 	const comment3CheckResult=checkComments($comment3_element.value);
 
 	errMsgs={...errMsgs,
-	  name:nameCheckResult,
+		name:nameCheckResult,
 		photo:photoCheckResult,
 		comment1:comment1CheckResult,
 		comment2:comment2CheckResult,
@@ -160,26 +161,51 @@ export const onSubmitProfile=(user_id:number)=>{
 	}
 
 	if(errMsgs.name!==[]||errMsgs.photo!==[]||errMsgs.comment1!==[]||errMsgs.comment2!==[]||errMsgs.comment3!==[]){
-	  $photo_err_element.innerHTML=errMsgs.photo[1];
-	  $name_err_element.innerHTML=errMsgs.name[1];
-	  $comment1_err_element.innerHTML=errMsgs.comment1[1];
-	  $comment2_err_element.innerHTML=errMsgs.comment2[1];
-	  $comment3_err_element.innerHTML=errMsgs.comment3[1];
+		$photo_err_element.innerHTML=errMsgs.photo[1];
+		$name_err_element.innerHTML=errMsgs.name[1];
+		$comment1_err_element.innerHTML=errMsgs.comment1[1];
+		$comment2_err_element.innerHTML=errMsgs.comment2[1];
+		$comment3_err_element.innerHTML=errMsgs.comment3[1];
 
 	}else{
 		const $profile_form_element=document.querySelector<any>('#profile_form');
 		errMsgs={
-		  email:[],
-		  name:[],
-		  photo:[],
-		  comment1:[],
-		  comment2:[],
-		  comment3:[],
-  	};
+			email:[],
+			name:[],
+			photo:[],
+			comment1:[],
+			comment2:[],
+			comment3:[],
+		};
 
 		$profile_form_element.method="post";
 		$profile_form_element.action=`"/${user_id}/edit-profile"`;
 		$profile_form_element.submit();
+	}
+};
+
+export const searchKeyword=(str:string)=>{
+	let result:any=axios.get('/search',{
+		params:{
+			keyword:str
+		}
+	}).then((res:any)=>res).catch((err:any)=>err);
+
+  if(result===undefined){
+    return {
+      is_success:false,
+			result:'Failed to search.Try again later.'
+		}
+	}else if(result.data.Response==='False'){
+    return {
+      is_success:false,
+			result:'Failed to search.Try again later.'
+		}
+	}else{
+		return {
+      is_success:true,
+			result:result.data
+		}
 	}
 };
 

@@ -8,7 +8,8 @@
     </div>
   @endif
   @include('parts.nav')
-	@include('parts.user')
+  @include('parts.user')
+
   <div id="app">
 	<main class="py-4">
 		<h1 class="h3 mb-3 fw-normal mb-5 text-center">@yield('title')</h1>

@@ -20,6 +20,7 @@ declare global { interface Window {
   checkPhoto:any,
   checkComments:any;
   checkTodo:any,
+  searchKeyword:any
  } }
 
 window.onHandleIsDone = require("./func").onHandleIsDone;
@@ -42,3 +43,4 @@ window.checkName=require("./func").checkName;
 window.checkPhoto=require("./func").checkPhoto;
 window.checkComments=require("./func").checkComments;
 window.checkTodo=require("./func").checkTodo;
+window.searchKeyword=require("./func").searchKeyword;
