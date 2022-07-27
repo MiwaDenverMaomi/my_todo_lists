@@ -11,7 +11,7 @@ use App\Http\Controllers\GeneralController;
 
 //Top page
 Route::get('/',[BucketListController::class,'index'])->name('bucket-lists.index');
-
+Route::get('/search',[BucketListController::class,'searchKeyword'])->name('bucket-lists.searchKeyword');
 //Register,Login,Logout,cancel
 Route::get('/register',[RegisterController::class,'getRegister'])->name('register.getRegister');
 Route::post('/register',[RegisterController::class,'postRegister'])->name('register.postRegister');

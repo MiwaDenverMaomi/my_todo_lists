@@ -6,6 +6,16 @@
 @endif
 @section('content')
   <div class="container px-4 " id="featured-3">
+    <div class="text-center">
+      @if(!empty($keyword))
+       Seach results for "{{$keyword}}""
+      @endif
+    </div>
+    <div class="text-center">
+      @if(!empty($search_reulst))
+         {{$search_result}}
+      @endif
+    </div>
     <div class="row g-4 row-cols-1 row-cols-lg-3">
     @if(!empty($bucket_lists))
       @foreach($bucket_lists as $list)

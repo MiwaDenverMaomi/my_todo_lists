@@ -157,7 +157,7 @@ class BucketListController extends Controller
 			 if($result===true){
 				 return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
 			 }else{
-         return back()->with([`update_title_error`=>'Failed to save data. Please try again later.']);
+				 return back()->with([`update_title_error`=>'Failed to save data. Please try again later.']);
 			 }
 		}
 	}
@@ -175,4 +175,53 @@ class BucketListController extends Controller
 			 ->with(['delete_error','Failed to save data. Please try again later!']);
 		}
 }
+
+public function searchKeyword(Request $request){
+	 \Log::info('searchKeyword');
+	 \Log::debug($request);
+	 $keyword=trim($request->keyword);
+	 $request->keyword=$keyword;
+
+	 $validator=Validator::make($request->all(),
+	 [
+		'keyword'=>'required|max:255'
+	 ],[
+		'keyword.required'=>'Input keyword.',
+		'keyword.max'=>'Input within 255 letters.'
+	 ]);
+
+	 if($validator->fails()){
+		return back()
+		->withErrors($validator)
+		->withInput();
+	 }
+
+	 $space_conversion=mb_convert_kana($keyword);
+	 $word_array_searched = preg_split('/[\s,]+/', $space_conversion, -1, PREG_SPLIT_NO_EMPTY);
+
+	 $bucket_lists=User::with('profile','bucket_lists','likes')->whereHas('bucket_lists',function($q) use($word_array_searched){
+		  foreach($word_array_searched as $value) {
+             $q->where('bucket_list_item', 'like', '%'.$value.'%');
+            }
+	 })
+	//  ->where('name',function($q) use($word_array_searched){
+	// 	   foreach($word_array_searched as $value) {
+  //            $q->where('name', 'like', '%'.$value.'%');
+  //           }
+	//  })
+	 ->select('id','name','email')->get()->toArray();
+
+	 for($i=0;$i<count($bucket_lists);$i++){
+			$bucket_lists[$i]['countLikes']=count($bucket_lists[$i]['likes']);
+		}
+	 \Log::debug($bucket_lists);
+		// $count=!isset($bucket_lists)?count($bucket_lists):'0';
+		 return view('all_bucket_lists')
+		 ->with([
+			'keyword'=>$keyword,
+			'bucket_lists'=>$bucket_lists,
+			// 'search_result'=>`${$count} items found.}`,
+		]);
+	}
+
 }
