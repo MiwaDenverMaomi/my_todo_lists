@@ -204,23 +204,24 @@ public function searchKeyword(Request $request){
              $q->where('bucket_list_item', 'like', '%'.$value.'%');
             }
 	 })
-	//  ->where('name',function($q) use($word_array_searched){
+	//  ->orWhere('name',function($q) use($word_array_searched){
 	// 	   foreach($word_array_searched as $value) {
   //            $q->where('name', 'like', '%'.$value.'%');
   //           }
 	//  })
-	 ->select('id','name','email')->get()->toArray();
+	 ->select('id','name','email')->orderBy('users.updated_at'
+	 )->get()->toArray();
 
 	 for($i=0;$i<count($bucket_lists);$i++){
 			$bucket_lists[$i]['countLikes']=count($bucket_lists[$i]['likes']);
 		}
 	 \Log::debug($bucket_lists);
-		// $count=!isset($bucket_lists)?count($bucket_lists):'0';
+		$count=!empty($bucket_lists)?count($bucket_lists):0;
 		 return view('all_bucket_lists')
 		 ->with([
 			'keyword'=>$keyword,
 			'bucket_lists'=>$bucket_lists,
-			// 'search_result'=>`${$count} items found.}`,
+			'result_count'=>$count,
 		]);
 	}
 
