@@ -9,6 +9,7 @@ use App\Models\Favorite;
 use Validator;
 use Auth;
 use App\Models\Bucket_list;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserController extends Controller
 {
@@ -116,19 +117,41 @@ class UserController extends Controller
 		$result===true?response()->json($result,201):response()->json([],500);
 	}
 
-	public function storeFarovite(FavoriteRequest $favoriteRequest){
+	public function storeFarovite(Request $Request){
+
 		\Log::info('user/storeFavorite');
-		$favoriteRequest->merge([
-			'from_user'=>$favoriteRequest->Auth::id()
+        $validator=Validator::make($request->all(),[
+			'to_user'=>'required|number|max:255'
+		],[
+			'to_user.required'=>'Input required.',
+			'to_user.number'=>'Input number.',
+			'to_user.max'=>'Id number is invalid.'
 		]);
-		$favorite=Favorite::create($favoriteRequest->all());
-		$favorite?response()->json($favorite,201):json([],500);
+
+		if($validator->fails())
+		  $resonse['errors']=$validator->errors()->toArray();
+		  throw new HttpResponseException(response()->json($response));
+		}
+		$request->merge([
+			'from_user'=>Auth::id()
+		]);
+
+        $favorite=Favorite::create($request->all());
+		$result=User::find($request->to_user)->is_liked_by_auth();
+
+		if($favorite===true&&$result===true){
+			return response()->json(['is_success'=>true],201);
+		}
+
+		return throw new HttpResponseException(response()->json(['is_success'=>false,
+		    'storeFavorite_error'=>'Failed to store favorite.']));
 	}
 
-	public function deleteFavorite(FavoriteRequest $favoriteRequest,Favorite $favorite){
+	public function deleteFavorite(Favorite $favorite){
 		\Log::info('user/deleteFavorite');
-		$result=$favorite->delete();
-		$result===true?response()->json($favorite,201):response()->json([],500);
+
+		// $result=$favorite->delete();
+		// $result===true?response()->json($favorite,201):response()->json([],500);
 	}
 
 	public function storeLike(LikeRequest $likeRequest){
