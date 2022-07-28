@@ -21,16 +21,19 @@ class Favorite extends Model
     public function profile(){
         return $this->hasOne(Profile::class,'user_id','to_user');
     }
+    // public function user(){
+    //     return $this->hasOne(User::class,'id');
+    // }
     public function user(){
-        return $this->hasOne(User::class,'id');
+        return $this->belongsTo(User::class,'to_user','id');
     }
 
     public function bucket_lists(){
-        return $this->hasMany(Bucket_list::class,'user_id','to_user');
+        return $this->hasMany(Bucket_list::class,'to_user','user_id');
     }
 
     public function likes(){
-        return $this->hasMany(Like::class,'to_user');
+        return $this->hasMany(Like::class,'to_user','user_id');
     }
 
     public function is_liked_by_auth(){

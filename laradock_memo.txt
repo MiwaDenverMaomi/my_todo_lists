@@ -304,3 +304,108 @@ SPAのログインページで初めに/sanctum/csrf-cookieにリクエストを
 取得した結果のサンプルを参照～！
 ・リレーション先のリレーションを参照するときは、「.」でつなげる。例）
 with('user.profile')->,,,
+
+・$favorites=Favorite::where('from_user','=',3)
+		->with('user','user.profile','user.bucket_lists','user.likes')->get()->toArray();
+こういう書きかたをした場合、出力されるのは以下のようなデータ
+
+array (
+  0 => 
+  array (
+    'id' => 2,
+    'from_user' => 3,
+    'to_user' => 2,
+    'created_at' => '2022-06-21T15:17:07.000000Z',
+    'updated_at' => '2022-06-21T15:17:07.000000Z',
+    'user' => 
+    array (
+      'id' => 2,
+      'name' => 'Abagail Jaskolski IV',
+      'email' => 'tressie.heaney@example.net',
+      'email_verified_at' => NULL,
+      'created_at' => '2022-06-21T15:17:06.000000Z',
+      'updated_at' => '2022-06-21T15:17:06.000000Z',
+      'deleted_at' => NULL,
+      'profile' => 
+      array (
+        'id' => 9,
+        'user_id' => 2,
+        'photo' => 'https://via.placeholder.com/600x600.png/005599?text=cats+modi',
+        'question_1' => 'Gryphon said to Alice, very much of a treacle-well--eh, stupid?\' \'But they were lying on the twelfth?\' Alice went timidly up to her daughter \'Ah, my dear! I shall have to beat time when she looked down at them, and just as well as if she had never had fits, my dear, YOU must cross-examine THIS.',
+        'question_2' => 'On which Seven looked up eagerly, half hoping that the pebbles were all writing very busily on slates. \'What are tarts made of?\' Alice asked in a very curious sensation, which puzzled her a good character, But said I could say if I only knew the meaning of it at last, and they sat down and began.',
+        'question_3' => 'Alice had begun to repeat it, but her voice sounded hoarse and strange, and the small ones choked and had no reason to be talking in a natural way. \'I thought you did,\' said the Caterpillar. \'Well, perhaps not,\' said Alice aloud, addressing nobody in particular. \'She\'d soon fetch it here.',
+        'created_at' => '2022-06-21T15:17:06.000000Z',
+        'updated_at' => '2022-06-21T15:17:06.000000Z',
+      ),
+      'bucket_lists_for_favorites' => 
+      array (
+      ),
+      'likes' => 
+      array (
+      ),
+    ),
+  ),
+  1 => 
+  array (
+    'id' => 12,
+    'from_user' => 3,
+    'to_user' => 19,
+    'created_at' => '2022-06-21T15:17:07.000000Z',
+    'updated_at' => '2022-06-21T15:17:07.000000Z',
+    'user' => 
+    array (
+      'id' => 19,
+      'name' => 'Hallie Hills',
+      'email' => 'casandra.conn@example.net',
+      'email_verified_at' => NULL,
+      'created_at' => '2022-06-21T15:17:06.000000Z',
+      'updated_at' => '2022-06-21T15:17:06.000000Z',
+      'deleted_at' => NULL,
+      'profile' => 
+      array (
+        'id' => 7,
+        'user_id' => 19,
+        'photo' => 'https://via.placeholder.com/600x600.png/003322?text=cats+ipsum',
+        'question_1' => 'Never heard of "Uglification,"\' Alice ventured to remark. \'Tut, tut, child!\' said the Mouse to Alice severely. \'What are you getting on now, my dear?\' it continued, turning to Alice, and sighing. \'It IS a long silence after this, and after a few yards off. The Cat only grinned a little queer.',
+        'question_2' => 'Alice called after it; and while she ran, as well say,\' added the March Hare. \'I didn\'t know that cats COULD grin.\' \'They all can,\' said the Caterpillar. Alice folded her hands, and was just in time to see anything; then she remembered the number of executions the Queen jumped up in such a new.',
+        'question_3' => 'I then? Tell me that first, and then, \'we went to school in the sun. (IF you don\'t like it, yer honour, at all, as the rest of my own. I\'m a hatter.\' Here the Dormouse crossed the court, by the little golden key, and Alice\'s elbow was pressed so closely against her foot, that there was enough of.',
+        'created_at' => '2022-06-21T15:17:06.000000Z',
+        'updated_at' => '2022-06-21T15:17:06.000000Z',
+      ),
+      'bucket_lists_for_favorites' => 
+      array (
+        0 => 
+        array (
+          'id' => 6,
+          'user_id' => 19,
+          'bucket_list_item' => 'Alice remarked. \'Oh, you foolish Alice!\' she answered herself. \'How can you learn lessons in here? Why, there\'s hardly room to grow up any more HERE.\' \'But then,\' thought she, \'what would become of me? They\'re dreadfully fond of beheading people here; the great wonder is, that there\'s any one left alive!\' She was walking hand in hand, in couples: they were trying which word sounded best. Some of the room again, no wonder she felt sure it would be quite absurd for her to speak with. Alice.',
+          'is_done' => false,
+          'created_at' => '2022-06-21T15:17:07.000000Z',
+          'updated_at' => '2022-06-21T15:17:07.000000Z',
+        ),
+      ),
+      'likes' => 
+      array (
+        0 => 
+        array (
+          'id' => 3,
+          'from_user' => 6,
+          'to_user' => 19,
+          'created_at' => '2022-06-21T15:17:06.000000Z',
+          'updated_at' => '2022-06-21T15:17:06.000000Z',
+        ),
+        1 => 
+        array (
+          'id' => 19,
+          'from_user' => 5,
+          'to_user' => 19,
+          'created_at' => '2022-06-21T15:17:07.000000Z',
+          'updated_at' => '2022-06-21T15:17:07.000000Z',
+        ),
+      ),
+    ),
+  ),
+)  
+
+※ポイントはusers.favoritesのような書き方をした場合、bladeでの扱いは
+$result['users']['favorites']のようにネストされる。ネストがポイント。

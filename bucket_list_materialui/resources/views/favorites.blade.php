@@ -13,7 +13,7 @@
 		</div>
 		<div class="row g-4 row-cols-1 row-cols-lg-3">
 		@if(!empty($favorites))
-			@foreach($favorites['favorites'] as $list)
+			@foreach($favorites as $list)
 			<div class="card pt-5 pb-3 g-col-4">
 				@if(!empty($list['profile']))
 				<img src="{{ asset($list['profile']['photo'])}}" class="rounded-circle d-block mx-auto" alt="{{$list['user']['name'].'_photo'}}" width="100" height="100" >
@@ -22,12 +22,12 @@
 				@endif
 				<strong class="text-center d-block mb-3">{{$list['user']['name']}}</strong>
 				<div class="text-center mb-3">
-					<i class=`bi bi-heart-fill`></i><strong>{{count($list['likes'])}}</strong>
+					<i class=`bi bi-heart-fill`></i><strong>{{count($list['user']['likes'])}}</strong>
 				</div>
 				<div class="container">
 				<div class="list-group w-auto mb-3">
-					@if(!empty($list['bucket_lists']))
-						@foreach($list['bucket_lists'] as $item)
+					@if(!empty($list['user']['bucket_lists']))
+						@foreach($list['user']['bucket_lists'] as $item)
 						 <label class="list-group-item d-flex gap-3">
 							<p @class(['textdecoration-linethrough'=>$item['is_done']])>{{$item['bucket_list_item']}}</p>
 						</label>
