@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Profile;
+use App\Models\Favorite;
 use Validator;
+use Auth;
+use App\Models\Bucket_list;
 
 class UserController extends Controller
 {
@@ -143,4 +146,26 @@ class UserController extends Controller
 		$result===true?response()->json($result,201):response()->json([],500);
 	}
 
+	public function getFavorites(){
+		\Log::info('getFavorites');
+		// $favorites=User::with('profile','bucket_lists','likes','favorites')
+		// ->whereHas('favorites',function($q){
+		// 	$q->where('from_user','=',3);
+		// })
+		// ->select('id','name','email')->get()->toArray();
+		$favorites=Favorite::where('from_user','=',3)->with('user','profile','bucket_list','likes')->select('id')
+		->get()->toArray();
+		for($i=0;$i<count($favorites);$i++){
+			$favorites[$i]['countLikes']=count($favorites[$i]['likes']);
+		}
+
+		\Log::debug($favorites);
+        if(!empty($favorites)){
+
+			return view('favorites')->with(['favorites'=>$favorites]);
+		}else{
+			return view('favorites')->with(['favorites_ error'=>'Failed to get data.Please try again later.']);
+		}
+
+	}
 }

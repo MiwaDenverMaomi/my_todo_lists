@@ -41,6 +41,7 @@ Route::prefix('user')->group(function(){
     Route::group(['middleware'=>'auth'],function(){
       Route::patch('/{user}/edit-profile',[UserController::class,'editProfile'])->name('user.editProfile');
       Route::get('/{user}/show-profile',[UserController::class,'showProfile'])->name('user.showProfile');
+      Route::get('/{user}/favorites',[UserController::class,'getFavorites'])->name('user.getFavorites');
       Route::get('/{user}/edit-profile-mode/{edit_mode}',[UserController::class,'editProfileMode'])->name('user.editProfileMode');
       Route::patch(`/{user}/reset-password`,[UserController::class,'resetPassword'])->name('user.resetPassword');
       // Route::post(`/reset-password/send-email`,[UserController::class,'sendEmail']);

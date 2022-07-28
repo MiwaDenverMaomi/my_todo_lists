@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Profile;
 use App\Models\Like;
+use App\Models\Favorite;
 use App\Models\Bucket_list;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -66,13 +67,26 @@ class User extends Authenticatable
     public function is_liked_by_auth(){
         $likes=self::likes()->get()->toArray();
         for($i=0;$i<count($likes);$i++){
-            if($likes[$i]['from_user']===4){
+            if($likes[$i]['from_user']===Auth::id()){
                 return true;
             }
+            return false;
         }
-        return false;
     }
 
+    public function favorites(){
+        return $this->hasMany(Favorite::class,'from_user');
+    }
+
+    public function is_favorite_by_auth(){
+        $favorites=self::favorites()->get()->toArray();
+        for($i=0;$i<count($favorites);$i++){
+            if($favorites[$i]['from_user']===Auth::id()){
+                return true;
+            }
+            return false;
+        }
+    }
     // public function pic_thum(){
     //     $fnamebase=\Config::get('fpath.thum').$this->id."/"."thum";
     //     if(file_exists(public_path().$fnamebase."jpg")){
