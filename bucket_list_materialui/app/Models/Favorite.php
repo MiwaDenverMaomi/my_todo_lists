@@ -19,14 +19,14 @@ class Favorite extends Model
     //     return $this->hasMany(Favorite::class,'from_user');
     // }
     public function profile(){
-        return $this->hasOne(Profile::class,'user_id');
+        return $this->hasOne(Profile::class,'user_id','to_user');
     }
     public function user(){
         return $this->hasOne(User::class,'id');
     }
 
-    public function bucket_list(){
-        return $this->hasMany(Bucket_list::class,'user_id');
+    public function bucket_lists(){
+        return $this->hasMany(Bucket_list::class,'user_id','to_user');
     }
 
     public function likes(){

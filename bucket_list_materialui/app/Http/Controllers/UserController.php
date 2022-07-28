@@ -148,21 +148,19 @@ class UserController extends Controller
 
 	public function getFavorites(){
 		\Log::info('getFavorites');
-		// $favorites=User::with('profile','bucket_lists','likes','favorites')
-		// ->whereHas('favorites',function($q){
-		// 	$q->where('from_user','=',3);
-		// })
-		// ->select('id','name','email')->get()->toArray();
-		$favorites=Favorite::where('from_user','=',3)->with('user','profile','bucket_list','likes')->select('id')
+		$favorites=User::where('id','=',3)->with('favorites.user','favorites.profile','favorites.bucket_lists','favorites.likes')->select('id','name','email')
 		->get()->toArray();
-		for($i=0;$i<count($favorites);$i++){
-			$favorites[$i]['countLikes']=count($favorites[$i]['likes']);
+
+        foreach($favorites[0]['favorites'] as $favorite){
+				array_push($favorite,['countLikes'=>count($favorite['likes'])]);
+				\Log::debug('count');
+				\Log::debug(count($favorite['likes']));
 		}
 
-		\Log::debug($favorites);
-        if(!empty($favorites)){
+        \Log::debug($favorites);
+        if(!empty($favorites[0])){
 
-			return view('favorites')->with(['favorites'=>$favorites]);
+			return view('favorites')->with(['favorites'=>$favorites[0]]);
 		}else{
 			return view('favorites')->with(['favorites_ error'=>'Failed to get data.Please try again later.']);
 		}

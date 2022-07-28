@@ -296,3 +296,11 @@ SPAのログインページで初めに/sanctum/csrf-cookieにリクエストを
 後で、    protected $except = [
             '*',//delete later
     ];を削除する。今回はPOSTSMANテスト用のためここに追記した。
+
+・リレーションでつなげる際の第三引数を省略しないこと。省略すると、自動的に該当モデルのid番号にリンクされてしまう。
+  public function profile(){
+        return $this->hasOne(Profile::class,'user_id','to_user');*この場合、'to_user'を記述しないと、profileモデルのid番号とリンクしてしまう。
+    }
+取得した結果のサンプルを参照～！
+・リレーション先のリレーションを参照するときは、「.」でつなげる。例）
+with('user.profile')->,,,
