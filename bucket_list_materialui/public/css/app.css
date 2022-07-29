@@ -123,6 +123,15 @@ body {
   border-top-right-radius: 0;
 }
 
+.icon {
+  cursor: pointer;
+  opacity: 0.8;
+  color: gray;
+}
+.icon.active {
+  color: pink;
+}
+
 .flash {
   position: absolute;
   top: 0;

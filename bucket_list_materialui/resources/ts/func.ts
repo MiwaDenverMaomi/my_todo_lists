@@ -184,6 +184,40 @@ export const onSubmitProfile=(user_id:number)=>{
 	}
 };
 
+export const onToggleFavorite=(is_liked_by_auth:boolean)=>{
+	console.log('onToggleFavorite');
+
+  let result:any=axios.get('/store-favorite',{
+		params:{
+			to_user:!is_liked_by_auth
+		}
+	}).then((res:any)=>res).catch((err:any)=>err);
+
+  console.log(result);
+
+	if(result.data.is_success===true){
+		return {
+			is_sucess:true,
+			result:result.data
+		}
+	}else if(result===undefined){
+		return {
+			is_success:false,
+			result:'Failed to favorite. Try again later.'
+		}
+	}else if(result.data.errors.length>0){
+		return {
+			is_success:false,
+			result:result.data.errors
+		}
+	}else if(result.data.is_success===false){
+		return {
+			is_success:false,
+			result:result.data.errors.storeFavorite_error
+		}
+	}
+
+}
 export const searchKeyword=(str:string)=>{
 	let result:any=axios.get('/search',{
 		params:{

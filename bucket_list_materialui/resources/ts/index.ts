@@ -18,9 +18,10 @@ declare global { interface Window {
   checkPassword:any,
   checkName:any,
   checkPhoto:any,
-  checkComments:any;
+  checkComments:any,
   checkTodo:any,
-  searchKeyword:any
+  searchKeyword:any,
+  onToggleFavorite:any
  } }
 
 window.onHandleIsDone = require("./func").onHandleIsDone;
@@ -44,3 +45,4 @@ window.checkPhoto=require("./func").checkPhoto;
 window.checkComments=require("./func").checkComments;
 window.checkTodo=require("./func").checkTodo;
 window.searchKeyword=require("./func").searchKeyword;
+window.onToggleFavorite=require("./func").onToggleFavorite;

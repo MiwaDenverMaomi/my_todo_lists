@@ -2108,6 +2108,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "onStartEditMode": () => (/* binding */ onStartEditMode),
 /* harmony export */   "onSubmitProfile": () => (/* binding */ onSubmitProfile),
 /* harmony export */   "onSubmitTitle": () => (/* binding */ onSubmitTitle),
+/* harmony export */   "onToggleFavorite": () => (/* binding */ onToggleFavorite),
 /* harmony export */   "previewFile": () => (/* binding */ previewFile),
 /* harmony export */   "sanitize": () => (/* binding */ sanitize),
 /* harmony export */   "searchKeyword": () => (/* binding */ searchKeyword)
@@ -2264,6 +2265,41 @@ var onSubmitProfile = function onSubmitProfile(user_id) {
     $profile_form_element.method = "post";
     $profile_form_element.action = "\"/".concat(user_id, "/edit-profile\"");
     $profile_form_element.submit();
+  }
+};
+var onToggleFavorite = function onToggleFavorite(is_liked_by_auth) {
+  console.log('onToggleFavorite');
+  var result = _apis_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/store-favorite', {
+    params: {
+      to_user: !is_liked_by_auth
+    }
+  }).then(function (res) {
+    return res;
+  })["catch"](function (err) {
+    return err;
+  });
+  console.log(result);
+
+  if (result.data.is_success === true) {
+    return {
+      is_sucess: true,
+      result: result.data
+    };
+  } else if (result === undefined) {
+    return {
+      is_success: false,
+      result: 'Failed to favorite. Try again later.'
+    };
+  } else if (result.data.errors.length > 0) {
+    return {
+      is_success: false,
+      result: result.data.errors
+    };
+  } else if (result.data.is_success === false) {
+    return {
+      is_success: false,
+      result: result.data.errors.storeFavorite_error
+    };
   }
 };
 var searchKeyword = function searchKeyword(str) {
@@ -2461,6 +2497,7 @@ window.checkPhoto = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts")
 window.checkComments = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").checkComments);
 window.checkTodo = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").checkTodo);
 window.searchKeyword = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").searchKeyword);
+window.onToggleFavorite = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onToggleFavorite);
 
 
 /***/ }),

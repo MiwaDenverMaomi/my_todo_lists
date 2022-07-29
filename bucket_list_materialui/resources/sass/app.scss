@@ -115,6 +115,20 @@ body {
   border-top-right-radius: 0;
 }
 
+//icon
+.icon{
+  cursor:pointer;
+  opacity:0.8;
+  color:gray;
+
+  &.active{
+    color:pink;
+  }
+}
+
+
+
+
 //session flash
 .flash{
   position:absolute;

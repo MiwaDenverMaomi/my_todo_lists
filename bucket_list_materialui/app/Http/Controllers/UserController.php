@@ -117,7 +117,7 @@ class UserController extends Controller
 		$result===true?response()->json($result,201):response()->json([],500);
 	}
 
-	public function storeFarovite(Request $Request){
+	public function storeFarovite(Request $request){
 
 		\Log::info('user/storeFavorite');
         $validator=Validator::make($request->all(),[
@@ -128,7 +128,7 @@ class UserController extends Controller
 			'to_user.max'=>'Id number is invalid.'
 		]);
 
-		if($validator->fails())
+		if($validator->fails()){
 		  $resonse['errors']=$validator->errors()->toArray();
 		  throw new HttpResponseException(response()->json($response));
 		}
@@ -143,15 +143,14 @@ class UserController extends Controller
 			return response()->json(['is_success'=>true],201);
 		}
 
-		return throw new HttpResponseException(response()->json(['is_success'=>false,
+		throw new HttpResponseException(response()->json(['is_success'=>false,
 		    'storeFavorite_error'=>'Failed to store favorite.']));
 	}
 
 	public function deleteFavorite(Favorite $favorite){
 		\Log::info('user/deleteFavorite');
 
-		// $result=$favorite->delete();
-		// $result===true?response()->json($favorite,201):response()->json([],500);
+		// $result=$fa ue?response()->json($favorite,201):response()->json([],500);
 	}
 
 	public function storeLike(LikeRequest $likeRequest){
@@ -183,4 +182,5 @@ class UserController extends Controller
 		}
 
 	}
+
 }

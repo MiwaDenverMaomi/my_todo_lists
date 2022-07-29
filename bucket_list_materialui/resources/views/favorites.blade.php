@@ -22,7 +22,7 @@
 				@endif
 				<strong class="text-center d-block mb-3">{{$list['user']['name']}}</strong>
 				<div class="text-center mb-3">
-					<i class=`bi bi-heart-fill`></i><strong>{{count($list['user']['likes'])}}</strong>
+					<i class="fa-solid fa-heart icon" onclick="onToggleFavorite(false)"></i><strong>{{count($list['user']['likes'])}}</strong>
 				</div>
 				<div class="container">
 				<div class="list-group w-auto mb-3">
