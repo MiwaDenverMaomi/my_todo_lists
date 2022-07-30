@@ -22,7 +22,8 @@
 				@endif
 				<strong class="text-center d-block mb-3">{{$list['user']['name']}}</strong>
 				<div class="text-center mb-3">
-					<i class="fa-solid fa-heart icon" onclick="onToggleFavorite(false)"></i><strong>{{count($list['user']['likes'])}}</strong>
+
+					<i id={{$list['user']['id']}} class="{{$list['is_liked_by_auth']===true?`fa-solid fa-heart icon active`:'fa-solid fa-heart icon'}}" onclick="onToggleLike({{$list['user']['id']}},{{$list['is_liked_by_auth']==1?'true':'false'}})"></i><strong>{{count($list['user']['likes'])}}</strong>
 				</div>
 				<div class="container">
 				<div class="list-group w-auto mb-3">

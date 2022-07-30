@@ -32,6 +32,7 @@
 		              <div class="dropdown-divider"></div>
 		              <a class="dropdown-item" href="{{route('bucket-lists.index')}}">Top</a>
 		              <a class="dropdown-item" href="{{route('general.getAbout')}}">About</a>
+									<a class="dropdown-item" href="{{route('general.getContact')}}">Contact</a>
 		              <a class="dropdown-item" href="{{route('general.getHelp')}}">Help</a>
 								 @guest
 								  <a class="dropdown-item" href="{{route('login.getLogin')}}">Login</a>

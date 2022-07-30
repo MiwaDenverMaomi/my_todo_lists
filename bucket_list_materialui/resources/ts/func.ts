@@ -1,4 +1,5 @@
 import axios from '../apis/axios';
+// import axios from 'axios';
 
 //is_done:any->because the value passed from blade is 1 or 0. Convert them into string in php by wrapping '', and cast them to boolean in JavaScript.
 
@@ -184,6 +185,29 @@ export const onSubmitProfile=(user_id:number)=>{
 	}
 };
 
+export const onToggleLike=async(is_liked_by_auth:boolean,user:number)=>{
+	console.log('onToggleLike');
+  let result:any=await axios.post(`/user/store-like/`,{
+		params:{
+			to_user:user,
+			is_liked_by_auth:is_liked_by_auth
+		}
+	}).then((res:any)=>res).catch((err:any)=>err);
+	console.log(result);
+
+	if(result.data.is_liked_by_auth.length>0){
+		const is_liked_by_auth=result.data.is_liked_by_auth;
+    const $heart_element=document.querySelector<any>(`#like-id_${user}`);
+		$heart_element.className+=is_liked_by_auth===true?'active':'';
+    return;
+	}else if(result.data.storeLike_error.length>0){
+
+	}else if(result.data.errors.length>0){
+
+	}else{
+
+	}
+}
 export const onToggleFavorite=(is_liked_by_auth:boolean)=>{
 	console.log('onToggleFavorite');
 

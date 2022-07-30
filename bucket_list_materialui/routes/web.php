@@ -17,10 +17,6 @@ Route::get('/register',[RegisterController::class,'getRegister'])->name('registe
 Route::post('/register',[RegisterController::class,'postRegister'])->name('register.postRegister');
 Route::get('/login',[LoginController::class,'getLogin'])->name('login.getLogin');
 Route::post('/login',[LoginController::class,'postLogin'])->name('login.postLogin');
-Route::prefix('contact')->group(function(){
-    Route::get('/','ContactController@index')->name('contact.getContact');
-    Route::post('/',[ContactController::class,'send'])->name('contact.postContact');
-});
 
 Route::group(['middleware'=>'auth'],function(){
   Route::get('/logout',[LoginController::class,'logout'])->name('login.logout');
@@ -32,6 +28,9 @@ Route::group(['middleware'=>'auth'],function(){
 Route::prefix('general')->group(function(){
     Route::get('/about',[GeneralController::class,'getAbout'])->name('general.getAbout');
     Route::get('/help',[GeneralController::class,'getHelp'])->name('general.getHelp');
+    Route::get('/contact',[ContactController::class,'getContact'])->name('general.getContact');
+    Route::post('/contact',[ContactController::class,'postContact'])->name('general.postContact');
+
 });
 
 //User profile, like, favorite
@@ -47,7 +46,7 @@ Route::prefix('user')->group(function(){
       // Route::post(`/reset-password/send-email`,[UserController::class,'sendEmail']);
       Route::patch(`/store-favorite`,[UserController::class,'storeFavorite'])->name('user.storeFavorite');
       Route::delete('/delete-favorite/{favorite}',[UserController::class,'deleteFavorite'])->name('user.deleteFavorite');
-      Route::patch(`/store-like`,[UserController::class,'storeLike'])->name('user.storeLike');
+      Route::post(`/store-like`,[UserController::class,'storeLike'])->name('user.storeLike');
       Route::delete('/delete-like/{like}',[UserController::class,'deleteLike'])->name('user.deleteLike');
 });
 });

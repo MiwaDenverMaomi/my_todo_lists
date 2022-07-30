@@ -29,7 +29,7 @@ class UserController extends Controller
 	  \Log::debug($request->edit_mode);
 	   $edit_mode=((bool) $request->edit_mode)===true?true:false;
 
-       return redirect()->route('user.showProfile',[
+	   return redirect()->route('user.showProfile',[
 		'user'=>$user->id,
 		'edit_mode'=>$edit_mode]);
 	}
@@ -45,7 +45,7 @@ class UserController extends Controller
 		\Log::debug($user_data);
 	  return view('my_profile')->with([
 		'user_data'=>$user_data,
-	    'edit_mode'=>$edit_mode]);
+		'edit_mode'=>$edit_mode]);
 	}
 
 
@@ -86,7 +86,7 @@ class UserController extends Controller
 		 $question_3=!empty($request->question_3)?$request->question_3:'No comment';
 
 
-         $fileName=$request->file("img")!==null?$request->file("img")->store("public/img/uploads"):null;
+		 $fileName=$request->file("img")!==null?$request->file("img")->store("public/img/uploads"):null;
 
 		 $result=Profile::find($user->id)->fill([
 		  'photo'=>$fileName,
@@ -98,13 +98,13 @@ class UserController extends Controller
 		if($result===true){
 		 return redirect()->route('user.showProfile',[
 			'user'=>$user->id,
-		    'edit_mode'=>false]);
+			'edit_mode'=>false]);
 
 		}else{
 		  return back()
 		  ->with([
 			'error_edit_profile'=>'Failed to save data. Please try again.',
-		    'edit_mode'=>true]);
+			'edit_mode'=>true]);
 	   }
 	  }
 	}
@@ -120,7 +120,7 @@ class UserController extends Controller
 	public function storeFarovite(Request $request){
 
 		\Log::info('user/storeFavorite');
-        $validator=Validator::make($request->all(),[
+		$validator=Validator::make($request->all(),[
 			'to_user'=>'required|number|max:255'
 		],[
 			'to_user.required'=>'Input required.',
@@ -136,7 +136,7 @@ class UserController extends Controller
 			'from_user'=>Auth::id()
 		]);
 
-        $favorite=Favorite::create($request->all());
+		$favorite=Favorite::create($request->all());
 		$result=User::find($request->to_user)->is_liked_by_auth();
 
 		if($favorite===true&&$result===true){
@@ -144,7 +144,7 @@ class UserController extends Controller
 		}
 
 		throw new HttpResponseException(response()->json(['is_success'=>false,
-		    'storeFavorite_error'=>'Failed to store favorite.']));
+			'storeFavorite_error'=>'Failed to store favorite.']));
 	}
 
 	public function deleteFavorite(Favorite $favorite){
@@ -153,13 +153,45 @@ class UserController extends Controller
 		// $result=$fa ue?response()->json($favorite,201):response()->json([],500);
 	}
 
-	public function storeLike(LikeRequest $likeRequest){
+	public function storeLike(Request $request){
 		\Log::info('user/storeLike');
-		$likeRequest->merge([
+		$request=['is_liked_by_auth'=>$request->is_liked_by_auth,'to_user'=>$request->user];
+
+		$validator=Validator::make($request->all(),[
+			'to_user'=>'required|number',
+			'is_liked_by_auth'=>'required|boolean'
+		],[
+			'to_user.required'=>'Like required.',
+			'to_user.number'=>'Input number',
+			'is_liked_by_auth.required'=>'Flag for like is required.',
+			'is_liked_by_auth.boolean'=>'Flag for like should be boolean.'
+		]);
+
+		if($validator->fails()){
+			$response['errors']=$validator->errors()->toArray();
+			throw new HttpResponseException($response()->json($response));
+		}
+
+		$request->is_liked_by_auth=!$request->is_liked_by_auth;
+		$request->merge([
 			'from_user'=>Auth::id()
 		]);
-		$like=Like::create($likeRequest->all());
-		$like?response()->json($favofite,201):json([],500);
+
+		if($request->is_liked_by_auth===true){
+          $is_liked_by_auth=false;
+		  $like=Like::where('from_user','=',3)->where('to_user','=',$request->to_user)->delete($request);
+		}else{
+          $like=Like::create($request->all());
+		  $is_liked_by_auth=true;
+		}
+
+		if($like===true){
+		  $response['is_liked_by_auth']=$is_liked_by_auth;
+          return response()->json($response,201);
+		}else{
+		  $response['storeLike_error']='Failed to store like. Please try again later.';
+		  throw new HttpResponseException($response()->json($response));
+		}
 	}
 
 	public function deleteLike(LikeRequest $likeRequest,Like $like){
@@ -173,10 +205,20 @@ class UserController extends Controller
 		$favorites=Favorite::where('from_user','=',3)
 		->with('user','user.profile','user.bucket_lists','user.likes')->get()->toArray();
 		\Log::info('favorites');
-        \Log::debug($favorites);
+		\Log::debug($favorites);
 
-        if(!empty($favorites)){
-			return view('favorites')->with(['favorites'=>$favorites]);
+		$arr=[];
+		foreach($favorites as $favorite){
+			$is_liked_by_auth=User::find($favorite['user']['id'])->is_liked_by_auth($favorite['user']['id']);
+			// $favorite=$favorite+['is_liked_by_auth'=>$is_liked_by_auth];
+            $result=array_merge($favorite,['is_liked_by_auth'=>$is_liked_by_auth]);
+			\Log::debug($result);
+			array_push($arr,$result);
+		}
+        \Log::debug($arr);
+
+		if(!empty($favorites)){
+			return view('favorites')->with(['favorites'=>$arr]);
 		}else{
 			return view('favorites')->with(['favorites_ error'=>'Failed to get data.Please try again later.']);
 		}
