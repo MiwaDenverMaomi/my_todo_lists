@@ -42,6 +42,7 @@ Route::prefix('user')->group(function(){
       Route::get('/{user}/show-profile',[UserController::class,'showProfile'])->name('user.showProfile');
       Route::get('/{user}/favorites',[UserController::class,'getFavorites'])->name('user.getFavorites');
       Route::get('/{user}/edit-profile-mode/{edit_mode}',[UserController::class,'editProfileMode'])->name('user.editProfileMode');
+      Route::get('/reset-password')->name('user.getResetPassword');
       Route::patch(`/{user}/reset-password`,[UserController::class,'resetPassword'])->name('user.resetPassword');
       // Route::post(`/reset-password/send-email`,[UserController::class,'sendEmail']);
       Route::patch(`/store-favorite`,[UserController::class,'storeFavorite'])->name('user.storeFavorite');

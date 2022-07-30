@@ -6,7 +6,7 @@ Contact
 
 @section('content')
 <div class="container-sm w-25 p-3">
-	  <form method="post" action={{route('general.postContact')}}>
+	  <form method="post" action="{{route('general.postContact')}}">
     <div class="mb-3">
       <div class="text-center text-danger mb-0">
               {{!empty($error)?:''}}
