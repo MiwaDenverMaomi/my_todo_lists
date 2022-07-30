@@ -25,7 +25,7 @@
 		              <a class="dropdown-item" href="{{route('bucket-lists.show',['user'=>Auth::id()])}}">My Todos</a>
 		              <a class="dropdown-item" href="{{route('user.showProfile',['user'=>Auth::id()])}}">Profile</a>
 		              <a class="dropdown-item" href="{{route('user.getFavorites',['user'=>Auth::id()])}}">Favorites</a>
-		              <a class="dropdown-item" href="#">Password Reset</a>
+		              <a class="dropdown-item" href="{{route('password_reset.email.form')}}">Password Reset</a>
 		              <a class="dropdown-item" href="{{route('register.getCancel')}}">Cancel</a>
 		              <a class="dropdown-item" href="{{route('login.logout')}}">Logout</a>
 								 @endauth

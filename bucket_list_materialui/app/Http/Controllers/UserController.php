@@ -109,6 +109,12 @@ class UserController extends Controller
 	  }
 	}
 
+
+	public function getResetPassword(){
+		\Log::info('getResetPassword');
+		return view('reset_password');
+	}
+
 	public function resetPassword(passwordRequest $passwordRequest,User $user){
 		\Log::info('user/resetPassword');
 

@@ -8,6 +8,8 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\PasswordController;
+
 
 //Top page
 Route::get('/',[BucketListController::class,'index'])->name('bucket-lists.index');
@@ -42,7 +44,7 @@ Route::prefix('user')->group(function(){
       Route::get('/{user}/show-profile',[UserController::class,'showProfile'])->name('user.showProfile');
       Route::get('/{user}/favorites',[UserController::class,'getFavorites'])->name('user.getFavorites');
       Route::get('/{user}/edit-profile-mode/{edit_mode}',[UserController::class,'editProfileMode'])->name('user.editProfileMode');
-      Route::get('/reset-password')->name('user.getResetPassword');
+      Route::get('/reset-password',[UserController::class,'getResetPassword'])->name('user.getResetPassword');
       Route::patch(`/{user}/reset-password`,[UserController::class,'resetPassword'])->name('user.resetPassword');
       // Route::post(`/reset-password/send-email`,[UserController::class,'sendEmail']);
       Route::patch(`/store-favorite`,[UserController::class,'storeFavorite'])->name('user.storeFavorite');
@@ -52,6 +54,14 @@ Route::prefix('user')->group(function(){
 });
 });
 
+Route::prefix('password_reset')->name('password_reset.')->group(function(){
+    Route::prefix('email')->name('email.')->group(function(){
+        Route::get('/',[PasswordController::class,'getPasswordResetEmailForm'])->name('form');
+        Route::post('/',[PasswordController::class,'postPasswordResetEmailForm']);
+        });
+    Route::get('/edit',[PasswordController::class,'editPassword'])->name('edit');
+    Route::post('/update',[PasswordController::class,'updatePassword'])->name('updatePassword');
+});
 //My page
 Route::group(['middleware'=>'auth'],function(){
   Route::prefix('todo-list')->group(function(){
