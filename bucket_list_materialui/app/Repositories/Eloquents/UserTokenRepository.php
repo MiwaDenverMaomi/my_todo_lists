@@ -14,10 +14,23 @@ class UserTokenRepository implements UserTokenRepositoryInterface{
      * @param UserToken $userToken
      */
 
-  public function __contruct(UsserToken $userToken){
+  public function __construct(UserToken $userToken){
     $this->userToken=$userToken;
   }
    /**
      * @inheritDoc
      */
+   public function updateOrCreateUserToken(int $userId):UserToken
+   {
+    $now=Carbon::now();
+    $provitionalToken=hash('sha256',$userId,'');
+    return $this->userToken->updateOrCreate(
+      [
+        'user_id'=>$userId,
+      ],
+      [
+        'token'=>uniqid(rand(),$provitionalToken),
+        'expire_at'=>$now->addHours(48)->toDateTimeString(),
+      ]);
+   }
 }

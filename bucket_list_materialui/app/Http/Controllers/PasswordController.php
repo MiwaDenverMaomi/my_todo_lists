@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\Interfaces\UserRepositoryInterface;
-use App\Repositories\Interfaces\UserTokenRepositoryInterface;
+use App\Repositories\Eloquents\UserRepository;
+use App\Repositories\Eloquents\UserTokenRepository;
+
 use App\Http\Requests\SendEmailRequest;
 use App\Mail\UserResetPasswordMail;
 use Illuminate\Support\Facades\Log;
@@ -19,12 +20,13 @@ class PasswordController extends Controller
     private const MAIL_SENT_SESSION_KEY= 'user_reset_password_mail_sended_action';
 
     public function __construct(
-        useRepositoryInterface $useReposigtory,
-        userTokenRepositoryInterface $userTokenRepository,
+        UserRepository $userRepository,
+        UserTokenRepository $userTokenRepository
     ){
       $this->userRepository=$userRepository;
       $this->userTokenRepository=$userTokenRepository;
     }
+
     public function getPasswordResetEmailForm(){
         return view('password_reset');
     }
@@ -46,6 +48,7 @@ class PasswordController extends Controller
             return redirect()->route('password_reset.email.form')->with('flash_message','Failed to send email.Please try again later.');
         }
         session()->put(self::MAIL_SENT_SESSION_KEY,'user_reset_password_send_email');
+
         return view('result',[
             'is_success'=>true,
             'message'=>'Email was sent! Check your email to find the link to reset password.']);

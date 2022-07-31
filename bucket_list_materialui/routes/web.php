@@ -57,8 +57,8 @@ Route::prefix('user')->group(function(){
 Route::prefix('password_reset')->name('password_reset.')->group(function(){
     Route::prefix('email')->name('email.')->group(function(){
         Route::get('/',[PasswordController::class,'getPasswordResetEmailForm'])->name('form');
-        Route::post('/',[PasswordController::class,'postPasswordResetEmailForm']);
-        });
+        Route::post('/',[PasswordController::class,'postPasswordResetEmail'])->name('send');
+    });
     Route::get('/edit',[PasswordController::class,'editPassword'])->name('edit');
     Route::post('/update',[PasswordController::class,'updatePassword'])->name('updatePassword');
 });
