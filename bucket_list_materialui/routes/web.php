@@ -62,6 +62,7 @@ Route::prefix('password_reset')->name('password_reset.')->group(function(){
     });
     Route::get('/edit',[PasswordController::class,'editPassword'])->name('edit');
     Route::post('/update',[PasswordController::class,'updatePassword'])->name('update');
+    Route::get('/edit_complete',[PasswordController::class,'editComplete'])->name('edit_complete');
 });
 //My page
 Route::group(['middleware'=>'auth'],function(){

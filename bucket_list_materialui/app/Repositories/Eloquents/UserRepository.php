@@ -23,4 +23,13 @@ class UserRepository implements UserRepositoryInterface
   public function findFromEmail(string $email):User{
     return $this->user->where('email',$email)->firstOrFail();
   }
+
+  /**
+    * @inheritDoc
+  */
+  public function updateUserPassword(string $password,int $id):void{
+    $this->user->where('id',$id)->update([
+      'password'=>Hash::make($password),
+    ]);
+  }
 }

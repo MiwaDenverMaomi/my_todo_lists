@@ -26,6 +26,7 @@ class ResetPasswordRequest extends FormRequest
     {
         return [
             'password'=>['required','regex:/^[0-9a-zA-z-_]{8,32}$/','confirmed'],
+            'password_confirmation' => ['required', 'same:password'],
             'reset_token'=>['required',new TokenExpirationTimeRule]
         ];
     }
