@@ -409,3 +409,26 @@ array (
 
 ※ポイントはusers.favoritesのような書き方をした場合、bladeでの扱いは
 $result['users']['favorites']のようにネストされる。ネストがポイント。
+
+・成功・失敗のメッセージは、Routeに登録する。それを使いまわすが、その際に
+例）
+※何かの処理の最後に以下のようにリダイレクトさせる。
+　session()->put(self::MAIL_SENT_SESSION_KEY,'user_reset_password_send_email');->セッションにテキストを入れる。
+  return redirect()->route('password_reset.email.send_complete');
+
+->アクションsendCompleteで、session()->pullし、正しいMAIL_SENT_SESSION_KEYが入っていなければ、
+「不正なアクセスです」という画面を表示し、そうでなければ送信成功という画面を表示。
+
+・フォームResuestクラスの
+    public function authorize()
+    {
+        return false;
+    }
+
+を
+    public function authorize()
+    {
+        return true;
+    }
+にするべきだが、するとエラーになったので、falseのままにした。
+

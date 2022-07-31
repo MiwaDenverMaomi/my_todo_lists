@@ -7,6 +7,12 @@ Password Reset
 @section('content')
 <div class="container-sm w-25 p-3">
 	  <form method="post" action="{{route('password_reset.email.send')}}">
+
+      @if(!empty($passwordResetEmail_error))
+      <div class="text-center text-danger mb-0">
+              {{$passwordResetEmail_error}}
+			</div>
+      @endif
     <div class="mb-3">
       @error('email')
       <div class="text-center text-danger mb-0">

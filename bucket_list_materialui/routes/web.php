@@ -58,9 +58,10 @@ Route::prefix('password_reset')->name('password_reset.')->group(function(){
     Route::prefix('email')->name('email.')->group(function(){
         Route::get('/',[PasswordController::class,'getPasswordResetEmailForm'])->name('form');
         Route::post('/',[PasswordController::class,'postPasswordResetEmail'])->name('send');
+        Route::get('/send_complete',[PasswordController::class,'sendComplete'])->name('send_complete');
     });
     Route::get('/edit',[PasswordController::class,'editPassword'])->name('edit');
-    Route::post('/update',[PasswordController::class,'updatePassword'])->name('updatePassword');
+    Route::post('/update',[PasswordController::class,'updatePassword'])->name('update');
 });
 //My page
 Route::group(['middleware'=>'auth'],function(){

@@ -38,15 +38,20 @@ class UserResetPasswordMail extends Mailable
      */
     public function build()
     {
+        \Log::info('UserResetPasswordMail');
         $tokenParam=['reset_token'=>$this->userToken->token];
         $now=Carbon::now();
 
         $url=URL::temporarySignedRoute('password_reset.edit',$now->addHours(48),$tokenParam);
+         \Log::debug($tokenParam);
+         \Log::debug($now);
+        \Log::debug($url);
+        \Log::debug($this->user->email);
 
-        return $this->from(config('MAIL_USERNAME'),config('APP_NAME'))
+        return $this->view('emails.password_reset_mail')
+        ->from(config('MAIL_USERNAME'),config('APP_NAME'))
         ->to($this->user->email)
         ->subject('Reset password')
-        ->view('email.password_reset_mail')
         ->with([
             'user'=>$this->user,
             'url'=>$url,

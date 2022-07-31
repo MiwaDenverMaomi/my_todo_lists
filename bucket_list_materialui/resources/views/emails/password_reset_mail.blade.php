@@ -11,7 +11,8 @@
 </head>
 <body>
   <div>Password Reset</div>
-  <div>------------------</div>
+  <br>
+  <br>
   <p>Thank you for using our app!</p>
   <p>Here is the url to reset your password.</p>
   <p>Access the url below to reset your password within
@@ -21,14 +22,8 @@
   <a href="{{$url}}">{{$url}}</a>
   <br>
   <br>
-  <br>
-  <br>
   <p>Please do not reply to this email as this is a send-only address and you may receive an error message.</p>
   <p>
-    ------------------------------------------<br>
-    {{ config('app.name') }} customer service
-    -------------------------------------------
-</p>
-
-
+    From {{ config('app.name') }} customer service
+  </p>
 </body>

@@ -41,16 +41,54 @@ class PasswordController extends Controller
             $user=$this->userRepository->findFromEmail($sendEmailRequest->email);
             $userToken=$this->userTokenRepository->updateOrCreateUserToken($user->id);
             Log::info(__METHOD__.'...ID:'.$user->id.'email is goint to be sent to...');
-            Mail::send(new UserResetPasswordMail($user,$userToken));
+
+            Mail::to($sendEmailRequest->input('email'))->send(new UserResetPasswordMail($user,$userToken));
             Log::info(__METHOD__.'...ID:'.$user->id.'email was sent to reset password.');
         }catch(Exception $e){
             Log::error(__METHOD__.'...failed to send email to reset password.');
-            return redirect()->route('password_reset.email.form')->with('flash_message','Failed to send email.Please try again later.');
+            \Log::debug($e->getMessage());
+
+            return back()->with(['passwordResetEmail_error'=>'Failed to send email.Please try again later.']);
         }
         session()->put(self::MAIL_SENT_SESSION_KEY,'user_reset_password_send_email');
 
+        return redirect()->route('password_reset.email.send_complete');
+    }
+
+    /**
+
+    * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+    */
+    public function sendComplete(){
+        if(session()->pull(self::MAIL_SENT_SESSION_KEY)!=='user_reset_password_send_email'){
+            return view('result',[
+                'is_success'=>false,
+                'message'=>'Invalid request...'
+            ]);
+        }
         return view('result',[
             'is_success'=>true,
-            'message'=>'Email was sent! Check your email to find the link to reset password.']);
+            'message'=>'Your email was sent!'
+        ]);
+    }
+    public function editPassword(Request $request){
+        \Log::info('editPassword');
+        \Log::debug($request);
+        if(!$request->hasValidSignature()){
+            abort(403,'This link is expired.Re send email address to reset your password.');
+        }
+        $resetToken=$request->reset_token;
+        try{
+            $userToken=$this->userTokenRepository->getUserTokenFromToken($resetToken);
+        }catch(Exception $e){
+            Log::error(__METHOD__.' Failed to get user token. Error message= '.$e->getMessage());
+            return redirect()->route('password_reset.email.form')->with('edit_password_error',__('Access the link attached on your email.'));
+        }
+        return view('edit_new_password')
+        ->with('userToken',$userToken);
+    }
+
+    public function update(){
+        \Log::info('update')
     }
 }

@@ -33,4 +33,12 @@ class UserTokenRepository implements UserTokenRepositoryInterface{
         'expire_at'=>$now->addHours(48)->toDateTimeString(),
       ]);
    }
+
+    /**
+     * @inheritDoc
+     */
+
+     public function getUserTokenFromToken(string $token):UserToken{
+      return $this->userToken->where('token',$token)->firstOrFail();
+     }
 }
