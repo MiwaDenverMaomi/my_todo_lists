@@ -12,6 +12,7 @@ use App\Mail\UserResetPasswordMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Exception;
+use Illuminate\Support\Facades\Hash;
 
 class PasswordController extends Controller
 {
@@ -19,6 +20,7 @@ class PasswordController extends Controller
 	private $userTokenRepository;
 
 	private const MAIL_SENT_SESSION_KEY= 'user_reset_password_mail_sended_action';
+    private const UPDATE_PASSWORD_SESSION_KEY = 'user_update_password_action';
 
 	public function __construct(
 		UserRepository $userRepository,
@@ -98,7 +100,9 @@ class PasswordController extends Controller
 	public function updatePassword(ResetPasswordRequest $request){
 		\Log::info('updatePassword');
 		try{
+			\Log::info('try');
 			$userToken=$this->userTokenRepository->getUserTokenFromToken($request->reset_token);
+			\Log::debug($userToken);
 			$this->userRepository->updateUserPassword($request->password,$userToken->user_id);
 			\Log::info(__METHOD__.'...ID:'.$userToken->user_id." password was updated.");
 		}catch(Exception $e){
@@ -107,11 +111,12 @@ class PasswordController extends Controller
 
 		}
 		$request->session()->put(self::UPDATE_PASSWORD_SESSION_KEY,'user_update_password');
+		\Log::debug($request);
 
 		return redirect()->route('password_reset.edit_complete');
 	}
 
-	public function edit_complete(){
+	public function editComplete(){
 		if(session()->pull(self::UPDATE_PASSWORD_SESSION_KEY)!=='user_update_password'){
 			return redirect()->route('password_reset.email.form')->with('flash_message','Invalid request.');
 		}

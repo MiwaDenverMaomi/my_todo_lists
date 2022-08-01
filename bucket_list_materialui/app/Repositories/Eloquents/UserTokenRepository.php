@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquents;
 use App\Models\UserToken;
 use App\Repositories\Interfaces\UserTokenRepositoryInterface;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class UserTokenRepository implements UserTokenRepositoryInterface{
   private $userToken;

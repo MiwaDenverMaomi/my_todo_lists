@@ -4,6 +4,9 @@ namespace App\Repositories\Eloquents;
 
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use Illuminate\Support\Facades\Hash;
+
+
 
 class UserRepository implements UserRepositoryInterface
 {
