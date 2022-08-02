@@ -27,7 +27,7 @@ class ResetPasswordRequest extends FormRequest
         return [
             'password'=>['required', 'regex:/^[0-9a-zA-z-_]{8,32}$/', 'confirmed'],
             'password_confirmation' => 'required | same:password',
-            // 'reset_token'=>['required',new TokenExpirationTimeRule]
+            'reset_token'=>['required',new TokenExpirationTimeRule]
         ];
     }
     /**
@@ -36,9 +36,9 @@ class ResetPasswordRequest extends FormRequest
      */
     public function messages(){
         return[
-            'password.required'=>'Input :attribute required.',
+            'password.required'=>'Input required.',
             'password.regex'=>'Input :attribute within 8-32 letters.',
-            'password.confirmed'=>':attribute is not matched.'
+            'password.confirmed'=>':attributes do not match.'
         ];
     }
     /**

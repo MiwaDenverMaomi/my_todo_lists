@@ -9,17 +9,19 @@ Edit New Password
 	  <form method="post" action="{{route('password_reset.update')}}">
       @csrf
     <div class="mb-3">
-      <div class="text-center text-danger mb-0">
-              {{!empty($error)?:''}}
-			</div>
-    <div class="form-floating mb-3">
-      <input type="hidden" name="reset_token" value="{{$userToken->token}}">
-      @error('password')
+      @error('token')
         <div class="text-center text-danger mb-0">
            {{$message}}
 		    </div>
       @enderror
-      @error('token')
+      @if(session('flash_message'))
+        <div class="text-center text-danger mb-0">
+           {{session('flash_message')}}
+		    </div>
+      @enderror
+    <div class="form-floating mb-3">
+      <input type="hidden" name="reset_token" value="{{$userToken->token}}">
+      @error('password')
         <div class="text-center text-danger mb-0">
            {{$message}}
 		    </div>

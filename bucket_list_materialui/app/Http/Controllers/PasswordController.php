@@ -51,7 +51,7 @@ class PasswordController extends Controller
 			Log::error(__METHOD__.'...failed to send email to reset password.');
 			\Log::debug($e->getMessage());
 
-			return back()->with(['passwordResetEmail_error'=>'Failed to send email.Please try again later.']);
+			return back()->with(['flash_message'=>'Failed to send email.Please try again later.']);
 		}
 		session()->put(self::MAIL_SENT_SESSION_KEY,'user_reset_password_send_email');
 
