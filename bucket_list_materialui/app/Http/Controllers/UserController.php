@@ -163,33 +163,34 @@ class UserController extends Controller
 	public function storeLike(User $user){
 		\Log::info('user/storeLike');
     $liked=$user->is_liked_by_auth($user->id);
+    $result='';
 		if($liked===true){
 		  $result=Like::where('from_user','=',Auth::id())->where('to_user','=',$user->id)->delete();
 			$is_liked_by_auth=false;
+			$count_likes=$user->likes()->count();
 		}else if($liked===false){
       $result=Like::create([
 				'from_user'=>Auth::id(),
 				'to_user'=>$user->id,
 			]);
+			$count_likes=$user->likes()->count();
 		  $is_liked_by_auth=true;
-		}else{
-			$result='';
 		}
 
-//fix
 		if($result===''){
 	   \Log::info('error');
 		  $response=response()->json([
 			'error'=>'Failed to like.... sorry.'
 			]);
 			throw new HttpResponseException($response);
+
 		}else{
 		 	\Log::info('got/lost like');
 			\Log::debug(__METHOD__.'$is_liked_by_auth:'.$is_liked_by_auth);
-		  $response=response()->json([
-				'is_liked_by_auth'=>$is_liked_by_auth
+      return response()->json([
+				'is_liked_by_auth'=>$is_liked_by_auth,
+				'count_likes'=>$count_likes
 			],201);
-      return response()->json($response);
 		}
 	}
 
@@ -203,6 +204,10 @@ class UserController extends Controller
 		\Log::info('getFavorites');
 		$favorites=Favorite::where('from_user','=',Auth::id())
 		->with('user','user.profile','user.bucket_lists','user.likes')->get()->toArray();
+
+		// foreach($favorites as $favorite){
+		// 	$favorite['count_likes']=count($favorite['user']['likes']);
+		// }
 		\Log::info('favorites');
 
 		$arr=[];

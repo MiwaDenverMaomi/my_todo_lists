@@ -25,7 +25,9 @@
 					@php
 					 $heart_class=$list['is_liked_by_auth']===true?'fa-solid fa-heart icon active':'fa-solid fa-heart icon';
 					@endphp
-				  	<i id="{{$list['user']['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$list['user']['id']}},{{$list['is_liked_by_auth']}})"></i><strong>{{count($list['user']['likes'])}}</strong>
+				  	<i id="{{$list['user']['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$list['user']['id']}},{{$list['is_liked_by_auth']}})"></i><strong id="count_likes_{{$list['user']['id']}}">{{count($list['user']['likes'])}}</strong>
+						<div class="text-center text-warging" id="likes_result_{{$list['user']['id']}}">
+						</div>
 				</div>
 				<div class="container">
 				<div class="list-group w-auto mb-3">

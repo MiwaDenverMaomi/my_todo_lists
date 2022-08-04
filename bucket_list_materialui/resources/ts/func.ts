@@ -185,36 +185,38 @@ export const onSubmitProfile=(user_id:number)=>{
 	}
 };
 
-export const onToggleLike=async(user:number,is_liked_by_auth:number)=>{
+export const onToggleLike = async (user: number, is_liked_by_auth: number) => {
 	console.log('onToggleLike');
-	let result = await fetch(`http://localhost/user/store-like/${user}`,{
+	let result = await fetch(`http://localhost/user/store-like/${user}`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({
-				is_liked_by_auth: is_liked_by_auth === 1 ? true : false
+			is_liked_by_auth: is_liked_by_auth === 1 ? true : false
 		})
-	}).then((res: any) => {
-		if (!res.ok) {
-			throw new Error(`${res.status} ${res.statusText}`);
-		}
-	}).then((blob:any)=>blob).catch((err:any)=>err.response);
+	}).then((res: any) => res.json()
+	).then((data: any) => {
+		console.log(data);
+		return data;
+	}).catch((err: any) => err.response);
 	console.log(result);
 
+	const $likes_result_element = document.querySelector<any>(`#likes_result_${user}`);
 	if(result===undefined){
+		$likes_result_element.innerText = 'Failed to update like...sorry!'
+	} else if (result.data.error.length > 0) {
 
-	}else if(result.data.is_liked_by_auth.length>0){
-		const is_liked_by_auth=result.data.is_liked_by_auth;
-		const $heart_element=document.querySelector<any>(`#like-id_${user}`);
-		$heart_element.className+=is_liked_by_auth===true?'active':'';
+		$likes_result_element.innerText = result.error;
+	} else if(result.data.is_liked_by_auth.length>0){
+		const [is_liked_by_auth, count_likes] = result.data;
+		const $heart_element = document.querySelector<any>(`#like-id_${user}`);
+		const $count_likes_element = document.querySelector<any>(`#count_likes_${user}`);
+		$heart_element.className += is_liked_by_auth === true ? 'active' : '';
+		$count_likes_element.innerText = count_likes;
 		return;
-	}else if(result.data.storeLike_error.length>0){
-
-	}else if(result.data.errors.length>0){
-
 	}else{
-
+		$likes_result_element.innerText = result.error;
 	}
 }
 export const onToggleFavorite=(is_liked_by_auth:boolean)=>{
