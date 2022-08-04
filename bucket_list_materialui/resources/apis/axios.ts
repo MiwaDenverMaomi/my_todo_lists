@@ -4,10 +4,11 @@ const axios = Axios.create({
   baseURL: 'http://localhost',
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
-    'Accept': 'application / json',
+    'Accept': 'application/json',
     'Content-Type': 'application/json'
   },
-  withCredentials: true
+  // withCredentials: true
+  responseType: 'json'
 });
 
 export default axios;

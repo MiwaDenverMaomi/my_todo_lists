@@ -98,40 +98,49 @@ class UserTest extends TestCase
     //     assertTrue( $result);
     // }
 
-    public function test_storeFarovite(){
-        //insert initial data to table 'likes'.
-        $data=[
-            ['from_user'=>5,'to_user'=>4],
-            ['from_user'=>8,'to_user'=>4],
-            ['from_user'=>4,'to_user'=>9],
-            ['from_user'=>7 ,'to_user'=>4]];
+    // public function like(User $user){
+    //     if(Auth::check()===false){
+    //         return redirect()->route('login.getLogin');
+    //     }
 
-        Like::insert($data);
-        $favoriteRequest=new Request();
+    //     $user->likes()->detach($user->id);
+    //     $user->likes()->attach($user->id);
 
-        //create requests
-        $favoriteRequest->merge(['to_user'=>3]);
+    // }
+    // public function test_storeFarovite(){
+    //     //insert initial data to table 'likes'.
+    //     $data=[
+    //         ['from_user'=>5,'to_user'=>4],
+    //         ['from_user'=>8,'to_user'=>4],
+    //         ['from_user'=>4,'to_user'=>9],
+    //         ['from_user'=>7 ,'to_user'=>4]];
 
-        $favoriteRequest->merge([
-            'from_user'=>$this->user->id
-        ]);
+    //     Like::insert($data);
+    //     $favoriteRequest=new Request();
 
-        //Create new records on table 'likes'.
-        Favorite::create($favoriteRequest->all());
+    //     //create requests
+    //     $favoriteRequest->merge(['to_user'=>3]);
 
-        //Check if the record ('likes') already exists.
-        $result=User::find(9)->is_liked_by_auth();
+    //     $favoriteRequest->merge([
+    //         'from_user'=>$this->user->id
+    //     ]);
 
-        //If exists, return null. If not exists, create new record.
-        if($result===false){
-         $favorite=Favorite::create(['from_user'=>$this->user->id,'to_user'=>11]);
-        }else{
-         $favorite=null;
-        }
+    //     //Create new records on table 'likes'.
+    //     Favorite::create($favoriteRequest->all());
 
-        $this->assertNotNull($favorite);
-        $this->assertNotEmpty($favorite);
-    }
+    //     //Check if the record ('likes') already exists.
+    //     $result=User::find(9)->is_liked_by_auth();
+
+    //     //If exists, return null. If not exists, create new record.
+    //     if($result===false){
+    //      $favorite=Favorite::create(['from_user'=>$this->user->id,'to_user'=>11]);
+    //     }else{
+    //      $favorite=null;
+    //     }
+
+    //     $this->assertNotNull($favorite);
+    //     $this->assertNotEmpty($favorite);
+    // }
 
     // public function test_deleteFavorite(){
     //     $favoriteRequest=new Request();

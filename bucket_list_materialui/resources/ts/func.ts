@@ -185,21 +185,30 @@ export const onSubmitProfile=(user_id:number)=>{
 	}
 };
 
-export const onToggleLike=async(is_liked_by_auth:boolean,user:number)=>{
+export const onToggleLike=async(user:number,is_liked_by_auth:number)=>{
 	console.log('onToggleLike');
-  let result:any=await axios.post(`/user/store-like/`,{
-		params:{
-			to_user:user,
-			is_liked_by_auth:is_liked_by_auth
+	let result = await fetch(`http://localhost/user/store-like/${user}`,{
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+				is_liked_by_auth: is_liked_by_auth === 1 ? true : false
+		})
+	}).then((res: any) => {
+		if (!res.ok) {
+			throw new Error(`${res.status} ${res.statusText}`);
 		}
-	}).then((res:any)=>res).catch((err:any)=>err);
+	}).then((blob:any)=>blob).catch((err:any)=>err.response);
 	console.log(result);
 
-	if(result.data.is_liked_by_auth.length>0){
+	if(result===undefined){
+
+	}else if(result.data.is_liked_by_auth.length>0){
 		const is_liked_by_auth=result.data.is_liked_by_auth;
-    const $heart_element=document.querySelector<any>(`#like-id_${user}`);
+		const $heart_element=document.querySelector<any>(`#like-id_${user}`);
 		$heart_element.className+=is_liked_by_auth===true?'active':'';
-    return;
+		return;
 	}else if(result.data.storeLike_error.length>0){
 
 	}else if(result.data.errors.length>0){
@@ -211,13 +220,13 @@ export const onToggleLike=async(is_liked_by_auth:boolean,user:number)=>{
 export const onToggleFavorite=(is_liked_by_auth:boolean)=>{
 	console.log('onToggleFavorite');
 
-  let result:any=axios.get('/store-favorite',{
+	let result:any=axios.get('/store-favorite',{
 		params:{
 			to_user:!is_liked_by_auth
 		}
 	}).then((res:any)=>res).catch((err:any)=>err);
 
-  console.log(result);
+	console.log(result);
 
 	if(result.data.is_success===true){
 		return {
@@ -249,19 +258,19 @@ export const searchKeyword=(str:string)=>{
 		}
 	}).then((res:any)=>res).catch((err:any)=>err);
 
-  if(result===undefined){
-    return {
-      is_success:false,
+	if(result===undefined){
+		return {
+			is_success:false,
 			result:'Failed to search.Try again later.'
 		}
 	}else if(result.data.Response==='False'){
-    return {
-      is_success:false,
+		return {
+			is_success:false,
 			result:'Failed to search.Try again later.'
 		}
 	}else{
 		return {
-      is_success:true,
+			is_success:true,
 			result:result.data
 		}
 	}

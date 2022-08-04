@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Like;
 use App\Models\Profile;
 use App\Models\Favorite;
 use Validator;
@@ -39,7 +40,7 @@ class UserController extends Controller
 		$edit_mode=((bool) $request->edit_mode)===true?true:false;
 		$user_data=User::with(['profile','likes'])->select('id','name','email')->find($user->id)->toArray();
 		\Log::debug($user);
-		$is_liked_by_auth=$user->is_liked_by_auth();
+		$is_liked_by_auth=$user->is_liked_by_auth($user->id);
 		$user_data['countLikes']=count($user_data['likes']);
 		$user_data['is_liked_by_auth']=$is_liked_by_auth;
 		\Log::debug($user_data);
@@ -143,7 +144,7 @@ class UserController extends Controller
 		]);
 
 		$favorite=Favorite::create($request->all());
-		$result=User::find($request->to_user)->is_liked_by_auth();
+		$result=User::find($user->id)->is_liked_by_auth();
 
 		if($favorite===true&&$result===true){
 			return response()->json(['is_success'=>true],201);
@@ -159,25 +160,23 @@ class UserController extends Controller
 		// $result=$fa ue?response()->json($favorite,201):response()->json([],500);
 	}
 
-	public function storeLike(Request $request){
+	public function storeLike(User $user,Request $request){
 		\Log::info('user/storeLike');
-		$request=['is_liked_by_auth'=>$request->is_liked_by_auth,'to_user'=>$request->user];
 
 		$validator=Validator::make($request->all(),[
-			'to_user'=>'required|number',
 			'is_liked_by_auth'=>'required|boolean'
 		],[
-			'to_user.required'=>'Like required.',
-			'to_user.number'=>'Input number',
 			'is_liked_by_auth.required'=>'Flag for like is required.',
 			'is_liked_by_auth.boolean'=>'Flag for like should be boolean.'
 		]);
 
 		if($validator->fails()){
-			$response['errors']=$validator->errors()->toArray();
-			throw new HttpResponseException($response()->json($response));
+			$response=response()->json([
+				'errors'=>$validator->errors()
+			]);
+			throw new HttpResponseException($response);
 		}
-
+    \Log::info('passed validation');
 		$request->is_liked_by_auth=!$request->is_liked_by_auth;
 		$request->merge([
 			'from_user'=>Auth::id()
@@ -185,18 +184,22 @@ class UserController extends Controller
 
 		if($request->is_liked_by_auth===true){
           $is_liked_by_auth=false;
-		  $like=Like::where('from_user','=',3)->where('to_user','=',$request->to_user)->delete($request);
+		  $like=Like::where('from_user','=',3)->where('to_user','=',$user->id)->delete($request);
 		}else{
           $like=Like::create($request->all());
 		  $is_liked_by_auth=true;
 		}
-
-		if($like===true){
+//fix
+		if($like===true||$like===false){
+			\Log::info('like is true');
 		  $response['is_liked_by_auth']=$is_liked_by_auth;
           return response()->json($response,201);
 		}else{
-		  $response['storeLike_error']='Failed to store like. Please try again later.';
-		  throw new HttpResponseException($response()->json($response));
+			\Log::info('error');
+		  	$response=response()->json([
+				'error'=>'Failed to like.... sorry.'
+			]);
+			throw new HttpResponseException($response);
 		}
 	}
 

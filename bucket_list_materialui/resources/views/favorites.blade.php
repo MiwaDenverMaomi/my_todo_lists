@@ -18,12 +18,14 @@
 				@if(!empty($list['profile']))
 				<img src="{{ asset($list['profile']['photo'])}}" class="rounded-circle d-block mx-auto" alt="{{$list['user']['name'].'_photo'}}" width="100" height="100" >
 				@else
-				<img src="xxx" class="img-circle d-block mx-auto" alt="{{$list['user']['name'].'_photo'}}"  width="100" height="100">
+				<img src="" class="img-circle d-block mx-auto" alt="{{$list['user']['name'].'_photo'}}"  width="100" height="100">
 				@endif
 				<strong class="text-center d-block mb-3">{{$list['user']['name']}}</strong>
 				<div class="text-center mb-3">
-
-					<i id={{$list['user']['id']}} class="{{$list['is_liked_by_auth']===true?`fa-solid fa-heart icon active`:'fa-solid fa-heart icon'}}" onclick="onToggleLike({{$list['user']['id']}},{{$list['is_liked_by_auth']==1?'true':'false'}})"></i><strong>{{count($list['user']['likes'])}}</strong>
+					@php
+					 $heart_class=$list['is_liked_by_auth']===true?`fa-solid fa-heart icon active`:'fa-solid fa-heart icon';
+					@endphp
+				  	<i id="{{$list['user']['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$list['user']['id']}},{{$list['is_liked_by_auth']}})"></i><strong>{{count($list['user']['likes'])}}</strong>
 				</div>
 				<div class="container">
 				<div class="list-group w-auto mb-3">
@@ -38,7 +40,7 @@
 					@endif
 			 </div>
 			 </div>
-				<a href={{route('user.index',['user'=>$list['user']['id']])}} class="icon-link d-inline-flex align-items-center">
+				<a href="{{route('user.index',['user'=>$list['user']['id']])}}" class="icon-link d-inline-flex align-items-center">
 					See more...
 					<svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
 				</a>

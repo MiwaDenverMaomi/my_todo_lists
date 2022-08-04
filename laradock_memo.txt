@@ -464,3 +464,9 @@ $result['users']['favorites']のようにネストされる。ネストがポイ
             'password'=>'password'
         ];
     }
+
+
+・contains()で特定のデータが含まれているかどうかをチェックする
+
+・404エラーが出たら、まずphp artisan route:listでルートが正しいか確認。
+・web.phpでurlを``で囲ってはいけない。認識されないので。

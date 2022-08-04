@@ -30,6 +30,10 @@ class User extends Authenticatable
 		'password',
 	];
 
+	// protected $appends=[
+	// 	'count_like','liked_by_auth'
+	// ];
+
 	/**
 	 * The attributes that should be hidden for serialization.
 	 *
@@ -106,5 +110,19 @@ class User extends Authenticatable
 	//     }else{
 	//         return \Config::get('fpath.noimage');
 	//     }
+	// }
+
+	// public function getCountLikesAttribute(){
+	// 	return $this->likes->count();
+	// }
+
+	// public function getLikedByAuthAttribute(){
+	// 	if(Auth::guest()){
+	// 		return false;
+	// 	}
+
+	// 	return $this->likes->contains(function($user){
+  //       return $user->id===Auth::id();
+	// 	});
 	// }
 }

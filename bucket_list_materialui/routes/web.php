@@ -47,12 +47,14 @@ Route::prefix('user')->group(function(){
       Route::get('/reset-password',[UserController::class,'getResetPassword'])->name('user.getResetPassword');
       Route::patch(`/{user}/reset-password`,[UserController::class,'resetPassword'])->name('user.resetPassword');
       // Route::post(`/reset-password/send-email`,[UserController::class,'sendEmail']);
-      Route::patch(`/store-favorite`,[UserController::class,'storeFavorite'])->name('user.storeFavorite');
+      Route::patch('/store-favorite',[UserController::class,'storeFavorite'])->name('user.storeFavorite');
       Route::delete('/delete-favorite/{favorite}',[UserController::class,'deleteFavorite'])->name('user.deleteFavorite');
-      Route::post(`/store-like`,[UserController::class,'storeLike'])->name('user.storeLike');
+
+      Route::post('/store-like/{user}',[UserController::class,'storeLike'])->name('user.storeLike');
       Route::delete('/delete-like/{like}',[UserController::class,'deleteLike'])->name('user.deleteLike');
 });
 });
+
 
 Route::prefix('password_reset')->name('password_reset.')->group(function(){
     Route::prefix('email')->name('email.')->group(function(){

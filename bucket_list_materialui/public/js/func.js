@@ -2072,10 +2072,11 @@ var axios = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
   baseURL: 'http://localhost',
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
-    'Accept': 'application / json',
+    'Accept': 'application/json',
     'Content-Type': 'application/json'
   },
-  withCredentials: true
+  // withCredentials: true
+  responseType: 'json'
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (axios);
 
@@ -2305,7 +2306,7 @@ var onSubmitProfile = function onSubmitProfile(user_id) {
     $profile_form_element.submit();
   }
 };
-var onToggleLike = function onToggleLike(is_liked_by_auth, user) {
+var onToggleLike = function onToggleLike(user, is_liked_by_auth) {
   return __awaiter(void 0, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
     var result, _is_liked_by_auth, $heart_element;
 
@@ -2315,23 +2316,40 @@ var onToggleLike = function onToggleLike(is_liked_by_auth, user) {
           case 0:
             console.log('onToggleLike');
             _context.next = 3;
-            return _apis_axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("/user/store-like/", {
-              params: {
-                to_user: user,
-                is_liked_by_auth: is_liked_by_auth
-              }
+            return fetch("http://localhost/user/store-like/".concat(user), {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                is_liked_by_auth: is_liked_by_auth === 1 ? true : false
+              })
             }).then(function (res) {
-              return res;
+              if (!res.ok) {
+                throw new Error("".concat(res.status, " ").concat(res.statusText));
+                return res.blob();
+              }
+            }).then(function (blob) {
+              return blob;
             })["catch"](function (err) {
-              return err;
+              return err.response;
             });
 
           case 3:
             result = _context.sent;
             console.log(result);
 
+            if (!(result === undefined)) {
+              _context.next = 8;
+              break;
+            }
+
+            _context.next = 16;
+            break;
+
+          case 8:
             if (!(result.data.is_liked_by_auth.length > 0)) {
-              _context.next = 12;
+              _context.next = 15;
               break;
             }
 
@@ -2340,10 +2358,10 @@ var onToggleLike = function onToggleLike(is_liked_by_auth, user) {
             $heart_element.className += _is_liked_by_auth === true ? 'active' : '';
             return _context.abrupt("return");
 
-          case 12:
+          case 15:
             if (result.data.storeLike_error.length > 0) {} else if (result.data.errors.length > 0) {} else {}
 
-          case 13:
+          case 16:
           case "end":
             return _context.stop();
         }
