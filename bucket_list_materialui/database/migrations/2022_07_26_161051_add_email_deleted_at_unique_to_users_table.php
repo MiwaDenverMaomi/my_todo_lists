@@ -15,7 +15,7 @@ class AddEmailDeletedAtUniqueToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             // $table->softDeletes();
-            $table->unique(['email','deleted_at'],'users_email_unique');
+            $table->unique(['email','deleted_at'],'users_email_deleted_at_unique');
         });
     }
 
@@ -27,7 +27,7 @@ class AddEmailDeletedAtUniqueToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('deleted_at');
+            // $table->dropColumn('deleted_at');
             $table->dropUnique('users_email_unique');
         });
     }

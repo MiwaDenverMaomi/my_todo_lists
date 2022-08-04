@@ -15,8 +15,8 @@ class CreateBucketListsTable extends Migration
     {
         Schema::create('bucket_lists', function (Blueprint $table) {
             $table-> id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->string('bucket_list_item',1000);
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('bucket_list_item',255);
             $table->boolean('is_done');
             $table->timestamps();
             $table->softDeletes();

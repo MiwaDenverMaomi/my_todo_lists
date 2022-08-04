@@ -160,46 +160,36 @@ class UserController extends Controller
 		// $result=$fa ue?response()->json($favorite,201):response()->json([],500);
 	}
 
-	public function storeLike(User $user,Request $request){
+	public function storeLike(User $user){
 		\Log::info('user/storeLike');
-
-		$validator=Validator::make($request->all(),[
-			'is_liked_by_auth'=>'required|boolean'
-		],[
-			'is_liked_by_auth.required'=>'Flag for like is required.',
-			'is_liked_by_auth.boolean'=>'Flag for like should be boolean.'
-		]);
-
-		if($validator->fails()){
-			$response=response()->json([
-				'errors'=>$validator->errors()
+    $liked=$user->is_liked_by_auth($user->id);
+		if($liked===true){
+		  $result=Like::where('from_user','=',Auth::id())->where('to_user','=',$user->id)->delete();
+			$is_liked_by_auth=false;
+		}else if($liked===false){
+      $result=Like::create([
+				'from_user'=>Auth::id(),
+				'to_user'=>$user->id,
 			]);
-			throw new HttpResponseException($response);
-		}
-    \Log::info('passed validation');
-		$request->is_liked_by_auth=!$request->is_liked_by_auth;
-		$request->merge([
-			'from_user'=>Auth::id()
-		]);
-
-		if($request->is_liked_by_auth===true){
-          $is_liked_by_auth=false;
-		  $like=Like::where('from_user','=',3)->where('to_user','=',$user->id)->delete($request);
-		}else{
-          $like=Like::create($request->all());
 		  $is_liked_by_auth=true;
-		}
-//fix
-		if($like===true||$like===false){
-			\Log::info('like is true');
-		  $response['is_liked_by_auth']=$is_liked_by_auth;
-          return response()->json($response,201);
 		}else{
-			\Log::info('error');
-		  	$response=response()->json([
-				'error'=>'Failed to like.... sorry.'
+			$result='';
+		}
+
+//fix
+		if($result===''){
+	   \Log::info('error');
+		  $response=response()->json([
+			'error'=>'Failed to like.... sorry.'
 			]);
 			throw new HttpResponseException($response);
+		}else{
+		 	\Log::info('got/lost like');
+			\Log::debug(__METHOD__.'$is_liked_by_auth:'.$is_liked_by_auth);
+		  $response=response()->json([
+				'is_liked_by_auth'=>$is_liked_by_auth
+			],201);
+      return response()->json($response);
 		}
 	}
 
@@ -211,20 +201,17 @@ class UserController extends Controller
 
 	public function getFavorites(){
 		\Log::info('getFavorites');
-		$favorites=Favorite::where('from_user','=',3)
+		$favorites=Favorite::where('from_user','=',Auth::id())
 		->with('user','user.profile','user.bucket_lists','user.likes')->get()->toArray();
 		\Log::info('favorites');
-		\Log::debug($favorites);
 
 		$arr=[];
 		foreach($favorites as $favorite){
 			$is_liked_by_auth=User::find($favorite['user']['id'])->is_liked_by_auth($favorite['user']['id']);
-			// $favorite=$favorite+['is_liked_by_auth'=>$is_liked_by_auth];
-            $result=array_merge($favorite,['is_liked_by_auth'=>$is_liked_by_auth]);
-			\Log::debug($result);
+			$result=array_merge($favorite,['is_liked_by_auth'=>$is_liked_by_auth]);
 			array_push($arr,$result);
 		}
-        \Log::debug($arr);
+      \Log::debug($arr);
 
 		if(!empty($favorites)){
 			return view('favorites')->with(['favorites'=>$arr]);

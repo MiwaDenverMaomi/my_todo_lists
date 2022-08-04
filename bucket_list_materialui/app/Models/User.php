@@ -76,9 +76,10 @@ class User extends Authenticatable
 		\Log::debug($likes);
 
 		$result=false;
+
 		for($i=0;$i<count($likes);$i++){
 			\Log::debug($likes[$i]);
-			if($likes[$i]['from_user']===6){
+			if($likes[$i]['from_user']===Auth::id()){
 				\Log::info('matched');
 				$result=true;
 			}

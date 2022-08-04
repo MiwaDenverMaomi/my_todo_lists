@@ -23,7 +23,7 @@
 				<strong class="text-center d-block mb-3">{{$list['user']['name']}}</strong>
 				<div class="text-center mb-3">
 					@php
-					 $heart_class=$list['is_liked_by_auth']===true?`fa-solid fa-heart icon active`:'fa-solid fa-heart icon';
+					 $heart_class=$list['is_liked_by_auth']===true?'fa-solid fa-heart icon active':'fa-solid fa-heart icon';
 					@endphp
 				  	<i id="{{$list['user']['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$list['user']['id']}},{{$list['is_liked_by_auth']}})"></i><strong>{{count($list['user']['likes'])}}</strong>
 				</div>
@@ -51,7 +51,7 @@
 	</div>
 </div>
 		@else
-			<div class="text-center mb-5 w-100">No Todo Lists</div>
+			<div class="text-center mb-5 w-100">No Favorites</div>
 		@endif
 </div>
 @endsection

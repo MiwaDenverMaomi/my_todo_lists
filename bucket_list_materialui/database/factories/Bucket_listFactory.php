@@ -15,7 +15,7 @@ class Bucket_listFactory extends Factory
     {
         return [
             'user_id'=>$this->faker->numberBetween($min=1,$max=20),
-            'bucket_list_item'=>$this->faker->realText($maxNbChars=500,$indexSize=2),
+            'bucket_list_item'=>$this->faker->realText($maxNbChars=255,$indexSize=2),
             'is_done'=>$this->faker->boolean( $chanceOfGettingTrue=50
             )
         ];
