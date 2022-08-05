@@ -14,8 +14,19 @@
         @endif
         </div>
         <h3 class="fw-normal text-center">{{$user_data['name']}}</h3>
+        @php
+					 $heart_class=$user_data['is_liked_by_auth']===true?'fa-solid fa-heart icon active':'fa-solid fa-heart icon';
+				@endphp
         <div class="text-center">
-          <i class=`bi bi-heart-fill`></i><strong>{{$user_data['countLikes']}}</strong>
+          <i id="like-id_{{$user_data['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$user_data['id']}},{{$user_data['is_liked_by_auth']}})"></i><strong id="count_likes_{{$user_data['id']}}">{{$user_data['countLikes']}}</strong>
+        @php
+					 $star_class=$user_data['is_favorite_by_auth']===true?'fa-solid fa-heart icon active':'fa-solid fa-heart icon';
+				@endphp
+          <i id="favorite-id_{{$user_data['id']}}" class="{{$star_class}}" onclick="onToggleFavorite({{$user_data['id']}},{{$user_data['is_liked_by_auth']}})"></i>
+						<div class="text-center text-warging" id="likes_result_{{$user_data['id']}}">
+						</div>
+            <div class="text-center text-warging" id="favorites_result_{{$user_data['id']}}">
+						</div>
         </div>
            <strong class="text-center  d-block">What is your motto?</strong>
             <p class="text-center">{{!empty($user_data['profile'])?

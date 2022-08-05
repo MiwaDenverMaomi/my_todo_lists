@@ -189,53 +189,6 @@ export const onSubmitProfile=(user_id:number)=>{
 
 export const onToggleLike =async (user: number, is_liked_by_auth: number) => {
 	console.log('onToggleLike');
-	// const result:any=await fetch(`http://localhost/user/store-like/${user}`, {
-	// 	method: 'POST',
-	// 	headers: {
-	// 		'X-Requested-With': 'XMLHttpRequest',
-	// 		'Accept': 'application/json',
-	// 		'Content-Type': 'application/json',
-	// 		'Credentials': 'include',
-	// 	},
-	// 	body: JSON.stringify({
-	// 		is_liked_by_auth: is_liked_by_auth === 1 ? true : false
-	// 	})
-	// }).then((res: any) => {
-	// 	console.log('res');
-	// 	console.log(res);
-	// 	console.log(res.json());
-	// }
-	// ).then((data: any) => {
-	// 	console.log('data');
-	// 	console.log(data);
-	// }).then((data:any)=>data).catch((err: any) => err.response);
-
-	// const $likes_result_element = document.querySelector<any>(`#likes_result_${user}`);
-
-	// if(result?.ok===false) {
-	// 	const err = result.json();
-	// 	$likes_result_element.innerText = 'Failed to update like...sorry!';
-	// 	throw new Error(err);
-	// }
-
-	// if (result?.is_liked_by_auth=== true || result?.is_liked_by_auth=== false) {
-	// 	console.log(1);
-	// 	const [is_liked_by_auth, count_likes] = result.data;
-	// 	const $heart_element = document.querySelector<any>(`#like-id_${user}`);
-	// 	const $count_likes_element = document.querySelector<any>(`#count_likes_${user}`);
-	// 	$heart_element.className += is_liked_by_auth === true ? 'active' : '';
-	// 	$count_likes_element.innerText = count_likes;
-
-	// } else if (result === undefined) {
-	// 	console.log(2);
-	// 	$likes_result_element.innerText = 'Failed to update like...sorry!';
-
-	//  }else{
-	// 	console.log(3);
-	// 	console.log(result);
-	// 	$likes_result_element.innerText = result.error;
-	// }
-
 	fetch(`http://localhost/user/store-like/${user}`, {
 		method: 'POST',
 		headers: {
@@ -259,71 +212,74 @@ export const onToggleLike =async (user: number, is_liked_by_auth: number) => {
 	}).then((data: any) => {
 		const $likes_result_element = document.querySelector<any>(`#likes_result_${user}`);
 		const result = data;
-		console.log(data);
 		if (result?.is_liked_by_auth === true || result?.is_liked_by_auth === false) {
-			console.log(1);
 			const { is_liked_by_auth, count_likes } = result;
-			console.log(is_liked_by_auth);
-			console.log(count_likes);
-
 			const $heart_element = document.querySelector<any>(`#like-id_${user}`);
-			console.log($heart_element);
 			const $count_likes_element = document.querySelector<any>(`#count_likes_${user}`);
-			console.log($count_likes_element);
 
 			if (is_liked_by_auth === true) {
 				$heart_element.classList.add('active');
 			}else {
 				$heart_element.classList.remove('active');
 			}
-
 			$count_likes_element.innerText = count_likes;
 
 		} else if (result === undefined) {
-			console.log(2);
 			$likes_result_element.innerText = 'Failed to update like...sorry!';
 
 		} else {
-			console.log(3);
-			console.log(result);
 			$likes_result_element.innerText = result.error;
 		}
-	}).then((data: any) => data).catch((err: any) => err.response);
-
+	}).then((data: any) => data).catch((err: any) => {
+		const $likes_result_element = document.querySelector<any>(`#likes_result_${user}`);
+		$likes_result_element.innerText = err.responseerr.response
+	});
 }
 
-export const onToggleFavorite=(is_liked_by_auth:boolean)=>{
+export const onToggleFavorite=(user:number,is_favorite_by_auth:boolean)=>{
 	console.log('onToggleFavorite');
+	fetch('http://localhost/bucket-list/store-favorite', {
+		method: 'POST',
+		headers: {
+			'X-Requested-With': 'XMLHttpRequest',
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			'Credentials': 'include',
+		},
+		body: JSON.stringify({
+			is_favorite_by_auth:is_favorite_by_auth
+		})
+	}).then((res: any) => {
+		if (!res.ok) {
+			const errr = res.json();
+			const $favorites_result_element = document.querySelector<any>(`#favorites_result_${user}`);
+			$favorites_result_element.innerText = 'Failed to update like...sorry!';
+		}
+	})
+		.then((data: any) => {
+			const result = data;
+			const $favorites_result_element = document.querySelector<any>(`#favorites_result_${user}`);
+			if (result.is_favorite_by_auth === true || result.is_favorite_by_auth === true) {
+				const { is_favorite_by_auth, count_favorites } = result;
+				const $star_element = document.querySelector<any>(`#favorite-id_${user}`);
+				const $count_favorites_element = document.querySelector<any>(`#count_favorites_${user}`);
 
-	let result:any=axios.get('/store-favorite',{
-		params:{
-			to_user:!is_liked_by_auth
-		}
-	}).then((res:any)=>res).catch((err:any)=>err);
-
-	console.log(result);
-
-	if(result.data.is_success===true){
-		return {
-			is_sucess:true,
-			result:result.data
-		}
-	}else if(result===undefined){
-		return {
-			is_success:false,
-			result:'Failed to favorite. Try again later.'
-		}
-	}else if(result.data.errors.length>0){
-		return {
-			is_success:false,
-			result:result.data.errors
-		}
-	}else if(result.data.is_success===false){
-		return {
-			is_success:false,
-			result:result.data.errors.storeFavorite_error
-		}
-	}
+				if (is_favorite_by_auth === true) {
+					$star_element.classList.add('active');
+				} else {
+					$star_element.classList.remove('active');
+				}
+				$count_favorites_element.innerText = count_favorites;
+			} else if (result === undefined) {
+				$favorites_result_element.innerText = 'Failed to update favorite...sorry!';
+			} else {
+				$favorites_result_element.innerText = result.error;
+			}
+		 })
+		.catch((err: any) => {
+			const $favorites_result_element = document.querySelector<any>(`#favorites_result_${user}`);
+			$favorites_result_element.innerText = err.response;
+		});
 
 }
 export const searchKeyword=(str:string)=>{

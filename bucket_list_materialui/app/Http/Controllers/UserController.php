@@ -18,7 +18,7 @@ class UserController extends Controller
 		\Log::info('user/index');
 		$user_data=User::with(['profile','likes','bucket_lists'])->select('id','name','email')->find($user->id)->toArray();
 		\Log::debug($user);
-		$is_liked_by_auth=$user->is_liked_by_auth();
+		$is_liked_by_auth=$user->is_liked_by_auth($user->id);
 		$user_data['countLikes']=count($user_data['likes']);
 		$user_data['is_liked_by_auth']=$is_liked_by_auth;
 		\Log::debug($user_data);
@@ -124,34 +124,36 @@ class UserController extends Controller
 		$result===true?response()->json($result,201):response()->json([],500);
 	}
 
-	public function storeFarovite(Request $request){
-
+	public function storeFarovite(User $user){
 		\Log::info('user/storeFavorite');
-		$validator=Validator::make($request->all(),[
-			'to_user'=>'required|number|max:255'
-		],[
-			'to_user.required'=>'Input required.',
-			'to_user.number'=>'Input number.',
-			'to_user.max'=>'Id number is invalid.'
-		]);
-
-		if($validator->fails()){
-		  $resonse['errors']=$validator->errors()->toArray();
-		  throw new HttpResponseException(response()->json($response));
-		}
-		$request->merge([
-			'from_user'=>Auth::id()
-		]);
-
-		$favorite=Favorite::create($request->all());
-		$result=User::find($user->id)->is_liked_by_auth();
-
-		if($favorite===true&&$result===true){
-			return response()->json(['is_success'=>true],201);
+		$is_favorite_by_auth=$user->is_favorite_by_auth($user->id);
+		$result='';
+    if($is_favorite_by_auth===true){
+			$result=Favorite::find($user->id)
+			->where('from_user','=',Auth::id())
+			->where('to_user','=',$user->id)->delete();
+			$is_favorite_by_auth=false;
+		}else if($is_favorite_by_auth===false){
+			$result=Favorite::create([
+				'from_user'=>Auth::id(),
+				'to_user'=>$user->id,
+			]);
+			$is_favorite_by_auth=true;
 		}
 
-		throw new HttpResponseException(response()->json(['is_success'=>false,
-			'storeFavorite_error'=>'Failed to store favorite.']));
+		if($result===true||$result===false){
+			\Log::info('success');
+			response()->json([
+				'is_favorite_by_auth'=>$is_favorite_by_auth
+			],201);
+		}else{
+			 \Log::info('error');
+			 \Log::debug(__METHOD__.'id:'.$user->id.'failed to update favorite...');
+		  $response=response()->json([
+			'error'=>'Failed to favorite.... sorry.'
+			]);
+			throw new HttpResponseException($response);
+		}
 	}
 
 	public function deleteFavorite(Favorite $favorite){
@@ -162,8 +164,10 @@ class UserController extends Controller
 
 	public function storeLike(User $user){
 		\Log::info('user/storeLike');
+		\Log::debug($user->id);
     $liked=$user->is_liked_by_auth($user->id);
     $result='';
+
 		if($liked===true){
 		  $result=Like::where('from_user','=',Auth::id())->where('to_user','=',$user->id)->delete();
 			$is_liked_by_auth=false;
@@ -194,6 +198,7 @@ class UserController extends Controller
       return response()->json($response,201);
 		}
 	}
+
 
 	public function deleteLike(LikeRequest $likeRequest,Like $like){
 		\Log::info('user/deleteLike');

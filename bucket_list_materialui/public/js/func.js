@@ -2312,48 +2312,7 @@ var onToggleLike = function onToggleLike(user, is_liked_by_auth) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log('onToggleLike'); // const result:any=await fetch(`http://localhost/user/store-like/${user}`, {
-            // 	method: 'POST',
-            // 	headers: {
-            // 		'X-Requested-With': 'XMLHttpRequest',
-            // 		'Accept': 'application/json',
-            // 		'Content-Type': 'application/json',
-            // 		'Credentials': 'include',
-            // 	},
-            // 	body: JSON.stringify({
-            // 		is_liked_by_auth: is_liked_by_auth === 1 ? true : false
-            // 	})
-            // }).then((res: any) => {
-            // 	console.log('res');
-            // 	console.log(res);
-            // 	console.log(res.json());
-            // }
-            // ).then((data: any) => {
-            // 	console.log('data');
-            // 	console.log(data);
-            // }).then((data:any)=>data).catch((err: any) => err.response);
-            // const $likes_result_element = document.querySelector<any>(`#likes_result_${user}`);
-            // if(result?.ok===false) {
-            // 	const err = result.json();
-            // 	$likes_result_element.innerText = 'Failed to update like...sorry!';
-            // 	throw new Error(err);
-            // }
-            // if (result?.is_liked_by_auth=== true || result?.is_liked_by_auth=== false) {
-            // 	console.log(1);
-            // 	const [is_liked_by_auth, count_likes] = result.data;
-            // 	const $heart_element = document.querySelector<any>(`#like-id_${user}`);
-            // 	const $count_likes_element = document.querySelector<any>(`#count_likes_${user}`);
-            // 	$heart_element.className += is_liked_by_auth === true ? 'active' : '';
-            // 	$count_likes_element.innerText = count_likes;
-            // } else if (result === undefined) {
-            // 	console.log(2);
-            // 	$likes_result_element.innerText = 'Failed to update like...sorry!';
-            //  }else{
-            // 	console.log(3);
-            // 	console.log(result);
-            // 	$likes_result_element.innerText = result.error;
-            // }
-
+            console.log('onToggleLike');
             fetch("http://localhost/user/store-like/".concat(user), {
               method: 'POST',
               headers: {
@@ -2377,18 +2336,12 @@ var onToggleLike = function onToggleLike(user, is_liked_by_auth) {
             }).then(function (data) {
               var $likes_result_element = document.querySelector("#likes_result_".concat(user));
               var result = data;
-              console.log(data);
 
               if ((result === null || result === void 0 ? void 0 : result.is_liked_by_auth) === true || (result === null || result === void 0 ? void 0 : result.is_liked_by_auth) === false) {
-                console.log(1);
                 var _is_liked_by_auth = result.is_liked_by_auth,
                     count_likes = result.count_likes;
-                console.log(_is_liked_by_auth);
-                console.log(count_likes);
                 var $heart_element = document.querySelector("#like-id_".concat(user));
-                console.log($heart_element);
                 var $count_likes_element = document.querySelector("#count_likes_".concat(user));
-                console.log($count_likes_element);
 
                 if (_is_liked_by_auth === true) {
                   $heart_element.classList.add('active');
@@ -2398,17 +2351,15 @@ var onToggleLike = function onToggleLike(user, is_liked_by_auth) {
 
                 $count_likes_element.innerText = count_likes;
               } else if (result === undefined) {
-                console.log(2);
                 $likes_result_element.innerText = 'Failed to update like...sorry!';
               } else {
-                console.log(3);
-                console.log(result);
                 $likes_result_element.innerText = result.error;
               }
             }).then(function (data) {
               return data;
             })["catch"](function (err) {
-              return err.response;
+              var $likes_result_element = document.querySelector("#likes_result_".concat(user));
+              $likes_result_element.innerText = err.responseerr.response;
             });
 
           case 2:
@@ -2419,40 +2370,51 @@ var onToggleLike = function onToggleLike(user, is_liked_by_auth) {
     }, _callee);
   }));
 };
-var onToggleFavorite = function onToggleFavorite(is_liked_by_auth) {
+var onToggleFavorite = function onToggleFavorite(user, is_favorite_by_auth) {
   console.log('onToggleFavorite');
-  var result = _apis_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/store-favorite', {
-    params: {
-      to_user: !is_liked_by_auth
-    }
+  fetch('http://localhost/bucket-list/store-favorite', {
+    method: 'POST',
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Credentials': 'include'
+    },
+    body: JSON.stringify({
+      is_favorite_by_auth: is_favorite_by_auth
+    })
   }).then(function (res) {
-    return res;
-  })["catch"](function (err) {
-    return err;
-  });
-  console.log(result);
+    if (!res.ok) {
+      var errr = res.json();
+      var $favorites_result_element = document.querySelector("#favorites_result_".concat(user));
+      $favorites_result_element.innerText = 'Failed to update like...sorry!';
+    }
+  }).then(function (data) {
+    var result = data;
+    var $favorites_result_element = document.querySelector("#favorites_result_".concat(user));
 
-  if (result.data.is_success === true) {
-    return {
-      is_sucess: true,
-      result: result.data
-    };
-  } else if (result === undefined) {
-    return {
-      is_success: false,
-      result: 'Failed to favorite. Try again later.'
-    };
-  } else if (result.data.errors.length > 0) {
-    return {
-      is_success: false,
-      result: result.data.errors
-    };
-  } else if (result.data.is_success === false) {
-    return {
-      is_success: false,
-      result: result.data.errors.storeFavorite_error
-    };
-  }
+    if (result.is_favorite_by_auth === true || result.is_favorite_by_auth === true) {
+      var _is_favorite_by_auth = result.is_favorite_by_auth,
+          count_favorites = result.count_favorites;
+      var $star_element = document.querySelector("#favorite-id_".concat(user));
+      var $count_favorites_element = document.querySelector("#count_favorites_".concat(user));
+
+      if (_is_favorite_by_auth === true) {
+        $star_element.classList.add('active');
+      } else {
+        $star_element.classList.remove('active');
+      }
+
+      $count_favorites_element.innerText = count_favorites;
+    } else if (result === undefined) {
+      $favorites_result_element.innerText = 'Failed to update favorite...sorry!';
+    } else {
+      $favorites_result_element.innerText = result.error;
+    }
+  })["catch"](function (err) {
+    var $favorites_result_element = document.querySelector("#favorites_result_".concat(user));
+    $favorites_result_element.innerText = err.response;
+  });
 };
 var searchKeyword = function searchKeyword(str) {
   var result = _apis_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/search', {

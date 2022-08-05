@@ -88,17 +88,19 @@ class User extends Authenticatable
 	}
 
 	public function favorites(){
-		return $this->hasMany(Favorite::class,'from_user');
+		return $this->hasMany(Favorite::class,'to_user');
 	}
 
 	public function is_favorite_by_auth(){
-		$favorites=self::favorites()->get()->toArray();
+		\Log::info('User model is_favorite_by_auth');
+		$favorites=$this->favorites()->get()->toArray();
+		$result=false;
 		for($i=0;$i<count($favorites);$i++){
 			if($favorites[$i]['from_user']===Auth::id()){
-				return true;
+				$result=true;
 			}
-			return false;
 		}
+		return $result;
 	}
 	// public function pic_thum(){
 	//     $fnamebase=\Config::get('fpath.thum').$this->id."/"."thum";
