@@ -187,10 +187,11 @@ class UserController extends Controller
 		}else{
 		 	\Log::info('got/lost like');
 			\Log::debug(__METHOD__.'$is_liked_by_auth:'.$is_liked_by_auth);
-      return response()->json([
+			$response=[
 				'is_liked_by_auth'=>$is_liked_by_auth,
 				'count_likes'=>$count_likes
-			],201);
+			];
+      return response()->json($response,201);
 		}
 	}
 

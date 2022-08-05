@@ -1,3 +1,5 @@
+import { offset } from '@popperjs/core';
+import { configureStore } from '@reduxjs/toolkit';
 import axios from '../apis/axios';
 // import axios from 'axios';
 
@@ -185,40 +187,111 @@ export const onSubmitProfile=(user_id:number)=>{
 	}
 };
 
-export const onToggleLike = async (user: number, is_liked_by_auth: number) => {
+export const onToggleLike =async (user: number, is_liked_by_auth: number) => {
 	console.log('onToggleLike');
-	let result = await fetch(`http://localhost/user/store-like/${user}`, {
+	// const result:any=await fetch(`http://localhost/user/store-like/${user}`, {
+	// 	method: 'POST',
+	// 	headers: {
+	// 		'X-Requested-With': 'XMLHttpRequest',
+	// 		'Accept': 'application/json',
+	// 		'Content-Type': 'application/json',
+	// 		'Credentials': 'include',
+	// 	},
+	// 	body: JSON.stringify({
+	// 		is_liked_by_auth: is_liked_by_auth === 1 ? true : false
+	// 	})
+	// }).then((res: any) => {
+	// 	console.log('res');
+	// 	console.log(res);
+	// 	console.log(res.json());
+	// }
+	// ).then((data: any) => {
+	// 	console.log('data');
+	// 	console.log(data);
+	// }).then((data:any)=>data).catch((err: any) => err.response);
+
+	// const $likes_result_element = document.querySelector<any>(`#likes_result_${user}`);
+
+	// if(result?.ok===false) {
+	// 	const err = result.json();
+	// 	$likes_result_element.innerText = 'Failed to update like...sorry!';
+	// 	throw new Error(err);
+	// }
+
+	// if (result?.is_liked_by_auth=== true || result?.is_liked_by_auth=== false) {
+	// 	console.log(1);
+	// 	const [is_liked_by_auth, count_likes] = result.data;
+	// 	const $heart_element = document.querySelector<any>(`#like-id_${user}`);
+	// 	const $count_likes_element = document.querySelector<any>(`#count_likes_${user}`);
+	// 	$heart_element.className += is_liked_by_auth === true ? 'active' : '';
+	// 	$count_likes_element.innerText = count_likes;
+
+	// } else if (result === undefined) {
+	// 	console.log(2);
+	// 	$likes_result_element.innerText = 'Failed to update like...sorry!';
+
+	//  }else{
+	// 	console.log(3);
+	// 	console.log(result);
+	// 	$likes_result_element.innerText = result.error;
+	// }
+
+	fetch(`http://localhost/user/store-like/${user}`, {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json'
+			'X-Requested-With': 'XMLHttpRequest',
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			'Credentials': 'include',
 		},
 		body: JSON.stringify({
 			is_liked_by_auth: is_liked_by_auth === 1 ? true : false
 		})
-	}).then((res: any) => res.json()
-	).then((data: any) => {
+	}).then((res: any) => {
+
+		if (!res.ok) {
+			const err = res.json();
+			const $likes_result_element = document.querySelector<any>(`#likes_result_${user}`);
+			$likes_result_element.innerText = 'Failed to update like...sorry!';
+			throw new Error(err);
+		}
+		return res.json();
+	}).then((data: any) => {
+		const $likes_result_element = document.querySelector<any>(`#likes_result_${user}`);
+		const result = data;
 		console.log(data);
-		return data;
-	}).catch((err: any) => err.response);
-	console.log(result);
+		if (result?.is_liked_by_auth === true || result?.is_liked_by_auth === false) {
+			console.log(1);
+			const { is_liked_by_auth, count_likes } = result;
+			console.log(is_liked_by_auth);
+			console.log(count_likes);
 
-	const $likes_result_element = document.querySelector<any>(`#likes_result_${user}`);
-	if(result===undefined){
-		$likes_result_element.innerText = 'Failed to update like...sorry!'
-	} else if (result.data.error.length > 0) {
+			const $heart_element = document.querySelector<any>(`#like-id_${user}`);
+			console.log($heart_element);
+			const $count_likes_element = document.querySelector<any>(`#count_likes_${user}`);
+			console.log($count_likes_element);
 
-		$likes_result_element.innerText = result.error;
-	} else if(result.data.is_liked_by_auth.length>0){
-		const [is_liked_by_auth, count_likes] = result.data;
-		const $heart_element = document.querySelector<any>(`#like-id_${user}`);
-		const $count_likes_element = document.querySelector<any>(`#count_likes_${user}`);
-		$heart_element.className += is_liked_by_auth === true ? 'active' : '';
-		$count_likes_element.innerText = count_likes;
-		return;
-	}else{
-		$likes_result_element.innerText = result.error;
-	}
+			if (is_liked_by_auth === true) {
+				$heart_element.classList.add('active');
+			}else {
+				$heart_element.classList.remove('active');
+			}
+
+			$count_likes_element.innerText = count_likes;
+
+		} else if (result === undefined) {
+			console.log(2);
+			$likes_result_element.innerText = 'Failed to update like...sorry!';
+
+		} else {
+			console.log(3);
+			console.log(result);
+			$likes_result_element.innerText = result.error;
+		}
+	}).then((data: any) => data).catch((err: any) => err.response);
+
 }
+
 export const onToggleFavorite=(is_liked_by_auth:boolean)=>{
 	console.log('onToggleFavorite');
 

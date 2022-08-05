@@ -470,3 +470,8 @@ $result['users']['favorites']のようにネストされる。ネストがポイ
 
 ・404エラーが出たら、まずphp artisan route:listでルートが正しいか確認。
 ・web.phpでurlを``で囲ってはいけない。認識されないので。
+・apiの通信で、controllerでresponse()->json([],XXX)としたとき、
+ts側ではres.json()ではなく、resのみでOK。※fetchを使用した場合。axiosはわからない。
+
+・オブジェクトの分割代入：const {x,y}=z
+・配列の分割代入：const [x,y]=z
