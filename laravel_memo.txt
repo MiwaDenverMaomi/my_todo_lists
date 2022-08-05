@@ -111,28 +111,4 @@ $heart_class=$list['is_liked_by_auth']===true?'fa-solid fa-heart icon active':'f
 						</div>
 例2：<p @class(['textdecoration-linethrough'=>$item['is_done']])>
 
-★モデルバインディングの注意
-以下のtsで値を送信した。
-TS※引数に注目
-export const onToggleLike =async (user: number, is_liked_by_auth: number) => {
-	console.log('onToggleLike');
-	fetch(`http://localhost/user/store-like/${user}`, {
-		method: 'POST',
-		headers: {
-			'X-Requested-With': 'XMLHttpRequest',
-			'Accept': 'application/json',
-			'Content-Type': 'application/json',
-			'Credentials': 'include',
-		},
-		body: JSON.stringify({
-			is_liked_by_auth: is_liked_by_auth === 1 ? true : false
-		})
-ルート
-Route::post('/store-like',[BucketListController::class,'storeLike'])->name('bucket-lists.store-like');※ルートに{user}という記述はない。
-ルートにモデルバインディングさせるための{user}という記述はない。しかし、コントローラーの引数で(User $user)と記述したところ、$userにモデルのインスタンスを
-受け取ることができた。なぜ？？
 
-コントローラー
-public function storeLike(User $user){
-		\Log::info('user/storeLike');
-		\Log::debug($user->id);->$userのidが表示された。

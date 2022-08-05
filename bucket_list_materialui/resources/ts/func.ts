@@ -238,7 +238,7 @@ export const onToggleLike =async (user: number, is_liked_by_auth: number) => {
 
 export const onToggleFavorite=(user:number,is_favorite_by_auth:boolean)=>{
 	console.log('onToggleFavorite');
-	fetch('http://localhost/bucket-list/store-favorite', {
+	fetch(`http://localhost/user/store-favorite/${user}`, {
 		method: 'POST',
 		headers: {
 			'X-Requested-With': 'XMLHttpRequest',
@@ -251,28 +251,36 @@ export const onToggleFavorite=(user:number,is_favorite_by_auth:boolean)=>{
 		})
 	}).then((res: any) => {
 		if (!res.ok) {
-			const errr = res.json();
+			const err = res.json();
 			const $favorites_result_element = document.querySelector<any>(`#favorites_result_${user}`);
 			$favorites_result_element.innerText = 'Failed to update like...sorry!';
+			throw new Error(err);
 		}
-	})
-		.then((data: any) => {
+		return res.json();
+	}).then((data: any) => {
+		console.log(0);
 			const result = data;
+			console.log(data);
 			const $favorites_result_element = document.querySelector<any>(`#favorites_result_${user}`);
-			if (result.is_favorite_by_auth === true || result.is_favorite_by_auth === true) {
-				const { is_favorite_by_auth, count_favorites } = result;
+			if (result.is_favorite_by_auth === true || result.is_favorite_by_auth === false) {
+				console.log(1);
+				const { is_favorite_by_auth} = result;
 				const $star_element = document.querySelector<any>(`#favorite-id_${user}`);
 				const $count_favorites_element = document.querySelector<any>(`#count_favorites_${user}`);
 
 				if (is_favorite_by_auth === true) {
+					console.log(2);
 					$star_element.classList.add('active');
 				} else {
+					console.log(3);
 					$star_element.classList.remove('active');
 				}
-				$count_favorites_element.innerText = count_favorites;
+
 			} else if (result === undefined) {
+				console.log(4);
 				$favorites_result_element.innerText = 'Failed to update favorite...sorry!';
 			} else {
+				console.log(5);
 				$favorites_result_element.innerText = result.error;
 			}
 		 })

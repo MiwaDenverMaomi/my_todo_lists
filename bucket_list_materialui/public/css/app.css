@@ -132,6 +132,15 @@ body {
   color: pink;
 }
 
+.favorite-icon {
+  cursor: pointer;
+  opacity: 0.8;
+  color: gray;
+}
+.favorite-icon.active {
+  color: yellow;
+}
+
 .flash {
   position: absolute;
   top: 0;

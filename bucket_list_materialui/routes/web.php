@@ -47,7 +47,7 @@ Route::prefix('user')->group(function(){
       Route::get('/reset-password',[UserController::class,'getResetPassword'])->name('user.getResetPassword');
       Route::patch(`/{user}/reset-password`,[UserController::class,'resetPassword'])->name('user.resetPassword');
       // Route::post(`/reset-password/send-email`,[UserController::class,'sendEmail']);
-      Route::patch('/store-favorite',[UserController::class,'storeFavorite'])->name('user.storeFavorite');
+      Route::post('/store-favorite/{user}',[UserController::class,'storeFavorite'])->name('user.storeFavorite');
       Route::delete('/delete-favorite/{favorite}',[UserController::class,'deleteFavorite'])->name('user.deleteFavorite');
 
       Route::post('/store-like/{user}',[UserController::class,'storeLike'])->name('user.storeLike');
@@ -78,7 +78,7 @@ Route::group(['middleware'=>'auth'],function(){
     //Like, favorite
     Route::post('/store-like',[BucketListController::class,'storeLike'])->name('bucket-lists.store-like');
     Route::delete('/delete-like/{like}',[BucketListController::class,'deleteLike'])->name('bucket-lists.delete-like');
-    Route::post('/store-favorite',[BucketListController::class,'storeFavorite'])->name('bucket-lists.store-favorite');
+    // Route::post('/store-favorite',[BucketListController::class,'storeFavorite'])->name('bucket-lists.store-favorite');
     Route::delete('/delete-favorite/{favorite}',[BucketListController::class,'deleteFavorite'])->name('bucket-lists.delete-favorite');
   });
 });

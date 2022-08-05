@@ -19,8 +19,11 @@ class UserController extends Controller
 		$user_data=User::with(['profile','likes','bucket_lists'])->select('id','name','email')->find($user->id)->toArray();
 		\Log::debug($user);
 		$is_liked_by_auth=$user->is_liked_by_auth($user->id);
+		$is_favorite_by_auth=$user->is_favorite_by_auth($user->id);
 		$user_data['countLikes']=count($user_data['likes']);
 		$user_data['is_liked_by_auth']=$is_liked_by_auth;
+		$user_data['is_favorite_by_auth']=$is_favorite_by_auth;
+
 		\Log::debug($user_data);
 	   return  view('list_user')->with(['user_data'=>$user_data]);
 	}
@@ -124,7 +127,7 @@ class UserController extends Controller
 		$result===true?response()->json($result,201):response()->json([],500);
 	}
 
-	public function storeFarovite(User $user){
+	public function storeFavorite(User $user){
 		\Log::info('user/storeFavorite');
 		$is_favorite_by_auth=$user->is_favorite_by_auth($user->id);
 		$result='';
@@ -140,19 +143,19 @@ class UserController extends Controller
 			]);
 			$is_favorite_by_auth=true;
 		}
-
-		if($result===true||$result===false){
-			\Log::info('success');
-			response()->json([
+    \Log::debug($result);
+		if($result===''){
+			\Log::info('error');
+			 \Log::debug(__METHOD__.'id:'.$user->id.'failed to update favorite...');
+		  return response()->json([
+			'error'=>'Failed to favorite.... sorry.'
+			],500);
+			throw new HttpResponseException($response);
+		}else{
+			 \Log::info('success');
+		 return	response()->json([
 				'is_favorite_by_auth'=>$is_favorite_by_auth
 			],201);
-		}else{
-			 \Log::info('error');
-			 \Log::debug(__METHOD__.'id:'.$user->id.'failed to update favorite...');
-		  $response=response()->json([
-			'error'=>'Failed to favorite.... sorry.'
-			]);
-			throw new HttpResponseException($response);
 		}
 	}
 
@@ -219,7 +222,10 @@ class UserController extends Controller
 		$arr=[];
 		foreach($favorites as $favorite){
 			$is_liked_by_auth=User::find($favorite['user']['id'])->is_liked_by_auth($favorite['user']['id']);
-			$result=array_merge($favorite,['is_liked_by_auth'=>$is_liked_by_auth]);
+			$is_favorite_by_auth=User::find($favorite['user']['id'])->is_favorite_by_auth($favorite['user']['id']);
+			$result=array_merge($favorite,[
+				'is_liked_by_auth'=>$is_liked_by_auth,
+		   	'is_favorite_by_auth'=>$is_favorite_by_auth]);
 			array_push($arr,$result);
 		}
       \Log::debug($arr);

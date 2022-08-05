@@ -126,6 +126,15 @@ body {
   }
 }
 
+.favorite-icon{
+    cursor: pointer;
+      opacity: 0.8;
+      color: gray;
+
+      &.active {
+        color: yellow;
+      }
+}
 
 
 

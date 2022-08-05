@@ -20,12 +20,12 @@
         <div class="text-center">
           <i id="like-id_{{$user_data['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$user_data['id']}},{{$user_data['is_liked_by_auth']}})"></i><strong id="count_likes_{{$user_data['id']}}">{{$user_data['countLikes']}}</strong>
         @php
-					 $star_class=$user_data['is_favorite_by_auth']===true?'fa-solid fa-heart icon active':'fa-solid fa-heart icon';
+					 $star_class=$user_data['is_favorite_by_auth']===true?'fa-solid fa-star favorite-icon active':'fa-solid fa-star favorite-icon';
 				@endphp
-          <i id="favorite-id_{{$user_data['id']}}" class="{{$star_class}}" onclick="onToggleFavorite({{$user_data['id']}},{{$user_data['is_liked_by_auth']}})"></i>
-						<div class="text-center text-warging" id="likes_result_{{$user_data['id']}}">
+          <i id="favorite-id_{{$user_data['id']}}" class="{{$star_class}}" onclick="onToggleFavorite({{$user_data['id']}},{{$user_data['is_favorite_by_auth']}})"></i>
+						<div class="text-center text-danger" id="likes_result_{{$user_data['id']}}">
 						</div>
-            <div class="text-center text-warging" id="favorites_result_{{$user_data['id']}}">
+            <div class="text-center text-danger" id="favorites_result_{{$user_data['id']}}">
 						</div>
         </div>
            <strong class="text-center  d-block">What is your motto?</strong>

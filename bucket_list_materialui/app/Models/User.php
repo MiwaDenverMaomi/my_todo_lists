@@ -91,9 +91,9 @@ class User extends Authenticatable
 		return $this->hasMany(Favorite::class,'to_user');
 	}
 
-	public function is_favorite_by_auth(){
+	public function is_favorite_by_auth($target_id){
 		\Log::info('User model is_favorite_by_auth');
-		$favorites=$this->favorites()->get()->toArray();
+		$favorites=User::find($target_id)->favorites()->get()->toArray();
 		$result=false;
 		for($i=0;$i<count($favorites);$i++){
 			if($favorites[$i]['from_user']===Auth::id()){
