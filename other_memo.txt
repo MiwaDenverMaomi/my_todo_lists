@@ -1,0 +1,21 @@
+★エイリアス登録のしかた
+1)app/Library/Func.phpを作成、そこにファンクション記述
+namespace App\Library
+class Func extends Facade
+{
+
+  public function convertEmptyValueToNull($val){
+    $result=(strlen($value)>0)?$val:null;
+    return $result;
+  }
+
+}
+2)エイリアスに登録
+config/app.php
+'ailias'に
+'Func'=> App\Library\Func::class,
+※namespaceと実際のフォルダ構成が一致していないとエイリアスが動かないので注意。
+
+★contains()で特定のデータが含まれているかどうかをチェックする
+★オブジェクトの分割代入：const {x,y}=z
+★配列の分割代入：const [x,y]=z

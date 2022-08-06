@@ -5,52 +5,56 @@
 ②make:authをすると、ログインに必要なview,controllers,web.phpのルートが追加される。使わなくてもOK。
 ③Authファサードは、make:authしなくても使える、、、はず。
 
-
-★web.phpの注意
+★web.php
 ①apiを使用する際に、/apiというパスはルート内に必須ではない。
 ②''でなく``でルートを記述すると、ルートが全く認識されなくなるので、``は使用しない。
 ③ルートの中にダイレクトにモデル名を入れることができる。コントローラーで受け取る際には、User $userというふうに
 アーギュメントを渡す。例）ルート：'/edit/{user}'＝＞コントローラーの引数：User $user
 ④nameはネストできる。後が続く場合は、末尾にピリオドをつける。例：('user.')...('profile')
 ⑤値の送受信のしかた
-1)laravel<->blade
+
+1)laravel<->bladeの場合
 
 ルート例）
+※TodoはApp\Models\Todoからインポートしておく。
+※ルートの別名はネストできるので、分かりやすく命名する。
 Route::get('/todo-list',[Todo::class,getTodo])->name('todo.get');
 Route::post('/todo-list',[Todo::class,postTodo])->name('todo.post');
 Route::patch('/todo-list/{user}',[Todo::class,updateTitle])->name('todo.update-title');
 
 コントローラー例）
 ①バリデーションは、コントローラー内で行うとごちゃごちゃするので、フォームリクエスト内ですませるのが理想。
+ここでひっかかれば、自動的にフォームでエラーメッセージが表示される。※blade内でエラー表示欄に@error {{$message}} @enderrorを記述する。
 ②DBにアクセスし、データ取得・更新後にその戻り値によってエラーハンドリングの分岐をさせる。
 eloquentのcreateを使って新規作成した場合、その戻り値は新規作成したレコードのモデル。
-update,deleteの場合は、戻り値は更新したレコード数が帰る（1か0）。私がテストしたところtrue（成功）／false（失敗）で帰る。もしかしたら、print(xxx,true)で
-確認したらもっと詳しいデータがでるかもしれない。phpはtrue・falseを1/0で表すから、私が勘違いしているだけか？
+update,deleteの場合は、戻り値は更新したレコード数が帰る（1か0）。私がテストしたところtrue（成功）／false（失敗）で帰る（->phpの場合1/0と同等か？）。もしかしたら、print(xxx,true)で
+確認したらもっと詳しいデータがでるかもしれない。
 
 
-ブレード例
+ブレード例)
 ※post送信
 <form method="post" action="{{route('todo.post')}}">
 @csrf
-※patch
+
+※patch送信
 <form method="post" action="{{route('todo.update-title',['todo'=>$item['id']])}}">
 @csrf
-@method('patch')<-必須。htmlではpostとgetしかサポートしていないため。
+@method('patch')<-必須。htmlではpostとgetしかサポートしていないため。method="post"も記述。
 
-実例：
-
-<blade>
-★ルート名は、エイリアスで記述。渡すパラメータは、第二引数として入れる。tsでのaction=が効いてなさそうだったので、第二引数に['bucket_list'=>$item['id']]を入れた。
+★patch送信(api不使用)の実例：
+<blade側>
+※ルート名は、エイリアスで記述。渡すパラメータは、第二引数として入れる。tsでのaction=が効いてなさそうだったので、第二引数に['bucket_list'=>$item['id']]を入れた。
 <form id="todo_title_form" method="post" action="{{route('bucket-lists.update-title',['bucket_list'=>$item['id']])}}" onsubmit="onSubmit()">
 								@csrf
 								@method('patch')
 							<p id={{"todo_display_".$item['id']}} @class(['textdecoration-linethrough'=>$item['is_done']]) onclick="onStartEditMode({{$item['id']}},'{{$item['bucket_list_item']}}','{{$item['is_done']}}')">{{$item['bucket_list_item']}}</p>
 							</form>
 
-<ts>
-★引数のtodo_idは、routeでは{bucket_list}としてモデルバインディングされて渡される。同時にsubmitされたフォームのリクエストも渡される。それはコントローラではRequest $requestに入っている。
-$todo_title_form_element.action=`/todo-list/update-title/${todo_id}にNot working?とあるが、これは
-"`/todo-list/update-title/${todo_id}`"とすべきだったのかもしれない。
+<ts側>
+※引数のtodo_idは、routeでは{bucket_list}としてモデルバインディングされて渡される。
+同時にsubmitされたフォームのリクエストも渡される。フォームの内容はコントローラではRequest $requestに入っており、プロパティ名（htmlでのname属性）で取り出せる。
+（$request->emailなどのように）
+
 export const onSubmitTitle=(todo_id:number)=>{
 	console.log('onSubmit');
 	const $todo_title_form_element=document.querySelector<any>("#todo_title_form");
@@ -59,7 +63,11 @@ export const onSubmitTitle=(todo_id:number)=>{
 			$todo_title_form_element.submit();
 };
 
-<controller/update-title>★Bucket_list $bucket_listにはルート{bucket_list}でモデルバインディングされた値が入る。
+※$todo_title_form_element.action=`/todo-list/update-title/${todo_id}にNot working?とあるが、これは
+"`/todo-list/update-title/${todo_id}`"とすべきだったのかもしれない。
+
+<controller/update-title>
+※Bucket_list $bucket_listにはルート{bucket_list}でモデルバインディングされた値が入る。
 public function updateTitle(Request $request,Bucket_list $bucket_list){
 		\Log::info('update');
 
@@ -89,18 +97,18 @@ public function updateTitle(Request $request,Bucket_list $bucket_list){
 
 
 ★フォームリクエスト
-コントローラー内でバリデーションすると、記述量が多くなるので、バリデーションはフォームリクエスト内ですますと良い。
-フォームリクエスト内でバリデーションルールとメッセージを任意で設定する。
-同時にbladeでエラーメッセージ表示エリアを記述する。
+①コントローラー内でバリデーションすると、記述量が多くなるので、バリデーションはフォームリクエスト内ですますと良い。
+②フォームリクエスト内でバリデーションルールとメッセージを任意で設定する。
+③同時にbladeでエラーメッセージ表示エリアを記述する。
 
-<api>
+★api
 ①axiosで通信したときと、fetchで通信したときは、レスポンスの中身は若干ことなる。
 
 ★bladeの変数の書き方
-※①要素のプロパティは""で必ずくくる。(例1)
-※②引数に変数を使う場合は、変数ごとに{{}}でくくる。onclick="onToggleike({{$list['user']['id']}},{{$list['is_liked_by_auth']}})"(例1)
-※③id名などを動的に変更したい場合は、””でくくる。例：id="like-id_{{$list['user']['id']}}"(例1)
-※＠class([a=>b])を利用できる。bがtrueのとき、a(クラス名)が適用される。(例2)
+①要素のプロパティは""で必ずくくる。(例1)
+②引数に変数を使う場合は、変数ごとに{{}}でくくる。onclick="onToggleike({{$list['user']['id']}},{{$list['is_liked_by_auth']}})"(例1)
+③id名などを動的に変更したい場合は、””でくくる。例：id="like-id_{{$list['user']['id']}}"(例1)
+④＠class([a=>b])を利用できる。bがtrueのとき、a(クラス名)が適用される。(例2)
 
 例1:
 @php
@@ -111,4 +119,29 @@ $heart_class=$list['is_liked_by_auth']===true?'fa-solid fa-heart icon active':'f
 						</div>
 例2：<p @class(['textdecoration-linethrough'=>$item['is_done']])>
 
+★エラー表示のステップ(larabel->blade)
+①バリデーションによる表示
+方法１：フォームリクエストでバリデーション
+方法２：コントローラー内でバリデーション
+コントローラー側：
+return back()
+			->withErrors($validator)
+			->withInput();
 
+②sessionを使う。
+一度のエラーメッセージは、session('flash_message','xxx')でフラッシュメッセージとして入れることができる。これは、
+バリデーションにも使えるし、例外エラーを投げるときに使用しても良い。
+例）
+コントローラー側：back()->with(['flash_message','xxxx']);でflash_messageを入れることができる。
+blade側：session('flash_message')で取り出す
+
+★エラー表示のしかた
+方法１：bladeで@error('XXX') {{$message}} @enderrorで表示
+方法２: bladeで@if(session('flash_message')){{session('flash_message')}} @endif
+
+★エラー表示のメソッド
+方法１：first
+エラーひとつだけ表示
+{{$errors->has('name')?$errors->first('name'):''}}
+方法2:all?
+ひとつのname属性のエラーを全部表示する。（要ググる）

@@ -1,0 +1,50 @@
+
+・フォームResuestクラスの
+    public function authorize()
+    {
+        return false;
+    }
+
+を
+    public function authorize()
+    {
+        return true;
+    }
+にする。そうでないとアクセス時に403エラーとなる。
+
+
+・FormRequestクラスを使うときの注意。
+以下のようにrulesの一部を[]でくくる必要がある。理由は、「もしくは」を示すパイプ「|」が、使用できないため。
+
+   public function rules()
+    {
+        return [
+            'password'=>['required','regex:/^[0-9a-zA-z-_]{8,32}$/','confirmed'],
+            'password_confirmation' => 'required | same:password',
+            'reset_token'=>['required',new TokenExpirationTimeRule]
+        ];
+    }
+    /**
+     *
+     * @return array
+     */
+    public function messages(){
+        return[
+            'password.required'=>'Input :attribute required.',
+            'password.regex'=>'Input :attribute within 8-32 letters.',
+            'password.confirmed'=>':attribute is not matched.'
+        ];
+    }
+    /**
+     *
+     * @return array
+     */
+    public function attributes(){
+        return  [
+            'password'=>'password'
+        ];
+    }
+
+★requestをnewしたとき
+queryにキーと値を追加したい場合は、
+merge(['key'=>'sss'])を使う。$request->user_id=3とかやってはダメ。何も入らない。

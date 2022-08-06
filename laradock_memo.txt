@@ -1,3 +1,4 @@
+★Laradock 使用時対処
 ＜参考サイト＞
 https://reffect.co.jp/laravel/laradock-laravel-macos#Laravel
 https://qiita.com/mineaki27th/items/ad774a41b7a0a68761bd->こっちのほうがいいかも
@@ -45,7 +46,7 @@ C:\Users\Miwa\React\portfolio\laradock_2\bucket_list_materialui\app\Providers＞
 7.@mui/stylesは使えない模様。->makeStylesが使えないので、const classes={}普通にオブジェクトで指定した。
 8.コンパイルエラーがmixで出なくても、ブラウザコンソールでjsのエラーがあれば、正常にブラウザに表示されないので注意。コンソール上のエラーも解決すべし。
 
-gitへのアップロード
+★gitへのアップロード
 1.laradockと同階層に.gitignoreを作成した。テンプレは以下を使用。これを使用してPUSHしたところ、プロジェクトのあるフォルダだけが
 pushされた。
 ＜.gitignoreテンプレ＞ｄ
@@ -77,11 +78,11 @@ docker-compose.custom.yml
 
 .DS_Store
 
-<Laravel>
+★Laravelでログが出ないとき
 ・logが出ないときは、権限を変更。
 chmod -R 777　なんちゃら
 
-・画面作成以降のながれ
+★画面作成以降のながれ
 ①画面作成（react,react-router）
 ②表示してみる
 ③MysqlでDB作成。mysql は、docker-compose exec mysql bash
@@ -92,23 +93,7 @@ chmod -R 777　なんちゃら
 ⑧ルーティングに沿ってコントローラ作成
 ⑨テスト
 
-・web.php　laravel 8ではこういう書き方をするらしい
-Route::prefix('/bucket-lists')->group(function(){
-    Route::get('/',[BucketListController::class,'index'])->name('bucket-lists.index');
-
-・withでhasmanyやhasoneを取得したとき、必要なカラムのみ取得するにはどうしたらいいか
-
-・$bucket_lists=User::with([
-            'profile','bucket_list','likes'
-            // 'profile:id,photo,question_1,question_2,question_3',
-            // 'bucket_list:id,bucket_list_item,is_done,updated_at',
-            // 'likes:id,from_user'
-            ])->select('id','name','email')->get();
-とりあえず、上のような書き方に落ち着いたが、必要なカラムのみ抽出できていない。
-
-.更新のあった人のリストを最新に持っていきたい。
-・入力ないpostrequestでのfrom_user,to_userなどのバリデーションは必要か
-・laradock＋laravelでテスト用DBを作成する。
+★laradock＋laravelでテスト用DBを作成する手順。
 参考：https://qiita.com/yyy752/items/2252b26a2b1e03943ac2
 ①.envから.env.testingを作成。
 APP_ENV=local
@@ -167,311 +152,6 @@ use RefreshDatabase;を使うと、すべてのDBのデータが消えるので�
 
 ⑨phpunit.xmlの <server name="DB_CONNECTION" value="sqlite"/>のコメントマークを外すとテスト用DBで RefreshDatabaseしても本番用のDBのデータは消えない。
 
-☆laravel メール機能の実装
 
-1)make:controller XXX（ContactController）でメールを飛ばすコントローラーを作る
-・バリデーション、バリデーションOKならメールするsend()し、['message'=>'OK','error'=>[]]を返す。（NGなら
-['message'=>'NG','error'=>['message was not sent']]など。）
-ここで、2)で作成したmailクラスをnewし、sendで送る
-
-Mail::to($request->input('email'))->send(new Inquiry());
-        Mail::to($request->config('MAIL_FROM_ADDRESS'))->send(new Respond());
-        return response()->json([
-            'result'=>'Email was sent!',
-            'errors'=>[]
-        ]);
-
-2)make:mail XXX(Inqury)　で何のメールテンプレートにviewし、どんなsubjectで,どんな変数をテンプレート送るかを
-定める。
-  public function build()
-    {
-        return $this->view('emails.inquiry')
-        ->subject('Thank you for your inquiry.')
-        ->with(['data'=>$this->data]);
-    }
-
-3)emails>inquiry.blade.phpを作成し、
-メールのテンプレートを作る。
-
-★ $user_data=User::with(['profile','likes'])->select('id','name','email')->find($user->id)->toArray();だと
-１人分のデータが取れるが
- $user_data=User::with(['profile','likes'])->select('id','name','email')->get()->toArray();だと全員のデータが取れてしまう。
-
-★setUp():void関数を使おう。ここに記述した処理は、
-すべてのテストに適用される。
-protected $user;
-protected setUp():void{
-parent::setUp();//必要
-User::factory(1)->create();
-$user=User::find(4);
-}
-
-★requestをnewしたとき
-queryにキーと値を追加したい場合は、
-merge(['key'=>'sss'])を使う。$request->user_id=3とかやってはダメ。何も入らない。
-
-★テストはひとつひとつ実行しないとエラーになるのか？
-
-★複数create
-  $data=[  ['from_user'=>5,'to_user'=>4],  ['from_user'=>8,'to_user'=>4]];
-        $result=Like::insert($data);
-
-★複合キー制約（カラムの組み合わせを指定することで、重複データの作成を避ける。）を利用しよう。
-★ Syntax error or access violation: 1061 Duplicate key name 'favorites_from_user_to_user_unique' (SQ
-  L: alter table `favorites` add unique `favorites_from_user_to_user_unique`(`from_user`, `to_user`))
-$table->unique(['from_user','to_user]);で複合ユニーク制約が追加されるはずだが、このエラーが出てしまった。
-よくわからないので、いろいろ試した結果、成功したのは以下２つ。
-１）favoritesテーブルを新規作成するファイルで$table->unique(['from_user','to_user]);と記述。
-２）追加のマイグレーションファイルで制約を追加する場合は、$table->unique(['from_user','to_user],'favorites_from_user_to_user')
-その後、以下のコマンドで確認する。（show columns文ではないので注意。）
-MySQL [test_db]> show index from favorites;
-
-★gmailからメールを送る設定：
-gmailアカウント->security->sign up->パスワード必要あれば変更->app passwordsを作成
-これを含めた情報を以下のように貼り付ける
-
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com//ここ必要
-MAIL_PORT=1025
-MAIL_USERNAME=hoge@example.com // メールアドレス
-MAIL_PASSWORD=hogehogehoge     // アプリパスワード
-MAIL_FROM_ADDRESS=hoge@example.com  // MAIL_USERNAMEと同じ
-MAIL_FROM_NAME=Laravel便り // メール送信元名
-
-★responseの中にはcontentというプロパティがあり、そこにエラーメッセージなどを入れることができる。
 ★mix watchが遅すぎるので、https://qiita.com/suzu6/items/8a8246015e5b45e210c4を参照にしてみた。
 docker-compose.ymlに４行追記した。
-
-・キャメロンに聞きたいこと
-〇メールが届かない
-〇全リストを作成の場合、
-いきなり全データを取得するか？
-〇Laravel側でデータを加工するか？それともreact側で加工？
-〇mix run watchがとても遅い。
-
-★エイリアス登録のしかた
-1)app/Library/Func.phpを作成、そこにファンクション記述
-namespace App\Library
-class Func extends Facade
-{
-
-  public function convertEmptyValueToNull($val){
-    $result=(strlen($value)>0)?$val:null;
-    return $result;
-  }
-
-}
-2)エイリアスに登録
-config/app.php
-'ailias'に
-'Func'=> App\Library\Func::class,
-※namespaceと実際のフォルダ構成が一致していないとエイリアスが動かないので注意。
-
-★laravel の認証用トークンとcsrfトークンは別ものらしい。
-認証用トークンは、ログイン時に使う。csrfトークンは、フォーム送信時に使う。
-"POST"、"PUT"、"PATCH"、"DELETE" HTMLフォームを定義するときはいつでも、CSRF保護ミドルウェアがリクエストを検証できるように、フォームに非表示のCSRF_tokenフィールドを含める必要があります。
-
-★サンクタムのしくみ
-①API認証②SPA認証がある。
-API認証の流れ：
-データベースにトークン保存用の単一のテーブル（personal_access_tokens）を作成する（※マイグレーションファイルは前述のコマンド実行時に作成済み）
-ユーザーがログインに成功した時にトークンを発行（トークンはランダムの40桁の文字列をsha256のハッシュアルゴリズムでハッシュ化したもの）
-発行したトークンをpersonal_access_tokensテーブルに保存
-発行したトークンをユーザーに知らせる
-トークン認証が必要なルーティングには->middleware('auth:sanctum')を定義する
-リクエストが来た時にミドルウェアでリクエスト中のAuthorizationヘッダーに設定されたトークンとデータベースのトークンの値を照合しユーザーを識別する（トークンがそもそもない場合、一致するトークンがない場合は401エラーを返す）
-トークンの照合に成功したユーザーは->middleware('auth:sanctum')内のルーティング処理を続行する
-->SPAではセキュリティ上使用すべきではない。（ローカルストレージから盗まれたら終わりだから）
-
-SPA認証の流れ：
-config/sanctum.phpにLaravelセッションクッキーを使用して「ステートフル」な認証を維持するドメインを定義する
-apiミドルウェアグループにsactumミドルウェアを追加する。→SPAからのリクエストをLaravelのセッションクッキーを使って認証できるようにする＆サードパーティまたはモバイルアプリケーションからのリクエストをAPIトークンを使用して認証できるようにする。
-SPAのログインページで初めに/sanctum/csrf-cookieにリクエストを送信して、アプリケーションのCSRF保護を初期化する。（この処理でLaravelは現在のCSRFトークンを含むXSRF-TOKENクッキーをセットする）
-ログイン成功後、Laravelがクライアントにセッションクッキーを発行し、後続の処理はこのセッションクッキーを介して自動的に認証される。（ログイン、後続の処理でのリクエスト時にはCSRF保護の初期化に発行されたXSRF-TOKENクッキーの値をX-XSRF-TOKENヘッダで送信する限り、後続のリクエストは自動的にCSRF保護が行える）
-セッションの期限切れになった状態で認証が必要なAPIエンドポイントにリクエストすると401 or 419エラーを返す。（SPAでログインページにリダイレクトさせる）
-->クッキーを使っている。
-
-注意：
-★C:\Users\Miwa\React\portfolio\laradock_2\bucket_list_materialui\app\Http\Middleware\VerifyCSRFToken
-後で、    protected $except = [
-            '*',//delete later
-    ];を削除する。今回はPOSTSMANテスト用のためここに追記した。
-
-・リレーションでつなげる際の第三引数を省略しないこと。省略すると、自動的に該当モデルのid番号にリンクされてしまう。
-  public function profile(){
-        return $this->hasOne(Profile::class,'user_id','to_user');*この場合、'to_user'を記述しないと、profileモデルのid番号とリンクしてしまう。
-    }
-取得した結果のサンプルを参照～！
-・リレーション先のリレーションを参照するときは、「.」でつなげる。例）
-with('user.profile')->,,,
-
-・$favorites=Favorite::where('from_user','=',3)
-		->with('user','user.profile','user.bucket_lists','user.likes')->get()->toArray();
-こういう書きかたをした場合、出力されるのは以下のようなデータ
-
-array (
-  0 => 
-  array (
-    'id' => 2,
-    'from_user' => 3,
-    'to_user' => 2,
-    'created_at' => '2022-06-21T15:17:07.000000Z',
-    'updated_at' => '2022-06-21T15:17:07.000000Z',
-    'user' => 
-    array (
-      'id' => 2,
-      'name' => 'Abagail Jaskolski IV',
-      'email' => 'tressie.heaney@example.net',
-      'email_verified_at' => NULL,
-      'created_at' => '2022-06-21T15:17:06.000000Z',
-      'updated_at' => '2022-06-21T15:17:06.000000Z',
-      'deleted_at' => NULL,
-      'profile' => 
-      array (
-        'id' => 9,
-        'user_id' => 2,
-        'photo' => 'https://via.placeholder.com/600x600.png/005599?text=cats+modi',
-        'question_1' => 'Gryphon said to Alice, very much of a treacle-well--eh, stupid?\' \'But they were lying on the twelfth?\' Alice went timidly up to her daughter \'Ah, my dear! I shall have to beat time when she looked down at them, and just as well as if she had never had fits, my dear, YOU must cross-examine THIS.',
-        'question_2' => 'On which Seven looked up eagerly, half hoping that the pebbles were all writing very busily on slates. \'What are tarts made of?\' Alice asked in a very curious sensation, which puzzled her a good character, But said I could say if I only knew the meaning of it at last, and they sat down and began.',
-        'question_3' => 'Alice had begun to repeat it, but her voice sounded hoarse and strange, and the small ones choked and had no reason to be talking in a natural way. \'I thought you did,\' said the Caterpillar. \'Well, perhaps not,\' said Alice aloud, addressing nobody in particular. \'She\'d soon fetch it here.',
-        'created_at' => '2022-06-21T15:17:06.000000Z',
-        'updated_at' => '2022-06-21T15:17:06.000000Z',
-      ),
-      'bucket_lists_for_favorites' => 
-      array (
-      ),
-      'likes' => 
-      array (
-      ),
-    ),
-  ),
-  1 => 
-  array (
-    'id' => 12,
-    'from_user' => 3,
-    'to_user' => 19,
-    'created_at' => '2022-06-21T15:17:07.000000Z',
-    'updated_at' => '2022-06-21T15:17:07.000000Z',
-    'user' => 
-    array (
-      'id' => 19,
-      'name' => 'Hallie Hills',
-      'email' => 'casandra.conn@example.net',
-      'email_verified_at' => NULL,
-      'created_at' => '2022-06-21T15:17:06.000000Z',
-      'updated_at' => '2022-06-21T15:17:06.000000Z',
-      'deleted_at' => NULL,
-      'profile' => 
-      array (
-        'id' => 7,
-        'user_id' => 19,
-        'photo' => 'https://via.placeholder.com/600x600.png/003322?text=cats+ipsum',
-        'question_1' => 'Never heard of "Uglification,"\' Alice ventured to remark. \'Tut, tut, child!\' said the Mouse to Alice severely. \'What are you getting on now, my dear?\' it continued, turning to Alice, and sighing. \'It IS a long silence after this, and after a few yards off. The Cat only grinned a little queer.',
-        'question_2' => 'Alice called after it; and while she ran, as well say,\' added the March Hare. \'I didn\'t know that cats COULD grin.\' \'They all can,\' said the Caterpillar. Alice folded her hands, and was just in time to see anything; then she remembered the number of executions the Queen jumped up in such a new.',
-        'question_3' => 'I then? Tell me that first, and then, \'we went to school in the sun. (IF you don\'t like it, yer honour, at all, as the rest of my own. I\'m a hatter.\' Here the Dormouse crossed the court, by the little golden key, and Alice\'s elbow was pressed so closely against her foot, that there was enough of.',
-        'created_at' => '2022-06-21T15:17:06.000000Z',
-        'updated_at' => '2022-06-21T15:17:06.000000Z',
-      ),
-      'bucket_lists_for_favorites' => 
-      array (
-        0 => 
-        array (
-          'id' => 6,
-          'user_id' => 19,
-          'bucket_list_item' => 'Alice remarked. \'Oh, you foolish Alice!\' she answered herself. \'How can you learn lessons in here? Why, there\'s hardly room to grow up any more HERE.\' \'But then,\' thought she, \'what would become of me? They\'re dreadfully fond of beheading people here; the great wonder is, that there\'s any one left alive!\' She was walking hand in hand, in couples: they were trying which word sounded best. Some of the room again, no wonder she felt sure it would be quite absurd for her to speak with. Alice.',
-          'is_done' => false,
-          'created_at' => '2022-06-21T15:17:07.000000Z',
-          'updated_at' => '2022-06-21T15:17:07.000000Z',
-        ),
-      ),
-      'likes' => 
-      array (
-        0 => 
-        array (
-          'id' => 3,
-          'from_user' => 6,
-          'to_user' => 19,
-          'created_at' => '2022-06-21T15:17:06.000000Z',
-          'updated_at' => '2022-06-21T15:17:06.000000Z',
-        ),
-        1 => 
-        array (
-          'id' => 19,
-          'from_user' => 5,
-          'to_user' => 19,
-          'created_at' => '2022-06-21T15:17:07.000000Z',
-          'updated_at' => '2022-06-21T15:17:07.000000Z',
-        ),
-      ),
-    ),
-  ),
-)  
-
-※ポイントはusers.favoritesのような書き方をした場合、bladeでの扱いは
-$result['users']['favorites']のようにネストされる。ネストがポイント。
-
-・成功・失敗のメッセージは、Routeに登録する。それを使いまわすが、その際に
-例）
-※何かの処理の最後に以下のようにリダイレクトさせる。
-　session()->put(self::MAIL_SENT_SESSION_KEY,'user_reset_password_send_email');->セッションにテキストを入れる。
-  return redirect()->route('password_reset.email.send_complete');
-
-->アクションsendCompleteで、session()->pullし、正しいMAIL_SENT_SESSION_KEYが入っていなければ、
-「不正なアクセスです」という画面を表示し、そうでなければ送信成功という画面を表示。
-
-・フォームResuestクラスの
-    public function authorize()
-    {
-        return false;
-    }
-
-を
-    public function authorize()
-    {
-        return true;
-    }
-にする。そうでないとアクセス時に403エラーとなる。
-
-
-・FormRequestクラスを使うときの注意。
-以下のようにrulesの一部を[]でくくる必要がある。理由は、「もしくは」を示すパイプ「|」が、使用できないため。
-
-   public function rules()
-    {
-        return [
-            'password'=>['required','regex:/^[0-9a-zA-z-_]{8,32}$/','confirmed'],
-            'password_confirmation' => 'required | same:password',
-            'reset_token'=>['required',new TokenExpirationTimeRule]
-        ];
-    }
-    /**
-     *
-     * @return array
-     */
-    public function messages(){
-        return[
-            'password.required'=>'Input :attribute required.',
-            'password.regex'=>'Input :attribute within 8-32 letters.',
-            'password.confirmed'=>':attribute is not matched.'
-        ];
-    }
-    /**
-     *
-     * @return array
-     */
-    public function attributes(){
-        return  [
-            'password'=>'password'
-        ];
-    }
-
-
-・contains()で特定のデータが含まれているかどうかをチェックする
-
-・404エラーが出たら、まずphp artisan route:listでルートが正しいか確認。
-・web.phpでurlを``で囲ってはいけない。認識されないので。
-・apiの通信で、controllerでresponse()->json([],XXX)としたとき、
-ts側ではres.json()ではなく、resのみでOK。※fetchを使用した場合。axiosはわからない。
-
-・オブジェクトの分割代入：const {x,y}=z
-・配列の分割代入：const [x,y]=z

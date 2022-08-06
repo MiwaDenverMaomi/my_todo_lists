@@ -1,0 +1,37 @@
+★gmailからメールを送る設定：
+gmailアカウント->security->sign up->パスワード必要あれば変更->app passwordsを作成
+これを含めた情報を以下のように貼り付ける
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com//ここ必要
+MAIL_PORT=1025
+MAIL_USERNAME=hoge@example.com // メールアドレス
+MAIL_PASSWORD=hogehogehoge     // アプリパスワード
+MAIL_FROM_ADDRESS=hoge@example.com  // MAIL_USERNAMEと同じ
+MAIL_FROM_NAME=Laravel便り // メール送信元名
+
+★laravel メール機能の実装
+
+1)make:controller XXX（ContactController）でメールを飛ばすコントローラーを作る
+・バリデーション、バリデーションOKならメールするsend()し、['message'=>'OK','error'=>[]]を返す。（NGなら
+['message'=>'NG','error'=>['message was not sent']]など。）
+ここで、2)で作成したmailクラスをnewし、sendで送る
+
+Mail::to($request->input('email'))->send(new Inquiry());
+        Mail::to($request->config('MAIL_FROM_ADDRESS'))->send(new Respond());
+        return response()->json([
+            'result'=>'Email was sent!',
+            'errors'=>[]
+        ]);
+
+2)make:mail XXX(Inqury)　で何のメールテンプレートにviewし、どんなsubjectで,どんな変数をテンプレート送るかを
+定める。
+  public function build()
+    {
+        return $this->view('emails.inquiry')
+        ->subject('Thank you for your inquiry.')
+        ->with(['data'=>$this->data]);
+    }
+
+3)emails>inquiry.blade.phpを作成し、
+メールのテンプレートを作る。
