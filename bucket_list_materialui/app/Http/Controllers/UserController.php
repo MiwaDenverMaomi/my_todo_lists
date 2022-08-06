@@ -132,8 +132,7 @@ class UserController extends Controller
 		$is_favorite_by_auth=$user->is_favorite_by_auth($user->id);
 		$result='';
     if($is_favorite_by_auth===true){
-			$result=Favorite::find($user->id)
-			->where('from_user','=',Auth::id())
+			$result=Favorite::where('from_user','=',Auth::id())
 			->where('to_user','=',$user->id)->delete();
 			$is_favorite_by_auth=false;
 		}else if($is_favorite_by_auth===false){

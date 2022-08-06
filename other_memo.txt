@@ -19,3 +19,22 @@ config/app.php
 ★contains()で特定のデータが含まれているかどうかをチェックする
 ★オブジェクトの分割代入：const {x,y}=z
 ★配列の分割代入：const [x,y]=z
+
+★true falseのphpでの扱い
+  \Log::debug(true);
+ \Log::debug(false);
+ \Log::debug(1);
+ \Log::debug(0);
+ \Log::debug(true===1);
+ \Log::debug(false===0);
+ \Log::debug(false==='');
+ー－－－－－－－－－－－－－－－－－－－
+[2022-08-06 17:51:35] local.DEBUG: 1  
+[2022-08-06 17:51:35] local.DEBUG:   
+[2022-08-06 17:51:35] local.DEBUG: 1  
+[2022-08-06 17:51:35] local.DEBUG: 0  
+[2022-08-06 17:51:35] local.DEBUG:   
+[2022-08-06 17:51:35] local.DEBUG:   
+[2022-08-06 17:51:35] local.DEBUG:   
+
+->trueは1,falseは''で表示されているが、評価としてはbooleanとしてされている。

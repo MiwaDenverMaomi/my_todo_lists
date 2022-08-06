@@ -45,7 +45,6 @@ class BucketListController extends Controller
 	public function create(Request $request){
 		\Log::info('BucketListController create');
 		\Log::debug($request);
-		$user_auth_id=5; //Auth::id()
 
 		//validation
 		$validator=Validator::make($request->all(),[
@@ -63,13 +62,14 @@ class BucketListController extends Controller
 
 		}else{
 				\Log::info('create validator success');
-				$result=Bucket_list::create(["user_id"=>$user_auth_id,"bucket_list_item"=>$request->new_todo,"is_done"=>false]);
+				$result=Bucket_list::create(["user_id"=>Auth::id(),"bucket_list_item"=>$request->new_todo,"is_done"=>false]);
+        \Log::debug(__METHOD__.'/result:'.$result);
 
-				if($result===true){
-						$user_data=User::with(['profile','bucket_lists','likes'])->find($user_auth_id)->toArray();
+				if(!empty($result)){
+						$user_data=User::with(['profile','bucket_lists','likes'])->find(Auth::id())->toArray();
 						$user_data['countLikes']=count($user_data['likes']);
 						if(!empty($user_data)){
-							return redirect()->route('bucket-lists.show',['user'=>$user_auth_id]);
+							return redirect()->route('bucket-lists.show',['user'=>Auth::id()]);
 
 						}else{
 							return back()
@@ -164,11 +164,18 @@ class BucketListController extends Controller
 
 	public function delete(Bucket_list $bucket_list){
 		\Log::info('deleteBucketList');
-		$bucket_list->delete();
+		$result=$bucket_list->delete();
+    \Log::debug(true);
+    \Log::debug(false);
+    \Log::debug(1);
+    \Log::debug(0);
+    \Log::debug(true===1);
+    \Log::debug(false===0);
+    \Log::debug(false==='');
 
-		$user_data=User::with(['profile','bucket_lists','likes'])->find($bucket_list->user_id)->toArray();
-		if(!empty($user_data)){
-			 $user_data['countLikes']=count($user_data['likes']);
+
+
+		if($result===true){
 			 return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
 		}else{
 			 return back()

@@ -12,7 +12,7 @@
 	<div id="preview"></div>
 			<div class="col-lg-4 mx-auto">
 			<div class="text-center text-danger" id="photo_err"></div>
-			<form method="post" action={{route('user.editProfile',['user'=>$user_data['id']])}} enctype="multipart/form-data" id="profile_form">
+			<form method="post" action="{{route('user.editProfile',['user'=>$user_data['id']])}}" enctype="multipart/form-data" id="profile_form">
 				@csrf
 				@method('patch')
 				<div class="mx-auto mb-2 profile-img edit-img" id="photo_frame">
@@ -47,6 +47,7 @@
 				 </div>
 			 <div class="mb-3">
 			   <button class="btn btn-primary mx-auto d-block" type="submit" role="button" aria-disabled="false" >Submit</button>
+				 <a class="btn btn-primary" href="{{route('user.showProfile',['user'=>Auth::id()])}}" role="button">Cancel</a>
 			 </div>
 			 </form>
 			 </div>
