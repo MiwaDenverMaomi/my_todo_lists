@@ -179,6 +179,11 @@ body {
     opacity: 1;
   }
 }
+.position-pic {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
 /* RESPONSIVE CSS
 -------------------------------------------------- */
 @media (min-width: 40em) {

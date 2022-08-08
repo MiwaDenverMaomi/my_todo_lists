@@ -26,10 +26,10 @@
 				@enderror
 			 </div>
 				@if(!empty($user_data['profile']))
-		    <iframe name="photo_response" style="display:none;"></iframe>
-				<img src="{{ asset($user_data['profile']['photo'])}}" class="rounded-circle d-block mx-auto" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
+
+				<img id="photo_preview_image" src="{{ asset($user_data['profile']['photo'])}}" class="rounded-circle d-block mx-auto position-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100">
 				@else
-				<img src="xxx" class="img-circle d-block mx-auto" alt="{{$user_data['name'].'_photo'}}"  width="100" height="100">
+				<img id="photo_preview_image" class="img-circle d-block mx-auto position-pic" alt="{{$user_data['name'].'_photo'}}"  width="100" height="100">
 				@endif
 				</div>
 				<div class="mb-3">

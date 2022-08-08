@@ -86,26 +86,39 @@ export const sanitize=(str:any)=>{
 }
 
 export const onHandleSelectPhoto=(name:string|null)=>{
-	const sizeLimit=2560*1920*1;
+	const sizeLimit = 3264 * 2448 * 1; //800万画素
+	// const sizeLimit = 3968 * 2976 * 1; //iphone SE=>1200万画素->3968 * 2976 pixels.
+
+
 	const $inputPhoto=document.querySelector<any>('#input_photo');
-	const $photoFrame=document.querySelector<any>('#photo_frame');
-	const photos=$inputPhoto.files!==null?$inputPhoto.files:[
-		'./img/no_image.jpg'
-	];
-	if(photos!==null){
-		const $photo_err_element=document.querySelector<any>('#photo_err');
-		let photoErrMsgs:string[]=checkPhoto(photos);
-		photos.map((item:string)=>{
-		if(photoErrMsgs.length>0){
+	const $photoFrame = document.querySelector<any>('#photo_frame');
+	// const $photoPreview = document.querySelector<any>('#photo_preview');
+	const $photoPreviewImage = document.querySelector<any>('#photo_preview_image');
+
+	console.log($inputPhoto.files);
+	// const photos=$inputPhoto.files!==null?$inputPhoto.files:[
+	// 	'storage/img/no_image.jpg'
+	// ];
+	const photos = Array.from($inputPhoto.files);
+	console.log(photos);
+	// if(photos!==null){
+	const $photo_err_element=document.querySelector<any>('#photo_err');
+	let photoErrMsgs: string[] = checkPhoto(photos);
+
+	photos.map((photo:any)=>{
+		if (photoErrMsgs.length > 0) {
+			console.log('file is too big');
 			$inputPhoto.value='';
-			$photo_err_element.innerText=photoErrMsgs[0];
-		}else{
-			$photoFrame.innerHTML=`<img src="${item}" alt="${name===null?'No name':name}">`;
-			$photo_err_element.innerText='';
-			photoErrMsgs=[];
+			$photo_err_element.innerText = photoErrMsgs[0];
+			return;
 		}
+	const path = photo !== null ? URL.createObjectURL(photo):'./storage/img/no_image.jpg'
+	$photoPreviewImage.setAttribute('src',path);
+	// $photoPreview.style.display = 'block';
+	$photo_err_element.innerText='';
+	photoErrMsgs=[];
 	});
-	}
+	// }
 }
 
 export const previewFile=(file:any)=>{
@@ -384,7 +397,9 @@ export const checkValidEmail=(email:string)=>{
 // };
 
 export const checkValidPhoto = (photo: any, sizeLimit: number = 2560 * 1920 * 1, mb: number = 5) => {
-	if (photo.size > sizeLimit) {
+	console.log('checkValidPhoto');
+	if (photo !== null && photo.size > sizeLimit) {
+		console.log('photo !== null && photo.size > sizeLimit');
 		return `Upload less than ${mb} MB.`;
 	}
 };
@@ -480,14 +495,16 @@ export const checkName=(name:string)=>{
 };
 
 
-export const checkPhoto=(photo:string)=>{
+export const checkPhoto = (photo: any) => {
+	console.log('checkPhoto');
 	let errs:string[]=[];
 	const checkValidPhotoResult=checkValidPhoto(photo);
 	// if(checkValidPhotoResult?.length>0){
 	// 	errs.push(checkValidPhotoResult);
 	// }
 
-	if (checkValidPhotoResult!==undefined&&checkValidPhotoResult.length > 0) {
+	if (checkValidPhotoResult !== undefined && checkValidPhotoResult.length > 0) {
+		console.log('checkphoto error');
 		errs.push(checkValidPhotoResult);
 	}
 	return errs;

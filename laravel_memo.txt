@@ -145,3 +145,68 @@ blade側：session('flash_message')で取り出す
 {{$errors->has('name')?$errors->first('name'):''}}
 方法2:all?
 ひとつのname属性のエラーを全部表示する。（要ググる）
+
+★画像のアップロード～全体の流れ
+ステップ①画像選択ー＞プレビュー表示
+ステップ②送信->javascriptでバリデーション。OKなら送信。Ngならエラーメッセージ表示。
+ステップ③画像をバリデーション。
+ステップ④選択した画像を保存するディレクトリの名前、画像ファイルの名前を生成する。
+ステップ⑤選択した画像をstorageに入れる(storeAs)
+---------------ここまでが指定画像を指定のパスにいれる作業。DBには画像パス名は保存されていない。
+ステップ⑥画像パスをDBに保存。
+
+
+blade側
+①enctype=”multipart/form-data”をformタグに記述。
+②<input type="file">で画像ファイル選択可能。
+③accept=""で許可するファイル形式を指定。
+<input type="file" name="photo" accept=".png, .jpeg, .jpg" 
+id="input_photo" onchange="onHandleSelectPhoto('{{$user_data['name']}}')" style="opacity:0;">
+
+controller側
+①画像保存先のディレクトリ名生成：$dir='sample';
+②画像のファイル名を取得
+$file_name=$file_name = $request->file('image')->getClientOriginalName();
+③保存先ディレクトリ＋ファイル名を指定して、画像を保存する//->保存先はstorage/public以下になる。
+$request->file('<name属性名>')->storeAs('public/'.$dir,$file_name);
+//->storage/app/public/sample/XXXXXXXX.jpg
+④DBに画像保存先のパスを保存する。
+※画像選択で取得する値がNULLの場合は、’public/img/no_image.jpg'をDBに保存する
+例）Photo::create([
+'file_name'=>$file_name,
+'path'=>'storage/.$dir.'/'.$file_name
+]);
+
+★選択した画像をプレビュー
+ステップ①送信された画像を取得
+ステップ②オブジェクトになっているので、配列に変換
+ステップ③それぞれバリデーションする
+ステップ④
+バリデーションＯＫの場合はプレビューに表示
+ＮＧの場合はプレビュー表示せずにエラーメッセージ表示
+<サンプル>
+ <form action="">
+      <div>
+        <label for="input">画像ファイル</label>
+        <input type="file" name="input" id="input" accept="image/*">
+        <figure id="figure" style="display: none">
+          <figcaption>画像ファイルのプレビュー</figcaption>
+          <img src="" alt="" id="figureImage" style="max-width: 100%">
+        </figure>
+      </div>
+    </form>
+-----------------------------------------------------
+input.addEventListener('change', (event) => { // <1>
+    const [file] = event.target.files
+
+    if (file) {
+      figureImage.setAttribute('src', URL.createObjectURL(file))★setAttributeを使うのがポイント
+      figure.style.display = 'block'★普段非表示で、画像選択されたときは表示する
+    } else {
+      figure.style.display = 'none'
+    }
+  })
+★画像の位置調整は不明...
+
+
+

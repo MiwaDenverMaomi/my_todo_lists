@@ -2220,25 +2220,35 @@ var sanitize = function sanitize(str) {
   return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 };
 var onHandleSelectPhoto = function onHandleSelectPhoto(name) {
-  var sizeLimit = 2560 * 1920 * 1;
-  var $inputPhoto = document.querySelector('#input_photo');
-  var $photoFrame = document.querySelector('#photo_frame');
-  var photos = $inputPhoto.files !== null ? $inputPhoto.files : ['./img/no_image.jpg'];
+  var sizeLimit = 100 * 100 * 1; // const sizeLimit = 2560 * 1920 * 1;
 
-  if (photos !== null) {
-    var $photo_err_element = document.querySelector('#photo_err');
-    var photoErrMsgs = checkPhoto(photos);
-    photos.map(function (item) {
-      if (photoErrMsgs.length > 0) {
-        $inputPhoto.value = '';
-        $photo_err_element.innerText = photoErrMsgs[0];
-      } else {
-        $photoFrame.innerHTML = "<img src=\"".concat(item, "\" alt=\"").concat(name === null ? 'No name' : name, "\">");
-        $photo_err_element.innerText = '';
-        photoErrMsgs = [];
-      }
-    });
-  }
+  var $inputPhoto = document.querySelector('#input_photo');
+  var $photoFrame = document.querySelector('#photo_frame'); // const $photoPreview = document.querySelector<any>('#photo_preview');
+
+  var $photoPreviewImage = document.querySelector('#photo_preview_image');
+  console.log($inputPhoto.files); // const photos=$inputPhoto.files!==null?$inputPhoto.files:[
+  // 	'storage/img/no_image.jpg'
+  // ];
+
+  var photos = Array.from($inputPhoto.files);
+  console.log(photos); // if(photos!==null){
+
+  var $photo_err_element = document.querySelector('#photo_err');
+  var photoErrMsgs = checkPhoto(photos);
+  photos.map(function (photo) {
+    if (photoErrMsgs.length > 0) {
+      console.log('file is too big');
+      $inputPhoto.value = '';
+      $photo_err_element.innerText = photoErrMsgs[0];
+      return;
+    }
+
+    var path = photo !== null ? URL.createObjectURL(photo) : './storage/img/no_image.jpg';
+    $photoPreviewImage.setAttribute('src', path); // $photoPreview.style.display = 'block';
+
+    $photo_err_element.innerText = '';
+    photoErrMsgs = [];
+  }); // }
 };
 var previewFile = function previewFile(file) {
   var preview = document.querySelector('#preview');
@@ -2301,6 +2311,7 @@ var onSubmitProfile = function onSubmitProfile(user_id) {
       comment2: [],
       comment3: []
     };
+    console.log('submit');
     $profile_form_element.method = "post";
     $profile_form_element.action = "\"/".concat(user_id, "/edit-profile\"");
     $profile_form_element.submit();
@@ -2517,8 +2528,10 @@ var checkValidEmail = function checkValidEmail(email) {
 var checkValidPhoto = function checkValidPhoto(photo) {
   var sizeLimit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2560 * 1920 * 1;
   var mb = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5;
+  console.log('checkValidPhoto');
 
-  if (photo.size > sizeLimit) {
+  if (photo !== null && photo.size > sizeLimit) {
+    console.log('photo !== null && photo.size > sizeLimit');
     return "Upload less than ".concat(mb, " MB.");
   }
 };
@@ -2599,12 +2612,14 @@ var checkName = function checkName(name) {
   return errs;
 };
 var checkPhoto = function checkPhoto(photo) {
+  console.log('checkPhoto');
   var errs = [];
   var checkValidPhotoResult = checkValidPhoto(photo); // if(checkValidPhotoResult?.length>0){
   // 	errs.push(checkValidPhotoResult);
   // }
 
   if (checkValidPhotoResult !== undefined && checkValidPhotoResult.length > 0) {
+    console.log('checkphoto error');
     errs.push(checkValidPhotoResult);
   }
 
