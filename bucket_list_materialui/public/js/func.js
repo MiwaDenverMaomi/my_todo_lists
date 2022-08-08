@@ -2219,15 +2219,15 @@ var onSubmitTitle = function onSubmitTitle(todo_id) {
 var sanitize = function sanitize(str) {
   return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 };
-var onHandleSelectPhoto = function onHandleSelectPhoto(photo) {
+var onHandleSelectPhoto = function onHandleSelectPhoto(name) {
   var sizeLimit = 2560 * 1920 * 1;
   var $inputPhoto = document.querySelector('#input_photo');
   var $photoFrame = document.querySelector('#photo_frame');
   var photos = $inputPhoto.files !== null ? $inputPhoto.files : ['./img/no_image.jpg'];
 
-  if (photo !== null) {
+  if (photos !== null) {
     var $photo_err_element = document.querySelector('#photo_err');
-    var photoErrMsgs = checkPhoto(photo);
+    var photoErrMsgs = checkPhoto(photos);
     photos.map(function (item) {
       if (photoErrMsgs.length > 0) {
         $inputPhoto.value = '';
@@ -2286,11 +2286,11 @@ var onSubmitProfile = function onSubmitProfile(user_id) {
   });
 
   if (errMsgs.name !== [] || errMsgs.photo !== [] || errMsgs.comment1 !== [] || errMsgs.comment2 !== [] || errMsgs.comment3 !== []) {
-    $photo_err_element.innerHTML = errMsgs.photo[1];
-    $name_err_element.innerHTML = errMsgs.name[1];
-    $comment1_err_element.innerHTML = errMsgs.comment1[1];
-    $comment2_err_element.innerHTML = errMsgs.comment2[1];
-    $comment3_err_element.innerHTML = errMsgs.comment3[1];
+    $photo_err_element.innerHTML = errMsgs.name !== [] ? errMsgs.name[0] : '';
+    $name_err_element.innerHTML = errMsgs.photo !== [] ? errMsgs.photo[0] : '';
+    $comment1_err_element.innerHTML = errMsgs.comment1 !== [] ? errMsgs.comment1[0] : '';
+    $comment2_err_element.innerHTML = errMsgs.comment2 !== [] ? errMsgs.comment2[0] : '';
+    $comment3_err_element.innerHTML = errMsgs.comment3 !== [] ? errMsgs.comment3[0] : '';
   } else {
     var $profile_form_element = document.querySelector('#profile_form');
     errMsgs = {
@@ -2451,30 +2451,45 @@ var searchKeyword = function searchKeyword(str) {
     };
   }
 }; //validation
+// export const checkRequired=(str:string)=>{
+// 	if(str.length===0){
+// 		return 'Input required.';
+// 	}else{
+// 		return '';
+// 	}
+// };
 
 var checkRequired = function checkRequired(str) {
   if (str.length === 0) {
     return 'Input required.';
-  } else {
-    return '';
   }
-};
+}; // export const checkMinLen=(str:string,num:number=7)=>{
+// 	if(str.length<num){
+// 		return `Input more than ${num} letters.`;
+// 	}else{
+// 		return '';
+// 	}
+// };
+
 var checkMinLen = function checkMinLen(str) {
   var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 7;
 
   if (str.length < num) {
     return "Input more than ".concat(num, " letters.");
-  } else {
-    return '';
   }
-};
+}; // export const checkMaxLen=(str:string,num:number=255)=>{
+// 	if(str.length>num){
+// 		return `Input less than ${num} letters.`;
+// 	}else{
+// 		return '';
+// 	}
+// };
+
 var checkMaxLen = function checkMaxLen(str) {
   var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 255;
 
   if (str.length > num) {
     return "Input less than ".concat(num, " letters.");
-  } else {
-    return '';
   }
 };
 var checkValidEmail = function checkValidEmail(email) {
@@ -2482,18 +2497,29 @@ var checkValidEmail = function checkValidEmail(email) {
 
   if (!pattern.test(email)) {
     return 'Input valid email address.';
-  } else {
-    return '';
   }
-};
+}; // export const checkValidEmail = (email: string) => {
+// 	const pattern = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]+.[A-Za-z0-9]+$/;
+// 	if (!pattern.test(email)) {
+// 		return 'Input valid email address.'
+// 	} else {
+// 		return '';
+// 	}
+// };
+// export const checkValidPhoto=(photo:any,sizeLimit:number=2560*1920*1,mb:number=5)=>{
+// 	if(photo.size>sizeLimit){
+// 		return `Upload less than ${mb} MB.`;
+// 	}else{
+// 		return '';
+// 	}
+// };
+
 var checkValidPhoto = function checkValidPhoto(photo) {
   var sizeLimit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2560 * 1920 * 1;
   var mb = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5;
 
   if (photo.size > sizeLimit) {
     return "Upload less than ".concat(mb, " MB.");
-  } else {
-    return '';
   }
 };
 var checkEmail = function checkEmail(email) {
@@ -2501,21 +2527,32 @@ var checkEmail = function checkEmail(email) {
   var checkValidEmailResult = checkValidEmail(email);
   var checkMaxLenResult = checkMaxLen(email);
   var checkMinLenResult = checkMinLen(email);
-  var checkRequiredResult = checkRequired(email);
+  var checkRequiredResult = checkRequired(email); // if(checkValidEmailResult.length>0){
+  // 	errs.push(checkValidEmailResult);
+  // }
+  // if(checkMaxLenResult?.length>0){
+  // 	errs.push(checkMaxLenResult);
+  // }
+  // if(checkMinLenResult?.length>0){
+  // 	errs.push(checkMinLenResult);
+  // }
+  // if(checkRequiredResult?.length>0){
+  // 	errs.push(checkRequiredResult);
+  // }
 
-  if ((checkValidEmailResult === null || checkValidEmailResult === void 0 ? void 0 : checkValidEmailResult.length) > 0) {
+  if (checkValidEmailResult !== undefined && checkValidEmailResult.length > 0) {
     errs.push(checkValidEmailResult);
   }
 
-  if ((checkMaxLenResult === null || checkMaxLenResult === void 0 ? void 0 : checkMaxLenResult.length) > 0) {
+  if (checkMaxLenResult !== undefined && checkMaxLenResult.length > 0) {
     errs.push(checkMaxLenResult);
   }
 
-  if ((checkMinLenResult === null || checkMinLenResult === void 0 ? void 0 : checkMinLenResult.length) > 0) {
+  if (checkMinLenResult !== undefined && (checkMinLenResult === null || checkMinLenResult === void 0 ? void 0 : checkMinLenResult.length) > 0) {
     errs.push(checkMinLenResult);
   }
 
-  if ((checkRequiredResult === null || checkRequiredResult === void 0 ? void 0 : checkRequiredResult.length) > 0) {
+  if (checkRequiredResult !== undefined && (checkRequiredResult === null || checkRequiredResult === void 0 ? void 0 : checkRequiredResult.length) > 0) {
     errs.push(checkRequiredResult);
   }
 
@@ -2525,17 +2562,25 @@ var checkPassword = function checkPassword(password) {
   var errs = [];
   var checkMaxLenResult = checkMaxLen(password);
   var checkMinLenResult = checkMinLen(password);
-  var checkRequiredResult = checkRequired(password);
+  var checkRequiredResult = checkRequired(password); // if(checkMaxLenResult?.length>0){
+  // 	errs.push(checkMaxLenResult);
+  // }
+  // if(checkMinLenResult?.length>0){
+  // 	errs.push(checkMinLenResult);
+  // }
+  // if(checkRequiredResult?.length>0){
+  // 	errs.push(checkRequiredResult);
+  // }
 
-  if ((checkMaxLenResult === null || checkMaxLenResult === void 0 ? void 0 : checkMaxLenResult.length) > 0) {
+  if (checkMaxLenResult !== undefined && checkMaxLenResult.length > 0) {
     errs.push(checkMaxLenResult);
   }
 
-  if ((checkMinLenResult === null || checkMinLenResult === void 0 ? void 0 : checkMinLenResult.length) > 0) {
+  if (checkMinLenResult !== undefined && checkMinLenResult.length > 0) {
     errs.push(checkMinLenResult);
   }
 
-  if ((checkRequiredResult === null || checkRequiredResult === void 0 ? void 0 : checkRequiredResult.length) > 0) {
+  if (checkRequiredResult !== undefined && checkRequiredResult.length > 0) {
     errs.push(checkRequiredResult);
   }
 
@@ -2543,9 +2588,11 @@ var checkPassword = function checkPassword(password) {
 };
 var checkName = function checkName(name) {
   var errs = [];
-  var checkMaxLenResult = checkMaxLen(name);
+  var checkMaxLenResult = checkMaxLen(name); // if(checkMaxLenResult?.length>0){
+  // 	errs.push(checkMaxLenResult);
+  // }
 
-  if ((checkMaxLenResult === null || checkMaxLenResult === void 0 ? void 0 : checkMaxLenResult.length) > 0) {
+  if (checkMaxLenResult !== undefined && checkMaxLenResult.length > 0) {
     errs.push(checkMaxLenResult);
   }
 
@@ -2553,9 +2600,11 @@ var checkName = function checkName(name) {
 };
 var checkPhoto = function checkPhoto(photo) {
   var errs = [];
-  var checkValidPhotoResult = checkValidPhoto(photo);
+  var checkValidPhotoResult = checkValidPhoto(photo); // if(checkValidPhotoResult?.length>0){
+  // 	errs.push(checkValidPhotoResult);
+  // }
 
-  if ((checkValidPhotoResult === null || checkValidPhotoResult === void 0 ? void 0 : checkValidPhotoResult.length) > 0) {
+  if (checkValidPhotoResult !== undefined && checkValidPhotoResult.length > 0) {
     errs.push(checkValidPhotoResult);
   }
 
@@ -2563,9 +2612,11 @@ var checkPhoto = function checkPhoto(photo) {
 };
 var checkComments = function checkComments(comment) {
   var errs = [];
-  var checkMaxLenResult = checkMaxLen(comment);
+  var checkMaxLenResult = checkMaxLen(comment); // if(checkMaxLenResult?.length>0){
+  // 	errs.push(checkMaxLenResult);
+  // }
 
-  if ((checkMaxLenResult === null || checkMaxLenResult === void 0 ? void 0 : checkMaxLenResult.length) > 0) {
+  if (checkMaxLenResult !== undefined && checkMaxLenResult.length > 0) {
     errs.push(checkMaxLenResult);
   }
 
@@ -2574,14 +2625,19 @@ var checkComments = function checkComments(comment) {
 var checkTodo = function checkTodo(todo) {
   var errs = [];
   var checkMaxLenResult = checkMaxLen(todo);
-  var checkRequiredResult = checkRequired(todo);
+  var checkRequiredResult = checkRequired(todo); // if(checkRequiredResult?.length>0){
+  // 	errs.push(checkRequiredResult);
+  // }
 
-  if ((checkMaxLenResult === null || checkMaxLenResult === void 0 ? void 0 : checkMaxLenResult.length) > 0) {
-    errs.push(checkMaxLenResult);
-  }
-
-  if ((checkRequiredResult === null || checkRequiredResult === void 0 ? void 0 : checkRequiredResult.length) > 0) {
+  if (checkRequiredResult !== undefined && (checkRequiredResult === null || checkRequiredResult === void 0 ? void 0 : checkRequiredResult.length) > 0) {
     errs.push(checkRequiredResult);
+  } // if(checkMaxLenResult?.length>0){
+  // 	errs.push(checkMaxLenResult);
+  // }
+
+
+  if (checkMaxLenResult !== undefined && (checkMaxLenResult === null || checkMaxLenResult === void 0 ? void 0 : checkMaxLenResult.length) > 0) {
+    errs.push(checkMaxLenResult);
   }
 
   return errs;

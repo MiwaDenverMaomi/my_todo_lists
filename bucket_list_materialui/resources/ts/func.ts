@@ -85,16 +85,16 @@ export const sanitize=(str:any)=>{
 		.replace(/>/g,"&gt;")
 }
 
-export const onHandleSelectPhoto=(photo:string|null)=>{
+export const onHandleSelectPhoto=(name:string|null)=>{
 	const sizeLimit=2560*1920*1;
 	const $inputPhoto=document.querySelector<any>('#input_photo');
 	const $photoFrame=document.querySelector<any>('#photo_frame');
 	const photos=$inputPhoto.files!==null?$inputPhoto.files:[
 		'./img/no_image.jpg'
 	];
-	if(photo!==null){
+	if(photos!==null){
 		const $photo_err_element=document.querySelector<any>('#photo_err');
-		let photoErrMsgs:string[]=checkPhoto(photo);
+		let photoErrMsgs:string[]=checkPhoto(photos);
 		photos.map((item:string)=>{
 		if(photoErrMsgs.length>0){
 			$inputPhoto.value='';
@@ -163,14 +163,16 @@ export const onSubmitProfile=(user_id:number)=>{
 		comment3:comment3CheckResult
 	}
 
-	if(errMsgs.name!==[]||errMsgs.photo!==[]||errMsgs.comment1!==[]||errMsgs.comment2!==[]||errMsgs.comment3!==[]){
-		$photo_err_element.innerHTML=errMsgs.photo[1];
-		$name_err_element.innerHTML=errMsgs.name[1];
-		$comment1_err_element.innerHTML=errMsgs.comment1[1];
-		$comment2_err_element.innerHTML=errMsgs.comment2[1];
-		$comment3_err_element.innerHTML=errMsgs.comment3[1];
 
-	}else{
+	if(errMsgs.name!==[]||errMsgs.photo!==[]||errMsgs.comment1!==[]||errMsgs.comment2!==[]||errMsgs.comment3!==[]){
+		$photo_err_element.innerHTML = errMsgs.name !== [] ?errMsgs.name[0]:'';
+		$name_err_element.innerHTML = errMsgs.photo !== [] ?errMsgs.photo[0]:'';
+		$comment1_err_element.innerHTML = errMsgs.comment1 !== [] ?errMsgs.comment1[0]:'';
+		$comment2_err_element.innerHTML = errMsgs.comment2 !== [] ?errMsgs.comment2[0]:'';
+		$comment3_err_element.innerHTML = errMsgs.comment3 !== [] ? errMsgs.comment3[0] : '';
+
+	} else {
+
 		const $profile_form_element=document.querySelector<any>('#profile_form');
 		errMsgs={
 			email:[],
@@ -181,6 +183,7 @@ export const onSubmitProfile=(user_id:number)=>{
 			comment3:[],
 		};
 
+		console.log('submit');
 		$profile_form_element.method="post";
 		$profile_form_element.action=`"/${user_id}/edit-profile"`;
 		$profile_form_element.submit();
@@ -315,28 +318,44 @@ export const searchKeyword=(str:string)=>{
 	}
 };
 
+
 //validation
-export const checkRequired=(str:string)=>{
-	if(str.length===0){
+// export const checkRequired=(str:string)=>{
+// 	if(str.length===0){
+// 		return 'Input required.';
+// 	}else{
+// 		return '';
+// 	}
+// };
+export const checkRequired = (str: string) => {
+	if (str.length === 0) {
 		return 'Input required.';
-	}else{
-		return '';
 	}
 };
 
-export const checkMinLen=(str:string,num:number=7)=>{
-	if(str.length<num){
+// export const checkMinLen=(str:string,num:number=7)=>{
+// 	if(str.length<num){
+// 		return `Input more than ${num} letters.`;
+// 	}else{
+// 		return '';
+// 	}
+// };
+export const checkMinLen = (str: string, num: number = 7) => {
+	if (str.length < num) {
 		return `Input more than ${num} letters.`;
-	}else{
-		return '';
 	}
 };
 
-export const checkMaxLen=(str:string,num:number=255)=>{
-	if(str.length>num){
+// export const checkMaxLen=(str:string,num:number=255)=>{
+// 	if(str.length>num){
+// 		return `Input less than ${num} letters.`;
+// 	}else{
+// 		return '';
+// 	}
+// };
+export const checkMaxLen = (str: string, num: number = 255) => {
+	if (str.length > num) {
 		return `Input less than ${num} letters.`;
-	}else{
-		return '';
 	}
 };
 
@@ -344,16 +363,29 @@ export const checkValidEmail=(email:string)=>{
 	const pattern = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]+.[A-Za-z0-9]+$/;
 	if(!pattern.test(email)){
 		return 'Input valid email address.'
-	}else{
-		return '';
 	}
 };
 
-export const checkValidPhoto=(photo:any,sizeLimit:number=2560*1920*1,mb:number=5)=>{
-	if(photo.size>sizeLimit){
+// export const checkValidEmail = (email: string) => {
+// 	const pattern = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]+.[A-Za-z0-9]+$/;
+// 	if (!pattern.test(email)) {
+// 		return 'Input valid email address.'
+// 	} else {
+// 		return '';
+// 	}
+// };
+
+// export const checkValidPhoto=(photo:any,sizeLimit:number=2560*1920*1,mb:number=5)=>{
+// 	if(photo.size>sizeLimit){
+// 		return `Upload less than ${mb} MB.`;
+// 	}else{
+// 		return '';
+// 	}
+// };
+
+export const checkValidPhoto = (photo: any, sizeLimit: number = 2560 * 1920 * 1, mb: number = 5) => {
+	if (photo.size > sizeLimit) {
 		return `Upload less than ${mb} MB.`;
-	}else{
-		return '';
 	}
 };
 
@@ -364,19 +396,35 @@ export const checkEmail=(email:string)=>{
 	const checkMinLenResult=checkMinLen(email);
 	const checkRequiredResult=checkRequired(email);
 
-	if(checkValidEmailResult?.length>0){
+	// if(checkValidEmailResult.length>0){
+	// 	errs.push(checkValidEmailResult);
+	// }
+
+	// if(checkMaxLenResult?.length>0){
+	// 	errs.push(checkMaxLenResult);
+	// }
+
+	// if(checkMinLenResult?.length>0){
+	// 	errs.push(checkMinLenResult);
+	// }
+
+	// if(checkRequiredResult?.length>0){
+	// 	errs.push(checkRequiredResult);
+	// }
+
+	if (checkValidEmailResult !== undefined && checkValidEmailResult.length > 0) {
 		errs.push(checkValidEmailResult);
 	}
 
-	if(checkMaxLenResult?.length>0){
+	if (checkMaxLenResult !== undefined && checkMaxLenResult.length > 0) {
 		errs.push(checkMaxLenResult);
 	}
 
-	if(checkMinLenResult?.length>0){
+	if (checkMinLenResult!==undefined&&checkMinLenResult?.length > 0) {
 		errs.push(checkMinLenResult);
 	}
 
-	if(checkRequiredResult?.length>0){
+	if (checkRequiredResult !==undefined&&checkRequiredResult?.length > 0) {
 		errs.push(checkRequiredResult);
 	}
 
@@ -390,18 +438,29 @@ export const checkPassword=(password:string)=>{
 	const checkMinLenResult=checkMinLen(password);
 	const checkRequiredResult=checkRequired(password);
 
-	if(checkMaxLenResult?.length>0){
+	// if(checkMaxLenResult?.length>0){
+	// 	errs.push(checkMaxLenResult);
+	// }
+
+	// if(checkMinLenResult?.length>0){
+	// 	errs.push(checkMinLenResult);
+	// }
+
+	// if(checkRequiredResult?.length>0){
+	// 	errs.push(checkRequiredResult);
+	// }
+
+	if (checkMaxLenResult!==undefined&&checkMaxLenResult.length > 0) {
 		errs.push(checkMaxLenResult);
 	}
 
-	if(checkMinLenResult?.length>0){
+	if (checkMinLenResult!==undefined&&checkMinLenResult.length > 0) {
 		errs.push(checkMinLenResult);
 	}
 
-	if(checkRequiredResult?.length>0){
+	if (checkRequiredResult!==undefined&&checkRequiredResult.length > 0) {
 		errs.push(checkRequiredResult);
 	}
-
 	return errs;
 }
 
@@ -410,7 +469,11 @@ export const checkName=(name:string)=>{
 
 	const checkMaxLenResult=checkMaxLen(name);
 
-	if(checkMaxLenResult?.length>0){
+	// if(checkMaxLenResult?.length>0){
+	// 	errs.push(checkMaxLenResult);
+	// }
+
+	if (checkMaxLenResult!==undefined&&checkMaxLenResult.length > 0) {
 		errs.push(checkMaxLenResult);
 	}
 	return errs;
@@ -420,7 +483,11 @@ export const checkName=(name:string)=>{
 export const checkPhoto=(photo:string)=>{
 	let errs:string[]=[];
 	const checkValidPhotoResult=checkValidPhoto(photo);
-	if(checkValidPhotoResult?.length>0){
+	// if(checkValidPhotoResult?.length>0){
+	// 	errs.push(checkValidPhotoResult);
+	// }
+
+	if (checkValidPhotoResult!==undefined&&checkValidPhotoResult.length > 0) {
 		errs.push(checkValidPhotoResult);
 	}
 	return errs;
@@ -431,7 +498,11 @@ export const checkComments=(comment:string)=>{
 
 	const checkMaxLenResult=checkMaxLen(comment);
 
-	if(checkMaxLenResult?.length>0){
+	// if(checkMaxLenResult?.length>0){
+	// 	errs.push(checkMaxLenResult);
+	// }
+
+	if (checkMaxLenResult!==undefined&&checkMaxLenResult.length > 0) {
 		errs.push(checkMaxLenResult);
 	}
 
@@ -444,12 +515,20 @@ export const checkTodo=(todo:string)=>{
 	const checkMaxLenResult=checkMaxLen(todo);
 	const checkRequiredResult=checkRequired(todo);
 
-	if(checkMaxLenResult?.length>0){
-		errs.push(checkMaxLenResult);
+	// if(checkRequiredResult?.length>0){
+	// 	errs.push(checkRequiredResult);
+	// }
+
+	if (checkRequiredResult!==undefined&&checkRequiredResult?.length>0){
+		errs.push(checkRequiredResult);
 	}
 
-	if(checkRequiredResult?.length>0){
-		errs.push(checkRequiredResult);
+	// if(checkMaxLenResult?.length>0){
+	// 	errs.push(checkMaxLenResult);
+	// }
+
+	if(checkMaxLenResult!==undefined&&checkMaxLenResult?.length>0){
+		errs.push(checkMaxLenResult);
 	}
 
 	return errs;

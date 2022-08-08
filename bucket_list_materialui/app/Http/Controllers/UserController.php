@@ -25,15 +25,15 @@ class UserController extends Controller
 		$user_data['is_favorite_by_auth']=$is_favorite_by_auth;
 
 		\Log::debug($user_data);
-	   return  view('list_user')->with(['user_data'=>$user_data]);
+		 return  view('list_user')->with(['user_data'=>$user_data]);
 	}
 
 	public function editProfileMode(User $user,Request $request){
-	  \Log::info('editProfileMode');
-	  \Log::debug($request->edit_mode);
-	   $edit_mode=((bool) $request->edit_mode)===true?true:false;
+		\Log::info('editProfileMode');
+		\Log::debug($request->edit_mode);
+		 $edit_mode=((bool) $request->edit_mode)===true?true:false;
 
-	   return redirect()->route('user.showProfile',[
+		 return redirect()->route('user.showProfile',[
 		'user'=>$user->id,
 		'edit_mode'=>$edit_mode]);
 	}
@@ -47,22 +47,25 @@ class UserController extends Controller
 		$user_data['countLikes']=count($user_data['likes']);
 		$user_data['is_liked_by_auth']=$is_liked_by_auth;
 		\Log::debug($user_data);
-	  return view('my_profile')->with([
+		return view('my_profile')->with([
 		'user_data'=>$user_data,
 		'edit_mode'=>$edit_mode]);
 	}
 
 
 	public function editProfile(Request $request,User $user){
-	   \Log::info('user/editProfile');
+		 \Log::info('user/editProfile');
+		 \Log::debug('user->id:'.$user->id);
+		 \Log::debug(__METHOD__.'$request:'.$request);
+		 \Log::debug($request->all());
 
-	   $validator=Validator::make($request->all(),[
+		 $validator=Validator::make($request->all(),[
 		"photo"=>'image|mimes:jpeg,png,jpg|max:5120|dimensions:max_width=300',
 		"name"=>"string|max:255",
 		"question_1"=>"string |max:500",
 		"question_2"=>"string |max:500",
 		"question_3"=>"string |max:500",
-	   ],[
+		 ],[
 		"photo.image"=>"Upload jpg or png file.",
 		"photo.mimes"=>"Upload jpg or png file.",
 		"photo.dimensions"=>"Maximum width is 300px",
@@ -75,42 +78,62 @@ class UserController extends Controller
 		"question_1.max"=>"Input each answer within 500 letters. ",
 		"question_2.max"=>"Input each answer within 500 letters. ",
 		"question_3.max"=>"Input each answer within 500 letters. ",
-	   ]);
-	   if($validator->fails()){
+		 ]);
+
+		 if($validator->fails()){
+		\Log::debug(__METHOD__.':valid failed');
 		return back()
 		->withErrors($validator)
 		->with(['edit_mode'=>true])
 		->withInput();
 
-	   }else{
-		 $photo=!empty($request->photo)?$request->photho:'./image/no_image.jpg';
+		 }else{
+			\Log::debug(__METHOD__.':valid success');
+			$dir='user_photo';
+			$photo_path='storage/img/'.'no_image.jpg';
+
+		 if(!empty($request->file('photo'))){
+		   $file_name=$request->file('photo')->getClientOriginalName();
+		   $request->file('photo')->storeAs('public/img/uploads/'.$dir,$file_name);
+			 $photo_path='storage/img/uploads/'.$dir.'/'.$file_name;
+		 }
+
+     $photo=$photo_path;
 		 $name=!empty($request->name)?$request->name:'No name';
 		 $question_1=!empty($request->question_1)?$request->question_1:'No comment';
 		 $question_2=!empty($request->question_2)?$request->question_2:'No comment';
 		 $question_3=!empty($request->question_3)?$request->question_3:'No comment';
 
 
-		 $fileName=$request->file("img")!==null?$request->file("img")->store("public/img/uploads"):null;
+		 $result_profile=Profile::updateOrCreate([
+			'user_id'=>$user->id],[
+			'photo'=>$photo_path,
+			'question_1'=>$question_1,
+			'question_2'=>$question_2,
+			'question_3'=>$question_3,
+		 ]);
 
-		 $result=Profile::find($user->id)->fill([
-		  'photo'=>$fileName,
-		  'question_1'=>$question_1,
-		  'question_2'=>$question_2,
-		  'question_3'=>$question_3,
-		 ])->save();
+		$result_name=User::find($user->id)->update([
+			'name'=>$name
+		]);
 
-		if($result===true){
+		\Log::debug($result_profile);
+		\Log::debug($result_name);
+
+		if(!empty($result_profile)&&$result_name===true){
+			\Log::debug(__METHOD__.':saving data success!');
 		 return redirect()->route('user.showProfile',[
 			'user'=>$user->id,
 			'edit_mode'=>false]);
 
 		}else{
-		  return back()
-		  ->with([
+			\Log::debug(__METHOD__.':saveing data failed!');
+			return back()
+			->with([
 			'error_edit_profile'=>'Failed to save data. Please try again.',
 			'edit_mode'=>true]);
-	   }
-	  }
+		 }
+		}
 	}
 
 
@@ -131,7 +154,7 @@ class UserController extends Controller
 		\Log::info('user/storeFavorite');
 		$is_favorite_by_auth=$user->is_favorite_by_auth($user->id);
 		$result='';
-    if($is_favorite_by_auth===true){
+		if($is_favorite_by_auth===true){
 			$result=Favorite::where('from_user','=',Auth::id())
 			->where('to_user','=',$user->id)->delete();
 			$is_favorite_by_auth=false;
@@ -142,11 +165,11 @@ class UserController extends Controller
 			]);
 			$is_favorite_by_auth=true;
 		}
-    \Log::debug($result);
+		\Log::debug($result);
 		if($result===''){
 			\Log::info('error');
 			 \Log::debug(__METHOD__.'id:'.$user->id.'failed to update favorite...');
-		  return response()->json([
+			return response()->json([
 			'error'=>'Failed to favorite.... sorry.'
 			],500);
 			throw new HttpResponseException($response);
@@ -167,25 +190,25 @@ class UserController extends Controller
 	public function storeLike(User $user){
 		\Log::info('user/storeLike');
 		\Log::debug($user->id);
-    $liked=$user->is_liked_by_auth($user->id);
-    $result='';
+		$liked=$user->is_liked_by_auth($user->id);
+		$result='';
 
 		if($liked===true){
-		  $result=Like::where('from_user','=',Auth::id())->where('to_user','=',$user->id)->delete();
+			$result=Like::where('from_user','=',Auth::id())->where('to_user','=',$user->id)->delete();
 			$is_liked_by_auth=false;
 			$count_likes=$user->likes()->count();
 		}else if($liked===false){
-      $result=Like::create([
+			$result=Like::create([
 				'from_user'=>Auth::id(),
 				'to_user'=>$user->id,
 			]);
 			$count_likes=$user->likes()->count();
-		  $is_liked_by_auth=true;
+			$is_liked_by_auth=true;
 		}
 
 		if($result===''){
-	   \Log::info('error');
-		  $response=response()->json([
+		 \Log::info('error');
+			$response=response()->json([
 			'error'=>'Failed to like.... sorry.'
 			]);
 			throw new HttpResponseException($response);
@@ -197,7 +220,7 @@ class UserController extends Controller
 				'is_liked_by_auth'=>$is_liked_by_auth,
 				'count_likes'=>$count_likes
 			];
-      return response()->json($response,201);
+			return response()->json($response,201);
 		}
 	}
 
@@ -224,10 +247,10 @@ class UserController extends Controller
 			$is_favorite_by_auth=User::find($favorite['user']['id'])->is_favorite_by_auth($favorite['user']['id']);
 			$result=array_merge($favorite,[
 				'is_liked_by_auth'=>$is_liked_by_auth,
-		   	'is_favorite_by_auth'=>$is_favorite_by_auth]);
+			 	'is_favorite_by_auth'=>$is_favorite_by_auth]);
 			array_push($arr,$result);
 		}
-      \Log::debug($arr);
+			\Log::debug($arr);
 
 		if(!empty($favorites)){
 			return view('favorites')->with(['favorites'=>$arr]);

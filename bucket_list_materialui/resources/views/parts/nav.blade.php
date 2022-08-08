@@ -1,9 +1,4 @@
  <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-3 ps-3 pe-3 z-index-1" aria-label="Offcanvas navbar large">
-	@if (!empty(session('status')))
-    <div class="alert alert-success text-center flash z-index-2">
-        {{ session('status') }}
-    </div>
-  @endif
     <div class="container-fluid">
       <a class="navbar-brand" href={{route('bucket-lists.index')}}>My Todo Lists</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2">

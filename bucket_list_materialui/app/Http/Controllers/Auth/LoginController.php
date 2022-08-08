@@ -66,7 +66,7 @@ class LoginController extends Controller
 
 		if($validator->fails()){
 			return back()
-			->withErrors($validators)
+			->withErrors($validator)
 			->withInput();
 		}else{
             $remember=$request->rememtber===true?true:false;
