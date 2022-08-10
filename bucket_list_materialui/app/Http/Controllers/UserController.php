@@ -14,6 +14,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserController extends Controller
 {
+
 	public function index(User $user){
 		\Log::info('user/index');
 		$user_data=User::with(['profile','likes','bucket_lists'])->select('id','name','email')->find($user->id)->toArray();
@@ -30,8 +31,11 @@ class UserController extends Controller
 
 	public function editProfileMode(User $user,Request $request){
 		\Log::info('editProfileMode');
+		$profile=Profile::where('user_id','=',$user->id)->first();
+		$this->authorize('checkUser',$profile);
+
 		\Log::debug($request->edit_mode);
-		 $edit_mode=((bool) $request->edit_mode)===true?true:false;
+		$edit_mode=((bool) $request->edit_mode)===true?true:false;
 
 		 return redirect()->route('user.showProfile',[
 		'user'=>$user->id,
@@ -40,6 +44,9 @@ class UserController extends Controller
 
 	public function showProfile(User $user,Request $request){
 		\Log::info('showProfile');
+		$profile=Profile::where('user_id','=',$user->id)->first();
+		$this->authorize('checkUser',$profile);
+
 		$edit_mode=((bool) $request->edit_mode)===true?true:false;
 		$user_data=User::with(['profile','likes'])->select('id','name','email')->find($user->id)->toArray();
 		\Log::debug($user);
@@ -52,19 +59,20 @@ class UserController extends Controller
 		'edit_mode'=>$edit_mode]);
 	}
 
-
 	public function editProfile(Request $request,User $user){
 		 \Log::info('user/editProfile');
 		 \Log::debug('user->id:'.$user->id);
 		 \Log::debug(__METHOD__.'$request:'.$request);
 		 \Log::debug($request->all());
+		 $profile=Profile::where('user_id','=',$user->id)->first();
+		 $this->authorize('checkUser',$profile);
 
 		 $validator=Validator::make($request->all(),[
-		"photo"=>'image|mimes:jpeg,png,jpg|max:8192|dimensions:max_width=2448',//800万画素 8MB
-		"name"=>"string|max:255",
-		"question_1"=>"string |max:500",
-		"question_2"=>"string |max:500",
-		"question_3"=>"string |max:500",
+		"photo"=>'nullable|image|mimes:jpeg,png,jpg|max:8192|dimensions:max_width=2448',//800万画素 8MB
+		"name"=>"nullable|string|max:255",
+		"question_1"=>"nullable|string |max:500",
+		"question_2"=>"nullable|string |max:500",
+		"question_3"=>"nullable|string |max:500",
 		 ],[
 		"photo.image"=>"Upload jpg or png file.",
 		"photo.mimes"=>"Upload jpg or png file.",
@@ -89,29 +97,46 @@ class UserController extends Controller
 
 		 }else{
 			\Log::debug(__METHOD__.':valid success');
-			$dir='user_photo';
-			$photo_path='storage/img/'.'no_image.jpg';
-
-		 if(!empty($request->file('photo'))){
-		   $file_name=$request->file('photo')->getClientOriginalName();
-		   $request->file('photo')->storeAs('public/img/uploads/'.$dir,$file_name);
-			 $photo_path='storage/img/uploads/'.$dir.'/'.$file_name;
-		 }
-
-     $photo=$photo_path;
 		 $name=!empty($request->name)?$request->name:'No name';
 		 $question_1=!empty($request->question_1)?$request->question_1:'No comment';
 		 $question_2=!empty($request->question_2)?$request->question_2:'No comment';
 		 $question_3=!empty($request->question_3)?$request->question_3:'No comment';
 
 
-		 $result_profile=Profile::updateOrCreate([
+		 if(!empty($request->file('photo'))){	//if photo was selected
+			$dir='user_photo';
+			$file_name=$request->file('photo')->getClientOriginalName();
+		  $request->file('photo')->storeAs('public/img/uploads/'.$dir,$file_name);
+		  $photo_path='storage/img/uploads/'.$dir.'/'.$file_name;
+			$result_profile=Profile::updateOrCreate([
 			'user_id'=>$user->id],[
-			'photo'=>$photo_path,
+      'photo'=>$photo_path,
 			'question_1'=>$question_1,
 			'question_2'=>$question_2,
 			'question_3'=>$question_3,
-		 ]);
+			]);
+
+		 }else{//if photo was not selected
+			$photo_in_db=Profile::where('user_id','=',$user->id)->first();
+			if(empty($photo_in_db)){//if profile table has data in 'photo'
+			 $photo_path=null;
+			 $result_profile=Profile::updateOrCreate([
+			'user_id'=>$user->id],[
+      'photo'=>$photo_path,
+			'question_1'=>$question_1,
+			'question_2'=>$question_2,
+			'question_3'=>$question_3,
+			]);
+
+			}else{
+			$result_profile=Profile::updateOrCreate([
+			'user_id'=>$user->id],[
+			'question_1'=>$question_1,
+			'question_2'=>$question_2,
+			'question_3'=>$question_3,
+			]);
+			}
+		 }
 
 		$result_name=User::find($user->id)->update([
 			'name'=>$name
@@ -134,20 +159,6 @@ class UserController extends Controller
 			'edit_mode'=>true]);
 		 }
 		}
-	}
-
-
-	public function getResetPassword(){
-		\Log::info('getResetPassword');
-		return view('reset_password');
-	}
-
-	public function resetPassword(passwordRequest $passwordRequest,User $user){
-		\Log::info('user/resetPassword');
-
-		$user->password=\Hash::make($passwordRequest->password);
-		$result=$user->save();
-		$result===true?response()->json($result,201):response()->json([],500);
 	}
 
 	public function storeFavorite(User $user){
@@ -179,12 +190,6 @@ class UserController extends Controller
 				'is_favorite_by_auth'=>$is_favorite_by_auth
 			],201);
 		}
-	}
-
-	public function deleteFavorite(Favorite $favorite){
-		\Log::info('user/deleteFavorite');
-
-		// $result=$fa ue?response()->json($favorite,201):response()->json([],500);
 	}
 
 	public function storeLike(User $user){
@@ -224,21 +229,11 @@ class UserController extends Controller
 		}
 	}
 
-
-	public function deleteLike(LikeRequest $likeRequest,Like $like){
-		\Log::info('user/deleteLike');
-		$result=$like->delete();
-		$result===true?response()->json($result,201):response()->json([],500);
-	}
-
 	public function getFavorites(){
 		\Log::info('getFavorites');
 		$favorites=Favorite::where('from_user','=',Auth::id())
 		->with('user','user.profile','user.bucket_lists','user.likes')->get()->toArray();
 
-		// foreach($favorites as $favorite){
-		// 	$favorite['count_likes']=count($favorite['user']['likes']);
-		// }
 		\Log::info('favorites');
 
 		$arr=[];

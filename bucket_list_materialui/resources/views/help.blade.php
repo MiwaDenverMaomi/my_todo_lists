@@ -10,8 +10,7 @@ How to use
 
 @section('content')
 <div class="container-sm text-center">
-   <p class="lead">Step1:Make your todo list from <a href="">my page</a>.</p>
-   <p class="lead">Step2:Share your todo list. <a href={{route('bucket-lists.index')}}>my page</a></p>
-   <p class="lead">Step3:Good other's todo list.</p>
+   <p class="lead">Step1:Make your todo list from 'Menu' > 'My Todos' to share your todo list.</p>
+   <p class="lead">Step2:Good other's todo list.</p>
 </div>
 @endsection

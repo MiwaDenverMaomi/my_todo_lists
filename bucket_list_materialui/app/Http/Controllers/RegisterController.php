@@ -10,7 +10,7 @@ use \Symfony\Component\HttpFoundation\Response;
 
 class RegisterController extends Controller
 {
-    protected $RULES=[
+    private $RULES=[
             'email'=>'required|string|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',//userテーブルでemailのカラムがidカラムがNULLのものを除き、deleted_atがNULLのものが存在するかを確認するという内容になる。
             'password'=>'required|max:255|confirmed',
         ];
@@ -29,16 +29,17 @@ class RegisterController extends Controller
         'email.email'=>'Input valid email.',
         'email.max'=>'Input within 255 letters.',
         'email.unique'=>'This email is already used.',
-        'passowrd.required'=>'Input required.',
+        'password.required'=>'Input required.',
         'password.max'=>'Input within 255 letters.',
-        'password.confirmed'=>'Confirm your password.'
+        'password.confirmed'=>'Passwords are not matched.'
       ]);
       if($validator->fails()){
         return back()
         ->withErrors($validator)
         ->withInput();
      }else{
-        $user=User::create([
+      try{
+       $user=User::create([
         'email'=>$request->email,
         'password'=>\Hash::make($request->password)
         ]);
@@ -51,8 +52,13 @@ class RegisterController extends Controller
             'is_success'=>true,
             'message'=>'Your account was created!']);
         }else{
-// 　　　　　 return back()->with(['register_error'=>'Failed to create your account. Please try again later!']);
+          throw new \Exception('$user is empty!');
         }
+      }catch(\Exception $e){
+        \Log::debug(__METHOD__.':$e:'.$e->getMessage());
+         return view('register')
+        ->with(['register_result'=>'Failed to create your account. Please try again later!']);
+      }
      }
     }
 
@@ -62,17 +68,20 @@ class RegisterController extends Controller
 
     public function cancel(User $user){
         \Log::info('cancel');
+        $model=User::where('id','=',Auth::id())->first();
+        $this->authorize('checkUser',$model);
         $result=$user->delete();
         \Log::debug($result);
+
         if($result===true){
             session()->flash('is_userinfo_hide',true);
            return view('result')
            ->with([
             'is_success'=>true,
-            'message'=>'You canceled the membership.']);
+            'message'=>'Thank you for using our app!']);
         }else{
-           return back()->with(
-            ['cancel_err'=>'You failed to cancel. Please try again later!']);
+           return view('cancel')->with(
+            ['cancel_result'=>'You failed to cancel. Please try again later!']);
         }
     }
 }

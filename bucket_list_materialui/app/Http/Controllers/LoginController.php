@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
@@ -45,20 +45,23 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+		private $RULES=[
+			'email'=>'required|string|email|max:255',
+			'password'=>'required|max:255'
+		];
+
    public function getLogin(){
 		return view('login');
 	}
 
 	public function postLogin(Request $request){
 		\Log::debug($request);
+
 		//validation
-		$RULES=[
-			'email'=>'required|email|max:255',
-			'password'=>'required|max:255'
-		];
-		$validator=Validator::make($request->all(),$RULES,[
+		$validator=Validator::make($request->all(),$this->RULES,[
 			'email.required'=>'Input required.',
 			'email.email'=>'Input valid email address.',
+			'email.string'=>'Input string.',
 			'email.max'=>'Input within 255 letters.',
 			'password.required'=>'Input required.',
 			'password.max'=>'Input within 255 letters.'
@@ -68,44 +71,30 @@ class LoginController extends Controller
 			return back()
 			->withErrors($validator)
 			->withInput();
+
 		}else{
-            $remember=$request->rememtber===true?true:false;
-            if(Auth::attempt(['email'=>$request->input('email'),'password'=>$request->input('password')],$remember)){
+
+			try{
+        $remember=$request->rememtber;
+        if(Auth::attempt(['email'=>$request->input('email'),'password'=>$request->input('password')],$remember)){
 				\Log::info('Login ok');
 				\Log::debug(Auth::id());
 				\Log::debug(Auth::user());
 				session()->flash('status','Logged in');
-
 				return redirect()->route('bucket-lists.index');
-			}else{
-				return back()->with(['error'=>'Email/password is invalid.']);
+				}else{
+
+				throw new \Exception('Failed to Auth::attempt.');
 			}
-			// $user=DB::table('users')->where('email',$request->email)->first();
-			// \Log::debug($user->email);
-			// \Log::debug($user->password);
 
-			// if(empty($user)){
-
-			// 	return back()->with(['error'=>'Email/password is invalid.']);
-			// }
-
-			// if(Hash::check($request->password,$user->password)){
-			// 	session(['user_id'=>$user->id]);
-			// 	session(['email'=>$user->email]);
-			// 	session()->flash('status','Logged in');
-			// 	\Log::info('Logged in');
-
-			// 	return redirect()->route('bucket-lists.index');
-			// }else{
-			// 	return back()->with(['error'=>'Email/password is invalid.']);
-			// }
+			}catch(\Exception $e){
+				\Log::debug(__METHOD__.':$e:'.$e->getMessage());
+				return view('login')->with(['login_result'=>'Email/password is invalid.']);
+			}
 		}
-
 	}
 
 	public function logout(Request $request){
-		// session()->forget('email');
-		// session()->forget('user_id');
 		Auth::logout();
 		session()->flash('status','Logged out.');
 		return redirect()->route('bucket-lists.index');

@@ -206,7 +206,77 @@ input.addEventListener('change', (event) => { // <1>
       figure.style.display = 'none'
     }
   })
-★画像の位置調整は不明...
+★画像大きさについて
+iphoneの場合：
+写真のデータサイズ(ファイルサイズ)は、画素数と比例します。 iPhone 4S以降、iSightカメラ(背面カメラ)の画質は
+約800万のまま据え置かれているため、動作対象モデルがiPhone 4S以降となったiOS 8では、どのiPhoneを利用しても
+2メガバイト前後で撮影されます。
 
+参考ピクセル数：
+約1200万画素 (3968×2976)
+約800万画素 (3264×2448)->私の携帯
+※https://digital-faq.olympus.co.jp/faq/public/app/servlet/qadoc?QID=006995
 
+phpのデフォルトでは限界が8Mなので、controllerでは以下のように設定した。（800万画素）
+	"photo"=>'image|mimes:jpeg,png,jpg|max:8192|dimensions:max_width=2448',
+※私の携帯の画像は、800万画素、dimensions:2448 X 3264, width:2448, height:3264
+size:2.18 MB (2,295,953 bytes)だった。800万画素で約2MBと覚えておこう。
 
+★asset('パス')public フォルダのパス上にある画像を表示する。※storage/app/publicではないことに注意
+例）
+<img src="{{asset('img/no_image.jpg')}}" class="img-circle d-block mx-auto" alt="{{$user_data['name'].'_photo'}}"  width="100" height="100">
+
+★バリデーション ルールのnullable ->nullOKなものに設定する。出ないとnullをバリデーションしたときにエラーになる場合がある。
+
+★プロフィール編集の流れは以下。
+※プロフィールでは名前などを設定できるがすべてのカラムがnullableであるとする。
+①DBでは画像含め、NullOKのカラムにはNullを入れておく。'No name'とかデフォルトで入れない。
+②プロフィール編集では、初期表示のときにDBカラムがnullの場合はXXXを表示するという記述をしておく。
+例）blade側：!empty($user['name']){{$user['name']}}:'No name'
+こうすることで、会員登録したばかりのユーザーが初めてプロフィールを表示したときにNullの代わりに'No name'が表示される。
+③プロフィール編集をし送信する場合は、blade側からvalueの値を送信し、controllerで$requestとして受け取る。（name属性がキーとなる）
+④バリデーションする
+⑤バリデーションＯＫの場合、Nullの場合は'No name'をインサートする。（blade上では$user['name']がemptyの場合は、'No comment'と表示するようにしているため、自動的に'No comment'が
+valueとして入っている。なので、Nullがcontrollerで受け取られることはあり得ないのだが、こういう記述をしている。）
+⑥写真アップロードの場合は、以下の条件で分岐させる。（ＤＢ初期状態はnull）
+1)$request->photoがemptyかどうかをチェック
+2)emptyでない場合は、$request->photoでＤＢに画像パス登録
+3)emptyの場合は、DBのphotoがNullかどうかをチェックする。Profile::where('user_id','=',$requet->user_id)->photoがNullかどうかをチェックする。
+4)Nullである場合は、写真をアップロードしない（photoカラムを更新しない）
+5)Nullでない場合(既存の画像パスがある場合)は、$request->photoでDBに画像パスを登録する。
+⑦blade側でも、nullの場合は、no_image.jpgを表示するよう設定する。
+例）
+<img id="photo_preview_image" src="{{ !empty($user_data['profile']['
+photo'])?asset($user_data['profile']['photo']):asset('img/no_image.jpg')}}" class="rounded-circle d-block mx-auto position-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100">
+
+★ポリシーの設定
+現状、ログイン中ならばURLを操作することにより、別ユーザーのプロフィールを編集できてしまう。
+それを防ぐために、ポリシーを設定する。
+①php artisan make:policy ProfilePolicy
+②App/Policies/PrifilePolicyに以下の記述をする
+※必ずユーザーモデルと別モデルのインスタンスを紐づけるようにする
+public function checkUser(User $user,Profile $profile){
+      if($user->id===$profile->user_id){
+        return true;
+      }
+    }
+③AuthServiceProvider.phpに登録
+サービスプロバイダーに登録※ここで登録したものがデフォルトのポリシーの紐づけよりも優先される
+  protected $policies = [
+        'App\Models\Profile' => 'App\Policies\ProfilePolicy',
+    ];
+④コントローラーのconstructorに記述※middleware->authをweb.phpに記述していることが前提
+ $this->middleware('can:checkUser,profile')->only([
+            'editProfileMode','showProfile','editProfile'
+        ]);
+
+★エラーメッセージ
+@if($errors->has('password'))
+  $errors->first('password')
+@endif
+は以下と同じ
+ @error('password')
+    <div class="text-center text-danger mb-0">
+              {{$message}}
+		</div>
+    @enderror

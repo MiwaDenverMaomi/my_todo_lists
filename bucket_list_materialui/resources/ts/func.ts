@@ -133,7 +133,7 @@ export const previewFile=(file:any)=>{
  reader.readAsDataURL(file);
 }
 
-export const onSubmitProfile=(user_id:number)=>{
+export const onSubmitProfile=()=>{
 	const $name_element=document.querySelector<any>('#name');
 	const $photo_element=document.querySelector<any>('#photo');
 	const $comment1_element=document.querySelector<any>('#comment1');
@@ -197,8 +197,6 @@ export const onSubmitProfile=(user_id:number)=>{
 		};
 
 		console.log('submit');
-		$profile_form_element.method="post";
-		$profile_form_element.action=`"/${user_id}/edit-profile"`;
 		$profile_form_element.submit();
 	}
 };

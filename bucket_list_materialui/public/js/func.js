@@ -2220,7 +2220,8 @@ var sanitize = function sanitize(str) {
   return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 };
 var onHandleSelectPhoto = function onHandleSelectPhoto(name) {
-  var sizeLimit = 100 * 100 * 1; // const sizeLimit = 2560 * 1920 * 1;
+  var sizeLimit = 3264 * 2448 * 1; //800万画素
+  // const sizeLimit = 3968 * 2976 * 1; //iphone SE=>1200万画素->3968 * 2976 pixels.
 
   var $inputPhoto = document.querySelector('#input_photo');
   var $photoFrame = document.querySelector('#photo_frame'); // const $photoPreview = document.querySelector<any>('#photo_preview');
@@ -2263,7 +2264,7 @@ var previewFile = function previewFile(file) {
 
   reader.readAsDataURL(file);
 };
-var onSubmitProfile = function onSubmitProfile(user_id) {
+var onSubmitProfile = function onSubmitProfile() {
   var $name_element = document.querySelector('#name');
   var $photo_element = document.querySelector('#photo');
   var $comment1_element = document.querySelector('#comment1');
@@ -2312,8 +2313,6 @@ var onSubmitProfile = function onSubmitProfile(user_id) {
       comment3: []
     };
     console.log('submit');
-    $profile_form_element.method = "post";
-    $profile_form_element.action = "\"/".concat(user_id, "/edit-profile\"");
     $profile_form_element.submit();
   }
 };

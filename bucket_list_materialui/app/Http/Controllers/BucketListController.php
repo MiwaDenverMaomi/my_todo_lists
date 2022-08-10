@@ -36,6 +36,18 @@ class BucketListController extends Controller
 	 */
 	public function show(User $user){
 		\Log::info('BucketListController show');
+		//Check the user is allowed to access this page
+		$bucket_list=Bucket_list::where('user_id','=',$user->id)->first();
+		if(!empty($bucket_list)){//if the user has at least a record
+      $this->authorize('checkUser',$bucket_list);
+		}else{
+			if($user->id!==Auth::id()){//if the user does not have any record
+				abort(403);
+			}
+		}
+		\Log::debug($bucket_list);
+
+
 		$user_data=User::with(['profile','bucket_lists','likes'])->find($user->id)->toArray();
 		$user_data['countLikes']=count($user_data['likes']);
 
@@ -44,8 +56,8 @@ class BucketListController extends Controller
 
 	public function create(Request $request){
 		\Log::info('BucketListController create');
-		\Log::debug($request);
 
+		\Log::debug($request);
 		//validation
 		$validator=Validator::make($request->all(),[
 			"new_todo"=>'required | max:255',
@@ -63,7 +75,7 @@ class BucketListController extends Controller
 		}else{
 				\Log::info('create validator success');
 				$result=Bucket_list::create(["user_id"=>Auth::id(),"bucket_list_item"=>$request->new_todo,"is_done"=>false]);
-        \Log::debug(__METHOD__.'/result:'.$result);
+				\Log::debug(__METHOD__.'/result:'.$result);
 
 				if(!empty($result)){
 						$user_data=User::with(['profile','bucket_lists','likes'])->find(Auth::id())->toArray();
@@ -86,42 +98,11 @@ class BucketListController extends Controller
 
 	}
 
-	public function storeLike(LikeRequest $likeRequest){
-		$likeRequest->merge([
-			'from_user'=>Auth::id()
-		]);
-
-		$like=Like::create($LikeRequest->all());
-		$like?response()->json($like,201):
-		response()->json([],500);
-	}
-
-	public function deleteLike(Like $like){
-		\Log::info('deleteLike');
-		return $like->delete()?
-		response()->json($like,201):
-		response()->json([],500);
-	}
-
-	 public function storeFavorite(FavoriteRequest $favoriteRequest){
-		$FavoriteRequest->merge([
-			'from_user'=>Auth::id()
-		]);
-
-		$favorite=Favorite::create($favoriteRequest->all());
-		$favorite?response()->json($favorite,201):
-		response()->json([],500);
-	}
-
-	public function deleteFavorite(Favorite $favorite){
-		\Log::info('deleteFavorite');
-		return $favofite->delete()?
-		response()->json($favorite,201):
-		response()->json([],500);
-	}
-
 	public function updateIsDone(Bucket_list $bucket_list){
 		\Log::info('updateIsDone');
+
+		$this->authorize('checkUser',$bucket_list);
+
 
 			$bucket_list->is_done=!$bucket_list->is_done;
 			$result=$bucket_list->save();
@@ -136,6 +117,7 @@ class BucketListController extends Controller
 
 	public function updateTitle(Request $request,Bucket_list $bucket_list){
 		\Log::info('update');
+    $this->authorize('checkUser',$bucket_list);
 
 		$validator=Validator::make($request->all(),[
 			"title"=>"required | max:255"
@@ -164,16 +146,9 @@ class BucketListController extends Controller
 
 	public function delete(Bucket_list $bucket_list){
 		\Log::info('deleteBucketList');
+		$this->authorize('checkUser',$bucket_list);
+
 		$result=$bucket_list->delete();
-    \Log::debug(true);
-    \Log::debug(false);
-    \Log::debug(1);
-    \Log::debug(0);
-    \Log::debug(true===1);
-    \Log::debug(false===0);
-    \Log::debug(false==='');
-
-
 
 		if($result===true){
 			 return redirect()->route('bucket-lists.show',['user'=>$bucket_list->user_id]);
@@ -207,15 +182,10 @@ public function searchKeyword(Request $request){
 	 $word_array_searched = preg_split('/[\s,]+/', $space_conversion, -1, PREG_SPLIT_NO_EMPTY);
 
 	 $bucket_lists=User::with('profile','bucket_lists','likes')->whereHas('bucket_lists',function($q) use($word_array_searched){
-		  foreach($word_array_searched as $value) {
-             $q->where('bucket_list_item', 'like', '%'.$value.'%');
-            }
+			foreach($word_array_searched as $value) {
+						 $q->where('bucket_list_item', 'like', '%'.$value.'%');
+						}
 	 })
-	//  ->orWhere('name',function($q) use($word_array_searched){
-	// 	   foreach($word_array_searched as $value) {
-  //            $q->where('name', 'like', '%'.$value.'%');
-  //           }
-	//  })
 	 ->select('id','name','email')->orderBy('users.updated_at'
 	 )->get()->toArray();
 
