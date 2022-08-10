@@ -72,6 +72,27 @@ Contact
         ];
 Cancel->たぶんOK
 PasswordReset->
+sendEmail
+public function rules()
+	{
+		return [
+			'email'=>'required|email:filter|exists:users,email'
+		];
+	}
+	public function messages(){
+		return[
+			'email.required'=>'Input :attribute.',
+			'email.email'=>'Input valid email.',
+			'email.exists'=>'Input registered :attribute.',
+		];
+	}
+
+editnewpassword
+    return [
+            'password'=>['required', 'regex:/^[0-9a-zA-z-_]{8,32}$/', 'confirmed'],
+            'password_confirmation' => 'required | same:password',
+            'reset_token'=>['required',new TokenExpirationTimeRule]
+        ];
 
 
 ★デザイン

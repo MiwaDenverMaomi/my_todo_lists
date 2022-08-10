@@ -8,13 +8,13 @@ Password Reset
 <div class="container-sm w-25 p-3">
 	  <form method="post" action="{{route('password_reset.email.send')}}">
       @if(session('flash_message'))
-      <div class="text-center text-danger mb-3">
+      <div class="text-danger mb-3">
               {{session('flash_message')}}
 			</div>
       @endif
     <div class="mb-3">
       @error('email')
-      <div class="text-center text-danger mb-3">
+      <div class="text-danger mb-3">
               {{$errors->first('email')}}
 			</div>
       @enderror
