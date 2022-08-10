@@ -19,7 +19,7 @@ Login
 		</div>
     @enderror
     <div class="form-floating mb-3">
-      <input type="email" class="form-control" name="email" id="email" placeholder="email@example.com">
+      <input type="email" class="form-control" name="email" id="email" placeholder="email@example.com"  value="{{old('email')}}">
       <label for="email">Email address</label>
     </div>
     @error('password')
@@ -28,7 +28,7 @@ Login
 		</div>
     @enderror
     <div class="form-floating mb-3">
-      <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+      <input type="password" name="password" class="form-control" id="password" placeholder="Password" value="{{old('password')}}">
       <label for="password">Password</label>
     </div>
     <label>

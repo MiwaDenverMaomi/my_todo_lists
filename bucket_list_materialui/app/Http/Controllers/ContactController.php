@@ -11,13 +11,6 @@ use Validator;
 
 class ContactController extends Controller
 {
-    protected $RULES= [
-        'name' => 'required|string|max:50',
-        'title'=> 'reruired|string|max:100',
-        'email' => 'required|email|max:255',
-        'comment'=> 'required|email|max:1000',
-    ];
-
     public function getContact(){
         return view('contact');
     }

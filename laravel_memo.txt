@@ -111,12 +111,7 @@ public function updateTitle(Request $request,Bucket_list $bucket_list){
 ④＠class([a=>b])を利用できる。bがtrueのとき、a(クラス名)が適用される。(例2)
 
 例1:
-@php
-$heart_class=$list['is_liked_by_auth']===true?'fa-solid fa-heart icon active':'fa-solid fa-heart icon';
-@endphp
-<i id="like-id_{{$list['user']['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$list['user']['id']}},{{$list['is_liked_by_auth']}})"></i><strong id="count_likes_{{$list['user']['id']}}">{{count($list['user']['likes'])}}</strong>
-						<div class="text-center text-warging" id="likes_result_{{$list['user']['id']}}">
-						</div>
+<i class="{{$user_data['is_liked_by_auth']===true?'fa-solid fa-heart active icon-pink':'fa-solid fa-heart icon-grey'}}"></i>
 例2：<p @class(['textdecoration-linethrough'=>$item['is_done']])>
 
 ★エラー表示のステップ(larabel->blade)
@@ -280,3 +275,7 @@ public function checkUser(User $user,Profile $profile){
               {{$message}}
 		</div>
     @enderror
+
+★withInput()/old
+前回の値を引き継ぐ。
+<input type="text" class="form-control" id="name" placeholder="No name" value="{{old('name',!empty($user_data['name'])?$user_data['name']:'No name')}}" name="name">

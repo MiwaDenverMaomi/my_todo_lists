@@ -29,7 +29,7 @@
 				@endif
 				<strong class="text-center d-block mb-3">{{$list['name']}}</strong>
 				<div class="text-center mb-3">
-					<i class=`bi bi-heart-fill`></i><strong>{{$list['countLikes']}}</strong>
+					<i class="fa-solid fa-heart active icon-pink"></i><strong>{{$list['countLikes']}}</strong>
 				</div>
 				<div class="container">
 				<div class="list-group w-auto mb-3">

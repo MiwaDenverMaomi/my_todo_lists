@@ -32,7 +32,18 @@ class UserController extends Controller
 	public function editProfileMode(User $user,Request $request){
 		\Log::info('editProfileMode');
 		$profile=Profile::where('user_id','=',$user->id)->first();
-		$this->authorize('checkUser',$profile);
+		if(!empty($profile)){
+			\Log::info('not empty');
+     $this->authorize('checkUser',$profile);
+		}else{
+			\Log::info('empty');
+     if($user->id!==Auth::id()){
+			 \Log::info('user->id !==Auth::id()');
+			//  abort(403);
+		 }
+
+		}
+
 
 		\Log::debug($request->edit_mode);
 		$edit_mode=((bool) $request->edit_mode)===true?true:false;
@@ -45,7 +56,18 @@ class UserController extends Controller
 	public function showProfile(User $user,Request $request){
 		\Log::info('showProfile');
 		$profile=Profile::where('user_id','=',$user->id)->first();
-		$this->authorize('checkUser',$profile);
+		if(!empty($profile)){
+			\Log::debug('not empty');
+			$this->authorize('checkUser',$profile);
+		}else{
+			\Log::info('$profile=empty');
+			if($user->id!==Auth::id()){
+				\Log::debug($user->id);
+				\Log::debug(Auth::id());
+				\Log::debug($user->id!==Auth::id());
+        abort(403);
+			}
+		}
 
 		$edit_mode=((bool) $request->edit_mode)===true?true:false;
 		$user_data=User::with(['profile','likes'])->select('id','name','email')->find($user->id)->toArray();
@@ -65,7 +87,14 @@ class UserController extends Controller
 		 \Log::debug(__METHOD__.'$request:'.$request);
 		 \Log::debug($request->all());
 		 $profile=Profile::where('user_id','=',$user->id)->first();
-		 $this->authorize('checkUser',$profile);
+		 if(!empty($profile)){
+      $this->authorize('checkUser',$profile);
+		 }else{
+			if($user->id!==Auth::id()){
+        abort(403);
+			}
+		 }
+
 
 		 $validator=Validator::make($request->all(),[
 		"photo"=>'nullable|image|mimes:jpeg,png,jpg|max:8192|dimensions:max_width=2448',//800万画素 8MB
@@ -74,7 +103,7 @@ class UserController extends Controller
 		"question_2"=>"nullable|string |max:500",
 		"question_3"=>"nullable|string |max:500",
 		 ],[
-		"photo.image"=>"Upload jpg or png file.",
+		"photo.image"=>"Upload image file.",
 		"photo.mimes"=>"Upload jpg or png file.",
 		"photo.dimensions"=>"Maximum width is 2448 px",
 		"photo.max"=>"Upload the photo within 8192 bytes.",

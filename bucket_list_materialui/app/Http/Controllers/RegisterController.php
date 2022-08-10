@@ -12,7 +12,7 @@ class RegisterController extends Controller
 {
     private $RULES=[
             'email'=>'required|string|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',//userテーブルでemailのカラムがidカラムがNULLのものを除き、deleted_atがNULLのものが存在するかを確認するという内容になる。
-            'password'=>'required|max:255|confirmed',
+            'password'=>'required|min:8|max:255|confirmed',
         ];
 
     public function getRegister(){
@@ -31,6 +31,7 @@ class RegisterController extends Controller
         'email.unique'=>'This email is already used.',
         'password.required'=>'Input required.',
         'password.max'=>'Input within 255 letters.',
+        'password.min'=>'Input 8 - 255 letters.',
         'password.confirmed'=>'Passwords are not matched.'
       ]);
       if($validator->fails()){

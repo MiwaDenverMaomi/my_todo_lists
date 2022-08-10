@@ -155,3 +155,11 @@ use RefreshDatabase;を使うと、すべてのDBのデータが消えるので�
 
 ★mix watchが遅すぎるので、https://qiita.com/suzu6/items/8a8246015e5b45e210c4を参照にしてみた。
 docker-compose.ymlに４行追記した。
+
+★blade改行いちに注意
+以下は正常に動かなかった（$user_data['profile']['photo']がemptyと判定された）
+<img id="photo_preview_image" src="{{!empty($user_data['profile']['
+					photo'])?asset($user_data['profile']['photo']):asset('img/no_image.jpg')}}" class="rounded-circle d-block mx-auto position-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100">
+
+以下のように改行したら正常に動いた。※$user_data['profile']['photo']を改行せずに記述した。
+<img id="photo_preview_image" src="{{!empty($user_data['profile']['photo'])?asset($user_data['profile']['photo']):asset('img/no_image.jpg')}}" class="rounded-circle d-block mx-auto position-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100">

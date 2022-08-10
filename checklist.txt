@@ -30,12 +30,32 @@ private $RULES=[
 		];
 ・Logout ->OK //No need to check
 ・Todos
-update_is_done ->OK
-update-title ->OK
-delete ->OK
-create ->OK
+update_is_done ->
+update-title ->
+delete ->
+create ->
 
 Profile
+ $validator=Validator::make($request->all(),[
+		"photo"=>'nullable|image|mimes:jpeg,png,jpg|max:8192|dimensions:max_width=2448',//800万画素 8MB
+		"name"=>"nullable|string|max:255",
+		"question_1"=>"nullable|string |max:500",
+		"question_2"=>"nullable|string |max:500",
+		"question_3"=>"nullable|string |max:500",
+		 ],[
+		"photo.image"=>"Upload jpg or png file.",
+		"photo.mimes"=>"Upload jpg or png file.",
+		"photo.dimensions"=>"Maximum width is 2448 px",
+		"photo.max"=>"Upload the photo within 8192 bytes.",
+		"name.string"=>"Data type for name is not valid. ",
+		"name.max"=>"Input name within 255 letters. ",
+		"question_1.string"=>"Data type for answers are not valid. ",
+		"question_2.string"=>"Data type for answers are not valid. ",
+		"question_3.string"=>"Data type for answers are not valid. ",
+		"question_1.max"=>"Input each answer within 500 letters. ",
+		"question_2.max"=>"Input each answer within 500 letters. ",
+		"question_3.max"=>"Input each answer within 500 letters. ",
+		 ]);
 ・photo ->OK
 ・comment_1->OK
 ・comment_2->OK
@@ -44,7 +64,15 @@ Profile
 About ->OK //No need to check
 Help->OK //No need to check	
 Contact
+   return [
+        'name' =>'required | string |max:255',
+        'title'=>'nullable| string |max:255',
+        'email' =>'required | email | max:255',
+        'comment'=>'required | string | max:1000',
+        ];
 Cancel->たぶんOK
+PasswordReset->
+
 
 ★デザイン
 Register
@@ -66,4 +94,9 @@ About ->OK
 Help->OK	
 Contact->OK	
 Cancel
+
+★レスポンシブ
+
 レジスター直後に名前、メアドが表示されない
+アイコンが四角になって表示される
+

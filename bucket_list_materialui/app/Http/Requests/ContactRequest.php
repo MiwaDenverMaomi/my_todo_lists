@@ -25,7 +25,7 @@ class ContactRequest extends FormRequest
     {
         return [
         'name' =>'required | string |max:255',
-        'title'=>'string |max:255',
+        'title'=>'nullable| string |max:255',
         'email' =>'required | email | max:255',
         'comment'=>'required | string | max:1000',
         ];
@@ -39,7 +39,7 @@ class ContactRequest extends FormRequest
         'name.max' =>'Input less than 255 letters.',
 
         'title.string'=>'Input string.',
-        'title.nax'=>'Input less than 255 letters.',
+        'title.max'=>'Input less than 255 letters.',
 
         'email.required' =>'Input required.',
         'email.email' =>'Input valid email address.',

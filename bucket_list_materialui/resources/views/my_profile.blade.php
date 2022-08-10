@@ -15,53 +15,51 @@
 				<label class="btn btn-outline-primary">Choose Photo
 					<input type="file" name="photo" accept=".png, .jpeg, .jpg" id="input_photo" onchange="onHandleSelectPhoto('{{$user_data['name']}}')" style="opacity:0;">
        </label>
-
-			 <div id="photo_result" class="text-center text-danger">
-				@error('photo')
+       @error('photo')
+			 <div id="photo_result" class="text-danger">
 				 {{$message}}
-				@enderror
 			 </div>
-			 	<img id="photo_preview_image" src="{{ !empty($user_data['profile']['
-					photo'])?asset($user_data['profile']['photo']):asset('img/no_image.jpg')}}" class="rounded-circle d-block mx-auto position-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100">
+			 @enderror
+			 	<img id="photo_preview_image" src="{{!empty($user_data['profile']['photo'])?asset($user_data['profile']['photo']):asset('img/no_image.jpg')}}" class="rounded-circle d-block mx-auto position-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100">
 				</div>
 				<div class="mb-3">
 				<label for="name" class="form-label">Name</label>
-				<input type="text" class="form-control" id="name" placeholder="No name" value="{{!empty($user_data['name'])?$user_data['name']:'No name'}}" name="name">
-				</div>
-				<div id="name_result" class="text-center text-danger">
 				@error('name')
+				<div id="name_result" class="text-danger">
 				 {{$message}}
-				@enderror
-			 </div>
+			  </div>
+			  @enderror
+				<input type="text" class="form-control" id="name" placeholder="No name" value="{{old('name',!empty($user_data['name'])?$user_data['name']:'No name')}}" name="name">
+				</div>
 				<div class="mb-3">
 					 <label for="question_1" class="form-label"><strong class="d-block">What is your motto?</strong></label>
+					 @error('question_1')
 					 <div id="question_1_result" class="text-center text-danger">
-				   @error('question_1')
 				     {{$message}}
-			     @enderror
 			     </div>
-					 <textarea class="form-control" id="question_1" name="question_1" rows="3"  placeholder="No comment" >{{!empty($user_data['profile'])?$user_data['profile']['question_1']:
-						'No comment.'}}</textarea>
+					 @enderror
+					 <textarea class="form-control" id="question_1" name="question_1" rows="3"  placeholder="No comment" >{{old('question_1',!empty($user_data['profile'])?$user_data['profile']['question_1']:
+						'No comment.')}}</textarea>
 				 </div>
 				 <div class="mb-3">
 					 <label for="question_2" class="form-label"><strong class="d-block">What is your belief?</strong></label>
+					 @error('question_2')
 					 <div id="question_2_result" class="text-center text-danger">
-				   @error('question_2')
 				     {{$message}}
-			     @enderror
 			     </div>
-					 <textarea class="form-control" id="question_2" name="question_2" rows="3" placeholder="No comment">{{!empty($user_data['profile'])?$user_data['profile']['question_2']:
-						'No comment.'}}</textarea>
+					  @enderror
+					 <textarea class="form-control" id="question_2" name="question_2" rows="3" placeholder="No comment">{{old('question_2',!empty($user_data['profile'])?$user_data['profile']['question_2']:
+						'No comment.')}}</textarea>
 				 </div>
 					<div class="mb-3">
 					 <label for="question_3" class="form-label"><strong class="d-block">What would you do if you win $100,000?</strong></label>
+					 @error('question_3')
 					 <div id="question_3_result" class="text-center text-danger">
-				   @error('question_3')
 				     {{$message}}
-			     @enderror
 			     </div>
-					 <textarea class="form-control" id="question_3" name="question_3" rows="3" placeholder="No comment">{{!empty($user_data['profile'])?$user_data['profile']['question_3']:
-						'No comment.'}}</textarea>
+					 @enderror
+					 <textarea class="form-control" id="question_3" name="question_3" rows="3" placeholder="No comment">{{old('question_3',!empty($user_data['profile'])?$user_data['profile']['question_3']:
+						'No comment.')}}</textarea>
 				 </div>
 			   <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
 					<div class="mx-auto">
@@ -85,11 +83,12 @@
  <div class="row mx-auto">
 			<div class="col-lg-4 mx-auto">
 				<div class="mx-auto mb-2">
-				<img src="{{!empty($user_data['profile']['photo'])?asset($user_data['profile']['photo']):asset('img/no_image.jpg')}}" class="rounded-circle d-block mx-auto" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
+				<img src="{{ !empty($user_data['profile']['photo'])?asset($user_data['profile']['photo']):asset('img/no_image.jpg')}}" class="rounded-circle d-block mx-auto" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
 				</div>
 				<h3 class="fw-normal text-center">{{!empty($user_data['name'])?$user_data['name']:'No name'}}</h3>
 				<div class="text-center">
-					<i class=`bi bi-heart-fill`></i><strong>{{$user_data['countLikes']}}</strong>
+
+					<i class="{{$user_data['is_liked_by_auth']===true?'fa-solid fa-heart active icon-pink':'fa-solid fa-heart icon-grey'}}"></i><strong>{{$user_data['countLikes']}}</strong>
 				</div>
 					 <strong class="text-center  d-block">What is your motto?</strong>
 						<p class="text-center">{{!empty($user_data['profile']['question_1'])?

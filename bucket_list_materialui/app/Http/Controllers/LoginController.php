@@ -47,7 +47,7 @@ class LoginController extends Controller
 
 		private $RULES=[
 			'email'=>'required|string|email|max:255',
-			'password'=>'required|max:255'
+			'password'=>'required|min:8|max:255'
 		];
 
    public function getLogin(){
@@ -64,6 +64,7 @@ class LoginController extends Controller
 			'email.string'=>'Input string.',
 			'email.max'=>'Input within 255 letters.',
 			'password.required'=>'Input required.',
+			'password.min'=>'Input 8 - 255 letters.',
 			'password.max'=>'Input within 255 letters.'
 		]);
 
