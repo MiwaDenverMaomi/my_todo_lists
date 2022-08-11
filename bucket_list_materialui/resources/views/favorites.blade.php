@@ -18,7 +18,7 @@
 				@if(!empty($list['profile']))
 				<img src="{{ asset($list['profile']['photo'])}}" class="rounded-circle d-block mx-auto" alt="{{$list['user']['name'].'_photo'}}" width="100" height="100" >
 				@else
-				<img src="" class="img-circle d-block mx-auto" alt="{{$list['user']['name'].'_photo'}}"  width="100" height="100">
+				<img src="{{!empty($list['profile']['photo'])?asset($list['profile']['photo']):asset('img/no_image.jpg')}}" class="img-circle d-block mx-auto" alt="{{$list['user']['name'].'_photo'}}"  width="100" height="100">
 				@endif
 				<strong class="text-center d-block mb-3">{{$list['user']['name']}}</strong>
 				<div class="text-center mb-3">
