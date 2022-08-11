@@ -30,10 +30,24 @@ private $RULES=[
 		];
 ・Logout ->OK //No need to check
 ・Todos
-update_is_done ->
-update-title ->
-delete ->
-create ->
+update_is_done ->OK
+update-title ->OK
+		$validator=Validator::make($request->all(),[
+			"title"=>"required|string | max:255"
+		],[
+			"title.required"=>"Input todo.",
+			"title.string"=>"Input valid data.",
+			"tite.max"=>"Input less than 255 letters."
+		]);
+delete ->OK
+create ->OK
+$validator=Validator::make($request->all(),[
+			"new_todo"=>'required |string| max:255',
+		],[
+			"new_todo.required"=>"Input todo.",
+			"new_todo.string"=>"Input valid data.",
+			"new_todo.max"=>"Input less than 255 letters."
+		]);
 
 Profile
  $validator=Validator::make($request->all(),[

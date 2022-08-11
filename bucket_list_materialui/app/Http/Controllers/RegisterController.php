@@ -11,7 +11,7 @@ use \Symfony\Component\HttpFoundation\Response;
 class RegisterController extends Controller
 {
     private $RULES=[
-            'email'=>'required|string|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',//userテーブルでemailのカラムがidカラムがNULLのものを除き、deleted_atがNULLのものが存在するかを確認するという内容になる。
+            'email'=>'required|string|email:filter,dns|max:255|unique:users,email,NULL,id,deleted_at,NULL',//userテーブルでemailのカラムがidカラムがNULLのものを除き、deleted_atがNULLのものが存在するかを確認するという内容になる。
             'password'=>'required|min:8|max:255|confirmed',
         ];
 

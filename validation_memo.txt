@@ -48,3 +48,13 @@
 ★requestをnewしたとき
 queryにキーと値を追加したい場合は、
 merge(['key'=>'sss'])を使う。$request->user_id=3とかやってはダメ。何も入らない。
+
+★emailのバリデーション
+https://takuma-it.com/laravel-email-validation/
+https://qiita.com/hotate_chan/items/0cdfb490ee5cc6691c61
+'required|confirmed|between:8,128|regex:/\A(?=.*?[a-z])(?=.*?\d)(?=.*?[!-\/:-@[-`{-~])[!-~]+\z/i'|email:filter,dns,
+email:filter,dns
+filter->ひらがな、かたかな、漢字を弾く
+sdn->存在しないドメインを弾く
+
+

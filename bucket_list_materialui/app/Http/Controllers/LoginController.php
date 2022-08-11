@@ -46,7 +46,7 @@ class LoginController extends Controller
     }
 
 		private $RULES=[
-			'email'=>'required|string|email|max:255',
+			'email'=>'required|string|email:filter,dns|max:255',
 			'password'=>'required|min:8|max:255'
 		];
 
