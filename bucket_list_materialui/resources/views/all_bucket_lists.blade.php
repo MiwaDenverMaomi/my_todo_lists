@@ -1,9 +1,4 @@
 @extends('layouts.common')
-@if (!empty(session('status')))
-		<div class="alert alert-success text-center flash">
-				{{ session('status') }}
-		</div>
-@endif
 @section('content')
 	<div class="container px-4 " id="featured-3">
 		<div class="text-center">

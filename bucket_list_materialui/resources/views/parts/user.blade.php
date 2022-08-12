@@ -15,4 +15,9 @@
 		 @endauth
 	  </p>
 	@endif
+	 @if (!empty(session('status')))
+    <div class="alert alert-success text-center position-absolute flash w-100">
+        {{ session('status') }}
+    </div>
+  @endif
 </div>

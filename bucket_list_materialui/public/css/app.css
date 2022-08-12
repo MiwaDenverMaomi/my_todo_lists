@@ -151,10 +151,10 @@ body {
   top: 0;
   left: 0;
   transition-property: opacity;
-  transition-duration: 1s;
+  transition-duration: 6s;
   opacity: 0;
-  -webkit-animation: flashFadeOut 3s ease-in-out 3s 1 normal fowards;
-          animation: flashFadeOut 3s ease-in-out 3s 1 normal fowards;
+  -webkit-animation: flashFadeOut 5s ease-in-out 5s 1 normal fowards;
+          animation: flashFadeOut 5s ease-in-out 5s 1 normal fowards;
 }
 
 .z-index-1 {
@@ -163,7 +163,6 @@ body {
 }
 
 .z-index-2 {
-  position: absolute;
   z-index: 2;
 }
 
