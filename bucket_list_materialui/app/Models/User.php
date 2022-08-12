@@ -66,7 +66,7 @@ class User extends Authenticatable
 	}
 
 	public function bucket_lists(){
-		return $this->hasMany(Bucket_list::class,'user_id');
+		return $this->hasMany(Bucket_list::class,'user_id')->orderBy('id','desc');
 	}
 
 

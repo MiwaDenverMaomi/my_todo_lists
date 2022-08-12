@@ -2109,6 +2109,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "onStartEditMode": () => (/* binding */ onStartEditMode),
 /* harmony export */   "onSubmitProfile": () => (/* binding */ onSubmitProfile),
 /* harmony export */   "onSubmitTitle": () => (/* binding */ onSubmitTitle),
+/* harmony export */   "onToggleDescription": () => (/* binding */ onToggleDescription),
 /* harmony export */   "onToggleFavorite": () => (/* binding */ onToggleFavorite),
 /* harmony export */   "onToggleLike": () => (/* binding */ onToggleLike),
 /* harmony export */   "previewFile": () => (/* binding */ previewFile),
@@ -2460,6 +2461,16 @@ var searchKeyword = function searchKeyword(str) {
       result: result.data
     };
   }
+};
+var onToggleDescription = function onToggleDescription() {
+  console.log('onOpenDescription');
+  var $description_element = document.querySelector('#description');
+
+  if ($description_element.classList.contains('d-none')) {
+    $description_element.classList.remove('d-none');
+  } else {
+    $description_element.classList.add('d-none');
+  }
 }; //validation
 // export const checkRequired=(str:string)=>{
 // 	if(str.length===0){
@@ -2690,6 +2701,7 @@ window.checkTodo = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").
 window.searchKeyword = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").searchKeyword);
 window.onToggleFavorite = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onToggleFavorite);
 window.onToggleLike = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onToggleLike);
+window.onToggleDescription = (__webpack_require__(/*! ./func */ "./resources/ts/func.ts").onToggleDescription);
 
 
 /***/ }),

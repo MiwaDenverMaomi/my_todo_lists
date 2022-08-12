@@ -141,6 +141,11 @@ body {
   color: yellow;
 }
 
+.button:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
 .flash {
   position: absolute;
   top: 0;

@@ -279,3 +279,34 @@ public function checkUser(User $user,Profile $profile){
 ★withInput()/old
 前回の値を引き継ぐ。
 <input type="text" class="form-control" id="name" placeholder="No name" value="{{old('name',!empty($user_data['name'])?$user_data['name']:'No name')}}" name="name">
+
+★リレーション先を並べかえる。
+https://webru.info/laravel/column-sortable/並べ替え機能に便利なライブラリ
+コレクションの場合は、sortBy
+その他はorderBy
+asc（昇順 small->big）/desc（降順）
+例）モデルに記述
+public function bucket_lists(){
+		return $this->hasMany(Bucket_list::class,'user_id')->orderBy('id','desc');
+	}
+id が大->小へ並べ替える
+
+★TODOリストを更新したら、更新したものがトップに来る処理にした。
+改良の余地あり。（TodoがNullの人はいつも後ろにくるため）
+$arr_bucket_lists_not_empty=[];
+		$arr_bucket_lists_empty=[];
+		foreach($bucket_lists as $item){
+			if(!empty($item['bucket_lists'])){
+				array_push($arr_bucket_lists_not_empty,$item);
+			}
+		}
+		usort($arr_bucket_lists_not_empty,function($a,$b){
+			 return $a['bucket_lists'][0]['updated_at']<$b['bucket_lists'][0]['updated_at']?1:-1;
+		});
+		foreach($bucket_lists as $item){
+			if(empty($item['bucket_lists'])){
+				array_push($arr_bucket_lists_empty,$item);
+			}
+		}
+
+		$result=array_merge($arr_bucket_lists_not_empty,$arr_bucket_lists_empty);

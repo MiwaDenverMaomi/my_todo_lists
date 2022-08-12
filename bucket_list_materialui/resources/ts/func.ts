@@ -329,7 +329,15 @@ export const searchKeyword=(str:string)=>{
 	}
 };
 
-
+export const onToggleDescription=()=>{
+	console.log('onOpenDescription');
+	const $description_element = document.querySelector<any>('#description');
+	if ($description_element.classList.contains('d-none')) {
+		$description_element.classList.remove('d-none');
+	} else {
+		$description_element.classList.add('d-none');
+	 }
+}
 //validation
 // export const checkRequired=(str:string)=>{
 // 	if(str.length===0){

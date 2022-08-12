@@ -21,13 +21,48 @@ class BucketListController extends Controller
 
 		$bucket_lists=User::with([
 			'profile','bucket_lists','likes'
-			 ])->select('id','name','email')->get()->toArray();
+			 ])->select('id','name','email')->get()->sortByDesc('id')->toArray();
 		\Log::debug($bucket_lists);
 		for($i=0;$i<count($bucket_lists);$i++){
 			$bucket_lists[$i]['countLikes']=count($bucket_lists[$i]['likes']);
+			$bucket_lists[$i]['email']= substr($bucket_lists[$i]['email'],0,5).'***';
 		}
-		\Log::debug($bucket_lists);
-		return view('all_bucket_lists')->with('bucket_lists',$bucket_lists);
+    $arr_bucket_lists_not_empty=[];
+		$arr_bucket_lists_empty=[];
+		foreach($bucket_lists as $item){
+			if(!empty($item['bucket_lists'])){
+				array_push($arr_bucket_lists_not_empty,$item);
+			}
+		}
+		usort($arr_bucket_lists_not_empty,function($a,$b){
+			 return $a['bucket_lists'][0]['updated_at']<$b['bucket_lists'][0]['updated_at']?1:-1;
+		});
+		foreach($bucket_lists as $item){
+			if(empty($item['bucket_lists'])){
+				array_push($arr_bucket_lists_empty,$item);
+			}
+		}
+
+		$result=array_merge($arr_bucket_lists_not_empty,$arr_bucket_lists_empty);
+    \Log::debug($result);
+		// $result=usort($bucket_lists,function($a,$b){
+		// 	\Log::info('sort');
+		// 	\Log::debug($a);
+		// 	\Log::debug($b);
+    //   if(!empty($a['bucket_lists'])){
+    //     if(!empty($b['bucket_lists'])){
+    //        return $a['bucket_lists'][0]['updated_at']>$b['bucket_lists'][0]['updated_at']?1:-1;
+		// 		}else{
+    //        return $a['bucket_lists'][0]['updated_at']>$b['bucket_lists'][0]['updated_at']?1:-1;
+		// 		}
+		// 	}else{
+    //     if(!empty($b['bucket_lists'])){
+    //        return 1;
+		// 		}
+		// 	}
+		// });
+		// \Log::debug($resu);
+		return view('all_bucket_lists')->with('bucket_lists',$result);
 	}
 
 	/**

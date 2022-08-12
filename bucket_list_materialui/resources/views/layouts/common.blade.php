@@ -17,6 +17,7 @@
 	 @include('parts.go_to_top_button')
   </main>
   </div>
-   @include('parts.scripts')
+  @include('parts.footer')
+  @include('parts.scripts')
 </body>
 </html>

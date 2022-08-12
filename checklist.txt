@@ -110,6 +110,8 @@ editnewpassword
 
 
 ★デザイン
+All todo
+
 Register
 ・Login ->OK
 ・Logout ->OK
@@ -130,8 +132,11 @@ Help->OK
 Contact->OK	
 Cancel
 
+
+
 ★レスポンシブ
 
 レジスター直後に名前、メアドが表示されない
 アイコンが四角になって表示される
+検索ができない
 

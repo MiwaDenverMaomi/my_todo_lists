@@ -24,7 +24,7 @@ class UserController extends Controller
 		$user_data['countLikes']=count($user_data['likes']);
 		$user_data['is_liked_by_auth']=$is_liked_by_auth;
 		$user_data['is_favorite_by_auth']=$is_favorite_by_auth;
-
+    $user_data['email']= substr($user_data['email'],0,5).'***';
 		\Log::debug($user_data);
 		 return  view('list_user')->with(['user_data'=>$user_data]);
 	}

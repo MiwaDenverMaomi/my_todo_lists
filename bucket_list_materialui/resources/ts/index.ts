@@ -23,7 +23,7 @@ declare global { interface Window {
   searchKeyword:any,
   onToggleFavorite:any,
   onToggleLike:any,
-
+  onToggleDescription:any,
 
  } }
 
@@ -49,4 +49,5 @@ window.checkComments=require("./func").checkComments;
 window.checkTodo=require("./func").checkTodo;
 window.searchKeyword=require("./func").searchKeyword;
 window.onToggleFavorite=require("./func").onToggleFavorite;
-window.onToggleLike=require("./func").onToggleLike;
+window.onToggleLike = require("./func").onToggleLike;
+window.onToggleDescription = require("./func").onToggleDescription;

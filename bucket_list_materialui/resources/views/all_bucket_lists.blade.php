@@ -21,28 +21,30 @@
 		<div class="row g-4 row-cols-1 row-cols-lg-3">
 		@if(!empty($bucket_lists))
 			@foreach($bucket_lists as $list)
-			<div class="card pt-5 pb-3 g-col-4">
-				@if(!empty($list['profile']['photo']))
-				<img src="{{ asset($list['profile']['photo'])}}" class="rounded-circle d-block mx-auto" alt="{{$list['name'].'_photo'}}" width="100" height="100" >
-				@else
-				<img src="{{asset('img/no_image.jpg')}}" class="img-circle d-block mx-auto" alt="{{$list['name'].'_photo'}}"  width="100" height="100">
-				@endif
-				<strong class="text-center d-block mb-3">{{$list['name']}}</strong>
+			<div class="card pt-3 pb-3 g-col-4">
+	 <div class="mb-3">
+    <img src="{{!empty($list['profile']['photo'])?asset($list['profile']['photo']):asset('img/no_image.jpg')}}" alt="{{!empty($list['name'])?$list['name']:'No name'}}" width="32" height="32" class="rounded-circle flex-shrink-0">
+    <div class="d-flex gap-2 w-100 justify-content-between">
+      <div>
+        <h6 class="mb-0">{{!empty($list['name'])?$list['name']:'No name'}}</h6>
+        <p class="mb-0 opacity-75">{{!empty($list['email'])?$list['email']:'No email'}}</p>
+      </div>
+      <small class="opacity-50 text-nowrap"></small>
+    </div>
+   </div>
 				<div class="text-center mb-3">
 					<i class="fa-solid fa-heart active icon-pink"></i><strong>{{$list['countLikes']}}</strong>
 				</div>
 				<div class="container">
-				<div class="list-group w-auto mb-3">
+				<ul class="list-group w-70 mb-3">
 					@if(!empty($list['bucket_lists']))
 						@foreach($list['bucket_lists'] as $item)
-						 <label class="list-group-item d-flex gap-3">
-							<p @class(['textdecoration-linethrough'=>$item['is_done']])>{{$item['bucket_list_item']}}</p>
-						</label>
+							<li @class(['textdecoration-linethrough'=>$item['is_done']])>{{$item['bucket_list_item']}}</li>
 						@endforeach
 					@else
 						<div class="text-center">No Bucket List</div>
 					@endif
-			 </div>
+       </ul>
 			 </div>
 				<a href={{route('user.index',['user'=>$list['id']])}} class="icon-link d-inline-flex align-items-center">
 					See more...
