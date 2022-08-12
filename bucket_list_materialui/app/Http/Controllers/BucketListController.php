@@ -179,6 +179,11 @@ class BucketListController extends Controller
 public function searchKeyword(Request $request){
 	 \Log::info('searchKeyword');
 	 \Log::debug($request);
+
+  if(empty($request->keyword)){
+		return redirect()->route('bucket-lists.index');
+	 }
+
 	 $keyword=trim($request->keyword);
 	 $request->keyword=$keyword;
 
@@ -199,28 +204,34 @@ public function searchKeyword(Request $request){
 	try{
 	 $space_conversion=mb_convert_kana($keyword);
 	 $word_array_searched = preg_split('/[\s,]+/', $space_conversion, -1, PREG_SPLIT_NO_EMPTY);
+	 \Log::info(' $word_array_searched ');
+   \Log::debug( $word_array_searched );
 
 	 $bucket_lists_searched_in_bucket_lists_table=User::with('profile','bucket_lists','likes')->whereHas('bucket_lists',function($q) use($word_array_searched){
-			foreach($word_array_searched as $value) {
-						 $q->where('bucket_list_item', 'LIKE', '%'.$value.'%');
+			for($i=0;$i<count($word_array_searched);$i++) {
+				if($i===0){
+					 $q->where('bucket_list_item', 'LIKE', '%'.$word_array_searched[$i].'%');
+				}else{
+					 $q->orWhere('bucket_list_item', 'LIKE', '%'.$word_array_searched[$i].'%');
+				}
+
 						}
 	 })->select('id','name','email')->get()->sortByDesc('updated_at'
 	 )->toArray();
 
 	 $query=User::query();
-	 foreach($word_array_searched as $word){
-		$query->where('name','LIKE','%'.$word.'%');
+	 foreach($word_array_searched as $value){
+		$query->orWhere('name','LIKE','%'.$value.'%');
 	 }
 
 	 $bucket_lists_searched_in_users_table=$query->with('profile','bucket_lists','likes')->select('id','name','email')->get()->sortByDesc('updated_at')->toArray();
-	//  $bucket_lists_searched_in_users_table=User::where('name','iLIKE','%'.$value.'%')->with('profile','bucket_lists','likes')->select('id','name','email')->sortByDesc('users.updated_at')->get()->toArray();
+
 	\Log::info('bucket_lists_searched_in_bucket_lists_table');
 	\Log::debug($bucket_lists_searched_in_bucket_lists_table);
 	\Log::info('bucket_lists_searched_in_users_table');
 	\Log::debug($bucket_lists_searched_in_users_table);
-  \Log::info('array_merge');
-	\Log::debug(array_merge($bucket_lists_searched_in_bucket_lists_table,$bucket_lists_searched_in_users_table));
-  $bucket_lists=array_unique(array_merge($bucket_lists_searched_in_bucket_lists_table,$bucket_lists_searched_in_users_table));
+
+  $bucket_lists=array_unique(array_merge($bucket_lists_searched_in_bucket_lists_table,$bucket_lists_searched_in_users_table), SORT_REGULAR);
 	\Log::info('array_unique');
 	\Log::debug($bucket_lists);
 
@@ -259,8 +270,10 @@ public function searchKeyword(Request $request){
 	}
 	}catch(\Exception $e){
 		\Log::debug(__METHOD__.':'.$e->getMessage());
-		return view('all_bucket_lists')->with([
-			'search_result'=>'Failed to search...sorry!',
+		 return view('all_bucket_lists')
+		 ->with([
+			'keyword'=>$keyword,
+			'search_result'=>'Failed to search... sorry!'
 		]);
 	}
 

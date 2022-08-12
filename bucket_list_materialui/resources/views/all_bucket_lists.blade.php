@@ -7,11 +7,16 @@
 			@endif
 		</div>
 		<div class="text-center mb-3">
-		  <strong>
-				@if(isset($result_count))
-				{{$result_count}} items found.
-			  @endif
+			@if(isset($search_result))
+			<strong>
+				{{$search_result}}
 			</strong>
+			@endif
+			@if(isset($result_count))
+		  <strong>
+				{{$result_count}} items found.
+			</strong>
+			@endif
 		</div>
 		<div class="row g-4 row-cols-1 row-cols-lg-3">
 		@if(!empty($bucket_lists))

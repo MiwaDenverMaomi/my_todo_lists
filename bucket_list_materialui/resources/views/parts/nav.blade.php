@@ -37,17 +37,7 @@
 	          </li>
           </ul>
           <form class="d-flex mt-3 mt-lg-0" role="search" method="get" action="{{route('bucket-lists.searchKeyword')}}">
-            @php
-            $words='';
-            if($errors->has('keyword')){
-              $words=$errors->first('keyword');
-            }else if(!empty($keyword)){
-              $words=$keyword;
-            }else{
-              $words='Failed to search...sorry!';
-            }
-            @endphp
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword" value="{{$words}}">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword" value="{{!empty($keyword)?$keyword:''}}">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
         </div>
