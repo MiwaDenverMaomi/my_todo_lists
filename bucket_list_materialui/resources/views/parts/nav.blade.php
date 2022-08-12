@@ -1,6 +1,6 @@
  <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-3 ps-3 pe-3" aria-label="Offcanvas navbar large">
     <div class="container-fluid">
-      <a class="navbar-brand" href={{route('bucket-lists.index')}}>My Todo Lists</a>
+      <a class="navbar-brand" href="{{route('bucket-lists.index')}}">My Todo Lists</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -36,8 +36,18 @@
 	            </div>
 	          </li>
           </ul>
-          <form class="d-flex mt-3 mt-lg-0" role="search" method="get" action={{route('bucket-lists.searchKeyword')}}>
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword">
+          <form class="d-flex mt-3 mt-lg-0" role="search" method="get" action="{{route('bucket-lists.searchKeyword')}}">
+            @php
+            $words='';
+            if($errors->has('keyword')){
+              $words=$errors->first('keyword');
+            }else if(!empty($keyword)){
+              $words=$keyword;
+            }else{
+              $words='Failed to search...sorry!';
+            }
+            @endphp
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword" value="{{$words}}">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
         </div>

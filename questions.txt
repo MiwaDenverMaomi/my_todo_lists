@@ -20,3 +20,4 @@
 ★RegisterController>postRegister
 で、catch後にredirect()->route('register.getRegister')もしくはback()->route(...としたいが、ただ
 return されて終わってしまう模様。return view()とするとデータも添付できたので、とりあえずこれを使う。
+★flashが思うような位置に出ない。

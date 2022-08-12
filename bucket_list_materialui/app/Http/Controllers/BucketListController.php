@@ -27,7 +27,7 @@ class BucketListController extends Controller
 			$bucket_lists[$i]['countLikes']=count($bucket_lists[$i]['likes']);
 			$bucket_lists[$i]['email']= substr($bucket_lists[$i]['email'],0,5).'***';
 		}
-    $arr_bucket_lists_not_empty=[];
+		$arr_bucket_lists_not_empty=[];
 		$arr_bucket_lists_empty=[];
 		foreach($bucket_lists as $item){
 			if(!empty($item['bucket_lists'])){
@@ -44,24 +44,7 @@ class BucketListController extends Controller
 		}
 
 		$result=array_merge($arr_bucket_lists_not_empty,$arr_bucket_lists_empty);
-    \Log::debug($result);
-		// $result=usort($bucket_lists,function($a,$b){
-		// 	\Log::info('sort');
-		// 	\Log::debug($a);
-		// 	\Log::debug($b);
-    //   if(!empty($a['bucket_lists'])){
-    //     if(!empty($b['bucket_lists'])){
-    //        return $a['bucket_lists'][0]['updated_at']>$b['bucket_lists'][0]['updated_at']?1:-1;
-		// 		}else{
-    //        return $a['bucket_lists'][0]['updated_at']>$b['bucket_lists'][0]['updated_at']?1:-1;
-		// 		}
-		// 	}else{
-    //     if(!empty($b['bucket_lists'])){
-    //        return 1;
-		// 		}
-		// 	}
-		// });
-		// \Log::debug($resu);
+		\Log::debug($result);
 		return view('all_bucket_lists')->with('bucket_lists',$result);
 	}
 
@@ -74,7 +57,7 @@ class BucketListController extends Controller
 		//Check the user is allowed to access this page
 		$bucket_list=Bucket_list::where('user_id','=',$user->id)->first();
 		if(!empty($bucket_list)){//if the user has at least a record
-      $this->authorize('checkUser',$bucket_list);
+			$this->authorize('checkUser',$bucket_list);
 		}else{
 			if($user->id!==Auth::id()){//if the user does not have any record
 				abort(403);
@@ -151,7 +134,7 @@ class BucketListController extends Controller
 
 	public function updateTitle(Request $request,Bucket_list $bucket_list){
 		\Log::info('update');
-    $this->authorize('checkUser',$bucket_list);
+		$this->authorize('checkUser',$bucket_list);
 
 		$validator=Validator::make($request->all(),[
 			"title"=>"required|string | max:255"
@@ -201,9 +184,9 @@ public function searchKeyword(Request $request){
 
 	 $validator=Validator::make($request->all(),
 	 [
-		'keyword'=>'required|max:255'
+		'keyword'=>'string|max:255'
 	 ],[
-		'keyword.required'=>'Input keyword.',
+		'keyword.required'=>'Input valid data.',
 		'keyword.max'=>'Input within 255 letters.'
 	 ]);
 
@@ -213,28 +196,74 @@ public function searchKeyword(Request $request){
 		->withInput();
 	 }
 
+	try{
 	 $space_conversion=mb_convert_kana($keyword);
 	 $word_array_searched = preg_split('/[\s,]+/', $space_conversion, -1, PREG_SPLIT_NO_EMPTY);
 
-	 $bucket_lists=User::with('profile','bucket_lists','likes')->whereHas('bucket_lists',function($q) use($word_array_searched){
+	 $bucket_lists_searched_in_bucket_lists_table=User::with('profile','bucket_lists','likes')->whereHas('bucket_lists',function($q) use($word_array_searched){
 			foreach($word_array_searched as $value) {
-						 $q->where('bucket_list_item', 'like', '%'.$value.'%');
+						 $q->where('bucket_list_item', 'LIKE', '%'.$value.'%');
 						}
-	 })
-	 ->select('id','name','email')->orderBy('users.updated_at'
-	 )->get()->toArray();
+	 })->select('id','name','email')->get()->sortByDesc('updated_at'
+	 )->toArray();
 
-	 for($i=0;$i<count($bucket_lists);$i++){
+	 $query=User::query();
+	 foreach($word_array_searched as $word){
+		$query->where('name','LIKE','%'.$word.'%');
+	 }
+
+	 $bucket_lists_searched_in_users_table=$query->with('profile','bucket_lists','likes')->select('id','name','email')->get()->sortByDesc('updated_at')->toArray();
+	//  $bucket_lists_searched_in_users_table=User::where('name','iLIKE','%'.$value.'%')->with('profile','bucket_lists','likes')->select('id','name','email')->sortByDesc('users.updated_at')->get()->toArray();
+	\Log::info('bucket_lists_searched_in_bucket_lists_table');
+	\Log::debug($bucket_lists_searched_in_bucket_lists_table);
+	\Log::info('bucket_lists_searched_in_users_table');
+	\Log::debug($bucket_lists_searched_in_users_table);
+  \Log::info('array_merge');
+	\Log::debug(array_merge($bucket_lists_searched_in_bucket_lists_table,$bucket_lists_searched_in_users_table));
+  $bucket_lists=array_unique(array_merge($bucket_lists_searched_in_bucket_lists_table,$bucket_lists_searched_in_users_table));
+	\Log::info('array_unique');
+	\Log::debug($bucket_lists);
+
+
+	//change by 'update_at'
+	if(!empty($bucket_lists)){
+		$bucket_lists_not_empty=[];
+		$bucket_lists_empty=[];
+
+		for($i=0;$i<count($bucket_lists);$i++){
 			$bucket_lists[$i]['countLikes']=count($bucket_lists[$i]['likes']);
 		}
-	 \Log::debug($bucket_lists);
-		$count=!empty($bucket_lists)?count($bucket_lists):0;
+
+		foreach($bucket_lists as $list){
+			if(!empty($list['bucket_lists'])){
+				array_push($bucket_lists_not_empty,$list);
+			}else{
+				array_push($bucket_lists_empty,$list);
+			}
+		}
+
+		usort($bucket_lists_not_empty,function($a,$b){
+			return $a['bucket_lists'][0]['updated_at']>$b['bucket_lists'][0]['updated_at']?-1:1;
+		});
+
+		$result=array_merge($bucket_lists_not_empty,$bucket_lists_empty);
+		$count=!empty($result)?count($result):0;
 		 return view('all_bucket_lists')
 		 ->with([
 			'keyword'=>$keyword,
-			'bucket_lists'=>$bucket_lists,
+			'bucket_lists'=>$result,
 			'result_count'=>$count,
 		]);
+	}else{
+		throw new \Exception('$bucket_lists is empty!');
+	}
+	}catch(\Exception $e){
+		\Log::debug(__METHOD__.':'.$e->getMessage());
+		return view('all_bucket_lists')->with([
+			'search_result'=>'Failed to search...sorry!',
+		]);
+	}
+
 	}
 
 }

@@ -13,11 +13,11 @@
 		 @auth
        {{'('.substr(Auth::user()->email,0,5).'***'.')'}}
 		 @endauth
+		 @if (!empty(session('status')))
+  @endif
 	  </p>
 	@endif
-	 @if (!empty(session('status')))
-    <div class="alert alert-success text-center position-absolute flash w-100">
+	<div class="alert alert-success text-center position-absolute flash w-100">
         {{ session('status') }}
-    </div>
-  @endif
+  </div>
 </div>

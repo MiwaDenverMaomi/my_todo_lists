@@ -39,7 +39,7 @@ class UserController extends Controller
 			\Log::info('empty');
      if($user->id!==Auth::id()){
 			 \Log::info('user->id !==Auth::id()');
-			//  abort(403);
+			 abort(403);
 		 }
 
 		}
