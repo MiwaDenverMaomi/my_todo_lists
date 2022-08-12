@@ -36,7 +36,7 @@
 					<i class="fa-solid fa-heart active icon-pink"></i><strong>{{$list['countLikes']}}</strong>
 				</div>
 				<div class="container">
-				<ul class="list-group w-70 mb-3">
+				<ul class="w-70 mb-3 list-content">
 					@if(!empty($list['bucket_lists']))
 						@foreach($list['bucket_lists'] as $item)
 							<li @class(['textdecoration-linethrough'=>$item['is_done']])>{{$item['bucket_list_item']}}</li>
@@ -46,7 +46,7 @@
 					@endif
        </ul>
 			 </div>
-				<a href={{route('user.index',['user'=>$list['id']])}} class="icon-link d-inline-flex align-items-center">
+				<a href="{{route('user.index',['user'=>$list['id']])}}" class="icon-link d-inline-flex align-items-center see-more">
 					See more...
 					<svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
 				</a>
