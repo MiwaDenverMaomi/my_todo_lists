@@ -151,4 +151,4 @@ success->OK
 ・ログイン->top->favorite/likeを色付きで表示し、クリックできるようにしてほしい
 ・guest->favorite/like->グレーで表示でいいかも
 
-footer表示されない
+・footer表示されない->

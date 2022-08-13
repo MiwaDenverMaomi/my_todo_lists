@@ -1,3 +1,5 @@
-    <footer class="mt-auto text-white-50">
-    <p>Cover template for <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a>, by <a href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
-  </footer>
+
+	<footer class="bd-footer text-center bg-light pt-3 pb-3">
+		<div><a href="{{route('bucket-lists.index')}}" class="text-decoration-none link-dark">My Todo Lists</a></div>
+		<div>Copyright(C) All Rights Reserved.</div>
+	</footer>

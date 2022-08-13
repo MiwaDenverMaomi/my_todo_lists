@@ -1,3 +1,3 @@
-<div class="">
- <a class="d-block mx-auto text-center" href="{{route('bucket-lists.index')}}">>Back to Top</a>
+<div>
+ <a class="d-block mx-auto text-center text-decoration-none  link-dark" href="{{route('bucket-lists.index')}}"><<strong>Back to Top</strong></a>
 </div>
