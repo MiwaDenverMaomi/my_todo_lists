@@ -1,15 +1,15 @@
 @extends('layouts.common')
 
 @section('title')
-How to use this app
+About This App
 @endsection
 
 @section('title')
-How to use
+About This App
 @endsection
 
 @section('content')
-<div class="container-sm text-center">
+<div class="container-sm col-sm-6 col-md-4">
    <p class="lead">
       In the "collective unconscious", there is enormous energy that can move all human beings, and if we can use this energy, we will be able to fulfill our wishes.
    </p>

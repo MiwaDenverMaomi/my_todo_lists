@@ -5,7 +5,7 @@ Login
 @endsection
 
 @section('content')
-<div class="container-sm w-25 p-3">
+<div class="container-sm col-md-5 col-lg-4 p-3">
 	  <form method="post" action="{{route('login.postLogin')}}">
     <div class="mb-3">
       @if(!empty($login_result))
@@ -35,7 +35,7 @@ Login
         <input type="checkbox" name="remember" value="remember-me"> Remember me
     </label>
     </div>
-    <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Log in</button>
+    <button class="btn btn-primary mb-3 mx-auto d-block" type="submit">Log in</button>
     <a class="text-center d-block mb-1" href="{{route('register.getRegister')}}">Create your account</a>
     <a class="text-center d-block mb-1" href="{{route('password_reset.email.form')}}">Forgot your password?</a>
   </form>

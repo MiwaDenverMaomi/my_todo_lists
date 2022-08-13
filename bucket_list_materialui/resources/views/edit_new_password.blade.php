@@ -5,10 +5,10 @@ Edit New Password
 @endsection
 
 @section('content')
-<div class="container-sm w-25 p-3">
+<div class="container-sm col-sm-6 col-md-4 col-lg-3 p-3 mb-5">
 	  <form method="post" action="{{route('password_reset.update')}}">
       @csrf
-    <div class="mb-3">
+    <div class="mb-5">
       @error('token')
         <div class="text-danger mb-0">
            {{$message}}
@@ -34,7 +34,7 @@ Edit New Password
       <label for="password_confirmation">Re-type your password</label>
     </div>
     </div>
-    <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Submit</button>
+    <button class="btn btn-primary mx-auto d-block" type="submit">Submit</button>
   </form>
 </div>
 @endsection

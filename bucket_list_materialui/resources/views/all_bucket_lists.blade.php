@@ -21,7 +21,7 @@
 		<div class="row g-4 row-cols-1 row-cols-lg-3">
 		@if(!empty($bucket_lists))
 			@foreach($bucket_lists as $list)
-			<div class="card pt-3 pb-3 g-col-4">
+			<div class="card pt-3 pb-3  ps-4 pe-4 g-col-4">
 	 <div class="mb-3">
     <img src="{{!empty($list['profile']['photo'])?asset($list['profile']['photo']):asset('img/no_image.jpg')}}" alt="{{!empty($list['name'])?$list['name']:'No name'}}" width="32" height="32" class="rounded-circle flex-shrink-0">
     <div class="d-flex gap-2 w-100 justify-content-between">

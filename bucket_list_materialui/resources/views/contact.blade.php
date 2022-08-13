@@ -5,7 +5,7 @@ Contact
 @endsection
 
 @section('content')
-<div class="container-sm w-25 p-3">
+<div class="container-sm col-md-5 col-lg-4 p-3">
 	  <form method="post" action="{{route('general.postContact')}}">
     <div class="mb-3">
       <div class="text-center text-danger mb-0">
@@ -48,7 +48,7 @@ Contact
       <textarea class="form-control" id="comment" name="comment" rows="3">{{old('comment')}}</textarea>
     </div>
     </div>
-    <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Submit</button>
+    <button class="btn btn-primary mb-3 mx-auto d-block" type="submit">Submit</button>
   </form>
 </div>
 @endsection

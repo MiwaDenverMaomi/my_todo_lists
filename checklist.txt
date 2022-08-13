@@ -110,22 +110,22 @@ editnewpassword
 
 
 ★デザイン
-All todo
+All todo->OK
 
 Register
-・Login ->OK
-・Logout ->OK
+・Login->OK 
+・Logout 
 ・Todos
-update_is_done ->OK
-update-title ->OK
-delete ->OK
-create ->OK
+update_is_done
+update-title
+delete 
+create 
 
 Profile
-・photo ->OK
-・comment_1->OK
-・comment_2->OK
-・comment_3->OK
+・photo 
+・comment_1
+・comment_2
+・comment_3
 
 About ->OK 
 Help->OK	

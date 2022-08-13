@@ -5,7 +5,7 @@ Password Reset
 @endsection
 
 @section('content')
-<div class="container-sm w-25 p-3">
+<div class="container-sm  col-sm-6 col-md-4 col-lg-3 p-3">
 	  <form method="post" action="{{route('password_reset.email.send')}}">
       @if(session('flash_message'))
       <div class="text-danger mb-3">
@@ -22,7 +22,7 @@ Password Reset
       <input type="email" class="form-control" name="email" id="email" placeholder="email@example.com"  value="{{ old('email') }}">
       <label for="email">Email address</label>
     </div>
-    <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Send</button>
+    <button class="btn btn-primary mb-3 mx-auto d-block" type="submit">Send</button>
   </form>
 </div>
 @endsection

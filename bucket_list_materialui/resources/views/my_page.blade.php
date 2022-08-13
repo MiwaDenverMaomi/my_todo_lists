@@ -33,7 +33,7 @@
 							<form id="todo_form" method="post" action="{{route('bucket-lists.update-is-done',$item['id'])}}" class="mb-1">
 								@csrf
 								@method('patch')
-									<input id="check_todo_id" class="form-check-input flex-shrink-0" name="bucket_list" type="checkbox" value="" style="font-size: 1.375em;" onclick="onHandleIsDone({{$item['id']}})" {{$item['is_done']===true?'checked':''}}>
+									<input id="check_todo_id" class="form-check-input" name="bucket_list" type="checkbox" value="" style="font-size: 1.375em;" onclick="onHandleIsDone({{$item['id']}})" {{$item['is_done']===true?'checked':''}}>
 							</form>
 							<span class="pt-1 form-checked-content">
 							<form id="todo_title_form" method="post" action="{{route('bucket-lists.update-title',['bucket_list'=>$item['id']])}}" onsubmit="onSubmit()">
