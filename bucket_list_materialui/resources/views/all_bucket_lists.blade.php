@@ -1,6 +1,6 @@
 @extends('layouts.common')
 @section('content')
-	<div class="container px-4 " id="featured-3">
+	<div class="container px-4 mb-5" id="featured-3">
 		<div class="text-center">
 			@if(!empty($keyword))
 			 Seach results for "<strong>{{$keyword}}</strong>"

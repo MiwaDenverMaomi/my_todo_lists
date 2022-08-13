@@ -188,6 +188,10 @@ body {
      object-fit: cover;
 }
 
+.border-pic {
+  border: 1px solid lightgrey;
+}
+
 .list-content {
   position: relateve;
   height: auto;
