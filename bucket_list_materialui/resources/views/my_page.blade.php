@@ -30,7 +30,7 @@
 					@if(!empty($user_data['bucket_lists']))
 						@foreach($user_data['bucket_lists'] as $item)
 						 <div class="border-bottom mb-3">
-							<form id="todo_form" method="post" action="{{route('bucket-lists.update-is-done',$item['id'])}}" style="display:inline;">
+							<form id="todo_form" method="post" action="{{route('bucket-lists.update-is-done',$item['id'])}}" class="mb-1">
 								@csrf
 								@method('patch')
 									<input id="check_todo_id" class="form-check-input flex-shrink-0" name="bucket_list" type="checkbox" value="" style="font-size: 1.375em;" onclick="onHandleIsDone({{$item['id']}})" {{$item['is_done']===true?'checked':''}}>
@@ -43,6 +43,7 @@
 							</form>
 							</span>
 							<div class="text-end mb-3">
+
 						<form method="post" class="" action="{{route('bucket-lists.delete',['bucket_list' => $item['id']])}}">
 							@csrf
 							@method('delete')
