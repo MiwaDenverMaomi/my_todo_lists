@@ -109,12 +109,15 @@ editnewpassword
         ];
 
 
-★デザイン
-All todo->OK
+★デザイン(including responsive)
+・All todo->OK
 
-Register
+・Register->OK
 ・Login->OK 
 ・Logout 
+・passwordReset->OK
+・edit_password_result->OK
+
 ・Todos
 update_is_done
 update-title
@@ -122,22 +125,30 @@ delete
 create 
 
 Profile
-・photo 
-・comment_1
-・comment_2
-・comment_3
+preview->OK
+edit->OK
 
 About ->OK 
 Help->OK	
 Contact->OK	
 Cancel
 
-
+success->OK
 
 ★レスポンシブ
 
-レジスター直後に名前、メアドが表示されない
-アイコンが四角になって表示される
-検索ができない
-flashの位置
+＜バグ＞
+・レジスター直後に名前、メアドが表示されない
+・アイコンが四角になって表示される
+・検索が正常にできない
+・flashの位置調整必要
 
+・return redirect()->route('password_reset.email.form')->with(['edit_password_result',$e->getMessage()]);でメッセージ表示されない
+・フラッシュメッセージがfavorite->profileのときに表示される
+・like->cancel->top->list_user->自分のlikeが消えてない
+・favorite->cancel->top->list_user->自分のfavoriteが消えていない。クリックすると、undefinedと表示される。
+
+・ログイン->top->favorite/likeを色付きで表示し、クリックできるようにしてほしい
+・guest->favorite/like->グレーで表示でいいかも
+
+footer表示されない

@@ -22,7 +22,7 @@ export const onStartEditMode=(todo_id:number,prev_title:string,is_done:any)=>{
 
 	is_done==='1'?true:false;
 
-	document.querySelector<any>(`#todo_display_${todo_id}`).outerHTML=`<input id=todo_title_${todo_id} class="" name="title" type="text" onblur="onEndEditMode(${todo_id},'${prev_title}','${is_done}')"></input>`;
+	document.querySelector<any>(`#todo_display_${todo_id}`).outerHTML=`<input id=todo_title_${todo_id} class="todo-item-input" name="title" type="text" onblur="onEndEditMode(${todo_id},'${prev_title}','${is_done}')"></input>`;
 
 	const $todo_title_element=document.querySelector<any>(`#todo_title_${todo_id}`);
 	console.log($todo_title_element);
@@ -215,7 +215,6 @@ export const onToggleLike =async (user: number, is_liked_by_auth: number) => {
 			is_liked_by_auth: is_liked_by_auth === 1 ? true : false
 		})
 	}).then((res: any) => {
-
 		if (!res.ok) {
 			const err = res.json();
 			const $likes_result_element = document.querySelector<any>(`#likes_result_${user}`);

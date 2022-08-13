@@ -39,9 +39,9 @@
 					@endif
 			 </ul>
 			 </div>
-			 <h4 class="text-center fw-normal">About Author</h3>
+			 <h4 class="text-center fw-normal mb-4">About Author</h3>
 			 <div class="mx-auto mb-2">
-				<img src="{{ !empty($user_data['profile']['photo'])?asset($user_data['profile']['photo']):asset('img/no_image.jpg')}}" class="rounded-circle d-block mx-auto img-thumbnail" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
+				<img src="{{ !empty($user_data['profile']['photo'])?asset($user_data['profile']['photo']):asset('img/no_image.jpg')}}" class="rounded-circle mx-auto d-block position-pic border-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
 				</div>
 				<strong class="text-center d-block">{{!empty($user_data['name'])?$user_data['name']:'No name'}}</strong>
 				<p class="mb-3 opacity-75 text-center">{{!empty($user_data['email'])?$user_data['email']:'No email'}}</p>

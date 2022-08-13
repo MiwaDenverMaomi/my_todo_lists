@@ -18,7 +18,7 @@
 			</strong>
 			@endif
 		</div>
-		<div class="row g-4 row-cols-1 row-cols-lg-3">
+		<div class="row g-4  row-cols-md-2 row-cols-lg-3">
 		@if(!empty($bucket_lists))
 			@foreach($bucket_lists as $list)
 			<div class="card pt-3 pb-3  ps-4 pe-4 g-col-4">

@@ -215,6 +215,35 @@ body {
   z-index: 1;
 }
 
+.delete-btn {
+  border-radius: 100vh;
+  background-color: grey;
+  padding: 0 2px;
+  color: #fff;
+  border: none;
+}
+.delete-btn:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.todo-item {
+  max-width: 80%;
+  padding: 2px;
+  overflow-wrap: break-word;
+  margin-bottom: 2px;
+}
+.todo-item.deleted {
+  text-decoration: line-through;
+}
+
+.todo-item-input {
+  max-width: 80%;
+  display: block;
+  overflow-wrap: break-word;
+  margin-bottom: 2px;
+}
+
 /* RESPONSIVE CSS
 -------------------------------------------------- */
 @media (min-width: 40em) {

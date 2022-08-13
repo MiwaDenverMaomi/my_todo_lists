@@ -11,7 +11,7 @@
 				{{$favorites_error}}
 			  @endif
 		</div>
-		<div class="row g-4 row-cols-1 row-cols-lg-3">
+		<div class="row g-4 row-cols-md-2 row-cols-lg-3">
 		@if(!empty($favorites))
 			@foreach($favorites as $list)
 			<div class="card pt-5 pb-3 g-col-4">
@@ -36,17 +36,15 @@
 						</div>
 				</div>
 				<div class="container">
-				<div class="list-group w-auto mb-3">
+				<ul class="list-group w-auto mb-3">
 					@if(!empty($list['user']['bucket_lists']))
 						@foreach($list['user']['bucket_lists'] as $item)
-						 <label class="list-group-item d-flex gap-3">
-							<p @class(['textdecoration-linethrough'=>$item['is_done']])>{{$item['bucket_list_item']}}</p>
-						</label>
+							<li @class(['textdecoration-linethrough'=>$item['is_done']])>{{$item['bucket_list_item']}}</li>
 						@endforeach
 					@else
 						<div class="text-center">No Bucket List</div>
 					@endif
-			 </div>
+       </ul>
 			 </div>
 				<a href="{{route('user.index',['user'=>$list['user']['id']])}}" class="icon-link d-inline-flex align-items-center">
 					See more...

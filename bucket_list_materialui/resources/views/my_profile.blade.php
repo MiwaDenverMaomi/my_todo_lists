@@ -31,7 +31,7 @@
 				@enderror
 				<input type="text" class="form-control" id="name" placeholder="No name" value="{{old('name',!empty($user_data['name'])?$user_data['name']:'No name')}}" name="name">
 				</div>
-				<div class="mb-3">
+				   <div class="mb-3">
 					 <label for="question_1" class="form-label"><strong class="d-block">What is your motto?</strong></label>
 					 @error('question_1')
 					 <div id="question_1_result" class="text-center text-danger">
@@ -62,7 +62,7 @@
 						'No comment.')}}</textarea>
 				 </div>
 				 <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-					<div class="mx-auto">
+					<div class="mx-auto mb-5">
 					 <div class="btn-group me-2" role="group" aria-label="First group">
 							<button class="btn btn-primary mx-auto d-block" type="submit" role="button" aria-disabled="false" >Submit</button>
 					 </div>
@@ -83,13 +83,13 @@
  <div class="row ">
 			<div class="col-lg-4 mx-auto">
 				<div class="mx-auto mb-2">
-				<img src="{{ !empty($user_data['profile']['photo'])?asset($user_data['profile']['photo']):asset('img/no_image.jpg')}}" class="rounded-circle d-block mx-auto img-thumbnail" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
+				<img src="{{ !empty($user_data['profile']['photo'])?asset($user_data['profile']['photo']):asset('img/no_image.jpg')}}" class="rounded-circle mx-auto d-block position-pic  border-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
 				</div>
-				<h3 class="fw-normal text-center">{{!empty($user_data['name'])?$user_data['name']:'No name'}}</h3>
-				<div class="text-center">
-
-					<i class="{{$user_data['is_liked_by_auth']===true?'fa-solid fa-heart active icon-pink':'fa-solid fa-heart icon-grey'}}"></i><strong>{{$user_data['countLikes']}}</strong>
+				<h3 class="fw-normal text-center mb-4">{{!empty($user_data['name'])?$user_data['name']:'No name'}}</h3>
+        <div class="text-center mb-3">
+					<i id="like-id_{{$user_data['id']}}" class="{{$user_data['is_liked_by_auth']===true?'fa-solid fa-heart icon active':'fa-solid fa-heart icon'}}" onclick="onToggleLike({{$user_data['id']}},{{$user_data['is_liked_by_auth']}})"></i><strong id="count_likes_{{$user_data['id']}}">{{$user_data['countLikes']}}</strong>
 				</div>
+				<div class="mb-4">
 					 <strong class="text-center  d-block">What is your motto?</strong>
 						<p class="text-center">{{!empty($user_data['profile']['question_1'])?
 							$user_data['profile']['question_1']:
@@ -102,9 +102,10 @@
 						<p class="text-center">{{!empty($user_data['profile']['question_3'])?
 							$user_data['profile']['question_3']:
 						'No comment.'}}</p>
-						<div class="mb-3">
-							<a class="btn btn-primary mx-auto d-block" href="{{route('user.editProfileMode',['user'=>$user_data['id'],'edit_mode'=>true])}}" role="button">Edit Profile</a>
-						</div>
+					</div>
+					<div class="mb-3  text-center">
+						<a class="btn btn-primary mb-3" href="{{route('user.editProfileMode',['user'=>$user_data['id'],'edit_mode'=>true])}}" role="button">Edit Profile</a>
+					</div>
 			 </div>
 		 @else
 		No user data

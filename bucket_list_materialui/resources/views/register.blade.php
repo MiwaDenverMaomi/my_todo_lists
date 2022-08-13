@@ -5,7 +5,7 @@ Create your account
 @endsection
 
 @section('content')
-<div class="container-sm w-25 p-3">
+<div class="container-sm col-md-5 col-lg-4 p-3">
 	  <form method="post" action="{{route('register.postRegister')}}">
     <div class="mb-3">
     @if(!empty($register_result))
@@ -37,7 +37,7 @@ Create your account
       <label for="floatingPassword">Re-type your password</label>
     </div>
     </div>
-    <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Create account</button>
+    <button class="btn btn-primary mb-3 mx-auto d-block" type="submit">Create account</button>
   </form>
 </div>
 @endsection

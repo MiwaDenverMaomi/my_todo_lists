@@ -6,6 +6,11 @@ Password Reset
 
 @section('content')
 <div class="container-sm  col-sm-6 col-md-4 col-lg-3 p-3">
+  @if(!empty($edit_password_result))
+    <div class="text-danger mb-3">
+       {{$edit_password_result}}}
+    </div>
+  @endif
 	  <form method="post" action="{{route('password_reset.email.send')}}">
       @if(session('flash_message'))
       <div class="text-danger mb-3">

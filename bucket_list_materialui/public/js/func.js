@@ -2168,7 +2168,7 @@ var onHandleIsDone = function onHandleIsDone($todo_id, route) {
 var onStartEditMode = function onStartEditMode(todo_id, prev_title, is_done) {
   console.log('onStartEditMode');
   is_done === '1' ? true : false;
-  document.querySelector("#todo_display_".concat(todo_id)).outerHTML = "<input id=todo_title_".concat(todo_id, " class=\"\" name=\"title\" type=\"text\" onblur=\"onEndEditMode(").concat(todo_id, ",'").concat(prev_title, "','").concat(is_done, "')\"></input>");
+  document.querySelector("#todo_display_".concat(todo_id)).outerHTML = "<input id=todo_title_".concat(todo_id, " class=\"todo-item-input\" name=\"title\" type=\"text\" onblur=\"onEndEditMode(").concat(todo_id, ",'").concat(prev_title, "','").concat(is_done, "')\"></input>");
   var $todo_title_element = document.querySelector("#todo_title_".concat(todo_id));
   console.log($todo_title_element);
   onChangeTitle(todo_id, prev_title, is_done);

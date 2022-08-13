@@ -8,7 +8,7 @@ Edit New Password
 <div class="container-sm col-sm-6 col-md-4 col-lg-3 p-3 mb-5">
 	  <form method="post" action="{{route('password_reset.update')}}">
       @csrf
-    <div class="mb-5">
+    <div class="mb-3">
       @error('token')
         <div class="text-danger mb-0">
            {{$message}}

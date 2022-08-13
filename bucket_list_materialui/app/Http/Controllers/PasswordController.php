@@ -47,15 +47,13 @@ class PasswordController extends Controller
 
 			Mail::to($sendEmailRequest->input('email'))->send(new UserResetPasswordMail($user,$userToken));
 			Log::info(__METHOD__.'...ID:'.$user->id.'email was sent to reset password.');
+			session()->put(self::MAIL_SENT_SESSION_KEY,'user_reset_password_send_email');
+		  return redirect()->route('password_reset.email.send_complete');
 		}catch(Exception $e){
 			Log::error(__METHOD__.'...failed to send email to reset password.');
 			\Log::debug($e->getMessage());
-
 			return back()->with(['flash_message'=>'Failed to send email.Please try again later.']);
 		}
-		session()->put(self::MAIL_SENT_SESSION_KEY,'user_reset_password_send_email');
-
-		return redirect()->route('password_reset.email.send_complete');
 	}
 
 	/**
@@ -83,13 +81,13 @@ class PasswordController extends Controller
 		$resetToken=$request->reset_token;
 		try{
 			$userToken=$this->userTokenRepository->getUserTokenFromToken($resetToken);
+			\Log::debug(__METHOD__.':user_token='.$userToken);
+		   return view('edit_new_password')
+	  	->with('userToken',$userToken);
 		}catch(Exception $e){
 			Log::error(__METHOD__.' Failed to get user token. Error message= '.$e->getMessage());
-			return redirect()->route('password_reset.email.form')->with('edit_password_error',__('Access the link attached on your email.'));
+			return redirect()->route('password_reset.email.form')->with(['edit_password_result'=>'The link has expired. Send your email again to reset your password.']);
 		}
-		\Log::info('editPassword_ok');
-		return view('edit_new_password')
-		->with('userToken',$userToken);
 	}
 
 	/**
