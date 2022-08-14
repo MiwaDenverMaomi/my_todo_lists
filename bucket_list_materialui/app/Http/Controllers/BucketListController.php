@@ -244,6 +244,7 @@ public function searchKeyword(Request $request){
 
 		for($i=0;$i<count($bucket_lists);$i++){
 			$bucket_lists[$i]['countLikes']=count($bucket_lists[$i]['likes']);
+			$bucket_lists[$i]['is_liked_by_auth']=User::find($bucket_lists[$i]['id'])->is_liked_by_auth($bucket_lists[$i]['id']);
 		}
 
 		foreach($bucket_lists as $list){

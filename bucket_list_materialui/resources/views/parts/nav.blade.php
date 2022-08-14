@@ -62,7 +62,7 @@
           </ul>
         </li>
 				@endauth
-      <form class="d-flex ms-3" role="search">
+      <form class="d-flex ms-3" role="search" method="get" action="{{route('bucket-lists.searchKeyword')}}">
          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword" value="{{!empty($keyword)?$keyword:''}}">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>

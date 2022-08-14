@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\Bucket_list::truncate();
         // \App\Models\Favorite::truncate();
         // \App\Models\User::truncate();
-        // $this->call(LikeSeeder::class);
+        $this->call(LikeSeeder::class);
         $this->call(FavoriteSeeder::class);
 
 

@@ -1,20 +1,32 @@
 /* GLOBAL STYLES
 -------------------------------------------------- */
 /* Padding below the footer and lighter body text */
-
+html{
+	height: 100%;
+}
 body {
 	/* padding-top: 3rem; */
 	margin:0;
 	padding:0;
 	color: #5a5a5a;
+	height: 100%;
 }
 
 /*footer*/
 .footer-fixed{
-	min-height: 100vh;
 		position: relative;
-		padding-bottom: 70px;
-		box-sizing: border-box;
+		height: 100%;/*IE6対策*/
+		min-height: 100%;
+}
+.main{
+			padding-bottom: 70px;
+}
+
+.footer{
+	height: 70px;
+	position: absolute;
+	bottom: 0;
+	width:100%;
 }
 
 /* nav.blade.php */

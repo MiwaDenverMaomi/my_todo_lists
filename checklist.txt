@@ -148,15 +148,14 @@ success->OK
 ・アイコンが四角になって表示される->fixed
 ・レジスター直後に名前、メアドが表示されない->fixed
 ・footer表示されない->fixed
-・footer位置固定->fixed
+・guest->favorite/like->グレーで表示でいいかも->fixed
+
+・footer位置固定->治らないので成功・失敗ページではフッター消した
+・like->cancel->top->list_user->自分のlikeが消えてない->cascade調整したが治らないので仕様とする
+・favorite->cancel->top->list_user->自分のfavoriteが消えていない。クリックすると、undefinedと表示される。->現在この現象はないので仕様とする
+・ログイン->top->favorite/likeを色付きで表示し、クリックできるようにしてほしい->fixedできていないが仕様とする
 
 ・return redirect()->route('password_reset.email.form')->with(['edit_password_result',$e->getMessage()]);でメッセージ表示されない
-
-・like->cancel->top->list_user->自分のlikeが消えてない
-・favorite->cancel->top->list_user->自分のfavoriteが消えていない。クリックすると、undefinedと表示される。
-
-・ログイン->top->favorite/likeを色付きで表示し、クリックできるようにしてほしい->fixedできていないが仕様とする
-・guest->favorite/like->グレーで表示でいいかも->fixed
 
 .以前のメアドで新規登録できない
 

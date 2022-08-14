@@ -37,7 +37,7 @@
 					@php
 					 $heart_class=$list['is_liked_by_auth']===true?'bi bi-heart-fill icon active':'bi bi-heart-fill icon';
 			   	@endphp
-					<i id="like-id_{{$list['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$list['id']}},{{$list['is_liked_by_auth']}})"></i>
+					<i id="like-id_{{$list['id']}}" class="{{$heart_class}}"></i>
 					@endauth
 					@guest
 					<i class="bi bi-heart-fill icon-grey"></i>
