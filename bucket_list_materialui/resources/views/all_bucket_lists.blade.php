@@ -33,7 +33,16 @@
     </div>
    </div>
 				<div class="text-center mb-3">
-					<i class="bi bi-heart-fill active icon-pink"></i><strong>{{$list['countLikes']}}</strong>
+					@auth
+					@php
+					 $heart_class=$list['is_liked_by_auth']===true?'bi bi-heart-fill icon active':'bi bi-heart-fill icon';
+			   	@endphp
+					<i id="like-id_{{$list['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$list['id']}},{{$list['is_liked_by_auth']}})"></i>
+					@endauth
+					@guest
+					<i class="bi bi-heart-fill icon-grey"></i>
+					@endguest
+				<strong>{{$list['countLikes']}}</strong>
 				</div>
 				<div class="container">
 				<ul class="w-70 mb-3 list-content">

@@ -25,6 +25,7 @@ class BucketListController extends Controller
 		\Log::debug($bucket_lists);
 		for($i=0;$i<count($bucket_lists);$i++){
 			$bucket_lists[$i]['countLikes']=count($bucket_lists[$i]['likes']);
+			$bucket_lists[$i]['is_liked_by_auth']=User::find($bucket_lists[$i]['id'])->is_liked_by_auth($bucket_lists[$i]['id']);
 			$bucket_lists[$i]['email']= substr($bucket_lists[$i]['email'],0,5).'***';
 		}
 		$arr_bucket_lists_not_empty=[];
