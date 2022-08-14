@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 	@include('parts.head')
 <body>
+	<div class="footerFixed">
 	@include('parts.nav')
 	@include('parts.user')
 	<main class="w-70 p-3 mb-5">
@@ -11,5 +12,6 @@
 	</main>
 	@include('parts.footer')
 	@include('parts.scripts')
+	</div>
 </body>
 </html>

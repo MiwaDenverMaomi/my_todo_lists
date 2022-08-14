@@ -33,7 +33,7 @@
     </div>
    </div>
 				<div class="text-center mb-3">
-					<i class="fa-solid fa-heart active icon-pink"></i><strong>{{$list['countLikes']}}</strong>
+					<i class="bi bi-heart-fill active icon-pink"></i><strong>{{$list['countLikes']}}</strong>
 				</div>
 				<div class="container">
 				<ul class="w-70 mb-3 list-content">

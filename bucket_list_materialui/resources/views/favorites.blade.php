@@ -23,11 +23,11 @@
 				<strong class="text-center d-block mb-3">{{$list['user']['name']}}</strong>
 				<div class="text-center mb-3">
 					@php
-					 $heart_class=$list['is_liked_by_auth']===true?'fa-solid fa-heart icon active':'fa-solid fa-heart icon';
+					 $heart_class=$list['is_liked_by_auth']===true?'bi bi-heart-fill icon active':'bi bi-heart-fill icon';
 					@endphp
 				  	<i id="like-id_{{$list['user']['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$list['user']['id']}},{{$list['is_liked_by_auth']}})"></i><strong id="count_likes_{{$list['user']['id']}}">{{count($list['user']['likes'])}}</strong>
 					@php
-					 $star_class=$list['is_favorite_by_auth']===true?'fa-solid fa-star favorite-icon active':'fa-solid fa-star favorite-icon';
+					 $star_class=$list['is_favorite_by_auth']===true?'bi bi-star-fill favorite-icon active':'bi bi-star-fill favorite-icon';
 			  	@endphp
           <i id="favorite-id_{{$list['user']['id']}}" class="{{$star_class}}" onclick="onToggleFavorite({{$list['user']['id']}},{{$list['is_favorite_by_auth']}})"></i>
 						<div class="text-center text-danger" id="likes_result_{{$list['user']['id']}}">

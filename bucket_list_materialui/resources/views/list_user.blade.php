@@ -10,13 +10,13 @@
  <div class="row mx-auto">
 			<div class="col-sm-4 mx-auto">
 				@php
-					 $heart_class=$user_data['is_liked_by_auth']===true?'fa-solid fa-heart icon active':'fa-solid fa-heart icon';
+					 $heart_class=$user_data['is_liked_by_auth']===true?'bi bi-heart-fill icon active':'bi bi-heart-fill icon';
 				@endphp
 				<div class="text-center">
 					<div class="mb-3">
 					<i id="like-id_{{$user_data['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$user_data['id']}},{{$user_data['is_liked_by_auth']}})"></i><strong style="font-size:1.5rem;" id="count_likes_{{$user_data['id']}}">{{$user_data['countLikes']}}</strong>
 					@php
-					 $star_class=$user_data['is_favorite_by_auth']===true?'fa-solid fa-star favorite-icon active':'fa-solid fa-star favorite-icon';
+					 $star_class=$user_data['is_favorite_by_auth']===true?'bi bi-star-fill favorite-icon active':'bi bi-star-fill favorite-icon';
 	 				@endphp
 					<i id="favorite-id_{{$user_data['id']}}" class="{{$star_class}}" onclick="onToggleFavorite({{$user_data['id']}},{{$user_data['is_favorite_by_auth']}})"></i>
 					</div>

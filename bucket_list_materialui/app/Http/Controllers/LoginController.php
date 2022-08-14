@@ -81,7 +81,7 @@ class LoginController extends Controller
 				\Log::info('Login ok');
 				\Log::debug(Auth::id());
 				\Log::debug(Auth::user());
-				session()->flash('status','Logged in');
+				// session()->flash('status','You logged in');
 				return redirect()->route('bucket-lists.index');
 				}else{
 
@@ -97,7 +97,7 @@ class LoginController extends Controller
 
 	public function logout(Request $request){
 		Auth::logout();
-		session()->flash('status','Logged out.');
-		return redirect()->route('bucket-lists.index');
+		// session()->flash('status','You logged out.');
+		return redirect()->route('bucket-lists.index')->with('status','You logged out.');
 	}
 }

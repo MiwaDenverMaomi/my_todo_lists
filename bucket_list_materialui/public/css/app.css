@@ -8,6 +8,14 @@ body {
   color: #5a5a5a;
 }
 
+/*footer*/
+.footer-fixed {
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 70px;
+  box-sizing: border-box;
+}
+
 /* nav.blade.php */
 .navbar {
   margin-bottom: 20px;

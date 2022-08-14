@@ -87,7 +87,7 @@
 				</div>
 				<h3 class="fw-normal text-center mb-4">{{!empty($user_data['name'])?$user_data['name']:'No name'}}</h3>
         <div class="text-center mb-3">
-					<i id="like-id_{{$user_data['id']}}" class="{{$user_data['is_liked_by_auth']===true?'fa-solid fa-heart icon active':'fa-solid fa-heart icon'}}" onclick="onToggleLike({{$user_data['id']}},{{$user_data['is_liked_by_auth']}})"></i><strong id="count_likes_{{$user_data['id']}}">{{$user_data['countLikes']}}</strong>
+					<i id="like-id_{{$user_data['id']}}" class="{{$user_data['is_liked_by_auth']===true?'bi bi-heart-fill icon active':'bi bi-heart-fill icon'}}" onclick="onToggleLike({{$user_data['id']}},{{$user_data['is_liked_by_auth']}})"></i><strong id="count_likes_{{$user_data['id']}}">{{$user_data['countLikes']}}</strong>
 				</div>
 				<div class="mb-4">
 					 <strong class="text-center  d-block">What is your motto?</strong>
