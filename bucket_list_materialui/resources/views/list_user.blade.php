@@ -24,7 +24,7 @@
 						</div>
 						<div class="text-center text-danger" id="favorites_result_{{$user_data['id']}}">
 						</div>
-						<div><strong>{{!empty($user_data['bucket_lists'])?count($user_data['bucket_lists']):0}}</strong> todos</div>
+						<div><strong>{{!empty($user_data['bucket_lists'])?count($user_data['bucket_lists']):0}}</strong> todo(s)</div>
 				</div>
 				<div class="mt-3 mb-5">
 				<ul class="list-group">

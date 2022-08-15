@@ -23,7 +23,7 @@
 			@foreach($bucket_lists as $list)
 			<div class="card pt-3 pb-3  ps-4 pe-4 g-col-4">
 	 <div class="mb-3">
-    <img src="{{!empty($list['profile']['photo'])?asset($list['profile']['photo']):asset('img/no_image.jpg')}}" alt="{{!empty($list['name'])?$list['name']:'No name'}}" width="32" height="32" class="rounded-circle flex-shrink-0">
+    <img src="{{!empty($list['profile']['photo'])?asset($list['profile']['photo']):asset('img/no_image.jpg')}}" alt="{{!empty($list['name'])?$list['name']:'No name'}}" width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
     <div class="d-flex gap-2 w-100 justify-content-between">
       <div>
         <h6 class="mb-0">{{!empty($list['name'])?$list['name']:'No name'}}</h6>
@@ -44,6 +44,7 @@
 					@endguest
 				<strong>{{$list['countLikes']}}</strong>
 				</div>
+				<div class="text-center"><strong>{{!empty($list['bucket_lists'])?count($list['bucket_lists']):0}}</strong> todo(s)</div>
 				<div class="container">
 				<ul class="w-70 mb-3 list-content">
 					@if(!empty($list['bucket_lists']))

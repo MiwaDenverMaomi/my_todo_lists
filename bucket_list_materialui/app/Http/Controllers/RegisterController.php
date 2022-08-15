@@ -35,6 +35,7 @@ class RegisterController extends Controller
         'password.confirmed'=>'Passwords are not matched.'
       ]);
       if($validator->fails()){
+        \Log::debug(__METHOD__.':validation failed');
         return back()
         ->withErrors($validator)
         ->withInput();
@@ -46,6 +47,7 @@ class RegisterController extends Controller
         ]);
 
         if(!empty($user)){
+          \Log::debug(__METHOD__.'user:'.$user);
           Auth::attempt(['email'=>$request->input('email'),'password'=>$request->input('password')]);
           return view('result')
           ->with([

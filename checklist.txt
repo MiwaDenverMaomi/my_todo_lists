@@ -157,7 +157,7 @@ success->OK
 
 ・return redirect()->route('password_reset.email.form')->with(['edit_password_result',$e->getMessage()]);でメッセージ表示されない
 
-.以前のメアドで新規登録できない
+.以前のメアドで新規登録できない->fixed
 
 
 
