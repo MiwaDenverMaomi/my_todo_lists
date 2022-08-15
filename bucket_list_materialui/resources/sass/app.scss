@@ -246,9 +246,9 @@ body {
 }
 
 .delete-btn{
-	border-radius:100vh;
+	border-radius:5px;
 	background-color:grey;
-	padding:0 2px;
+	padding:2px;
 	color:#fff;
 	border:none;
 	&:hover{
@@ -257,11 +257,19 @@ body {
 	}
 }
 
+//checkbox
+.hover{
+	&:hover{
+		cursor:pointer;
+		opacity:.8;
+	}
+}
+
 .todo-item{
-	max-width: 80%;
 	padding: 2px;
 	overflow-wrap: break-word;
 	margin-bottom: 2px;
+
 	&.deleted{
 		text-decoration:line-through;
 	}

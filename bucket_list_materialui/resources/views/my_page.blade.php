@@ -35,15 +35,15 @@
 							<form id="todo_form" method="post" action="{{route('bucket-lists.update-is-done',$item['id'])}}" class="d-inline mb-1">
 								@csrf
 								@method('patch')
-									<input id="check_todo_id" class="form-check-input" name="bucket_list" type="checkbox" value="" style="font-size: 1.375em;" onclick="onHandleIsDone({{$item['id']}})" {{$item['is_done']===true?'checked':''}}>
+									<input id="check_todo_id" class="form-check-input hover" name="bucket_list" type="checkbox" value="" style="font-size: 1.375em;" onclick="onHandleIsDone({{$item['id']}})" {{$item['is_done']===true?'checked':''}}>
 							</form>
 							</div>
-							<div class="">
+							<div class="w-75">
 							<span class="pt-1 form-checked-content">
 							<form id="todo_title_form" method="post" action="{{route('bucket-lists.update-title',['bucket_list'=>$item['id']])}}" onsubmit="onSubmit()">
 								@csrf
 								@method('patch')
-							<p id="{{'todo_display_'.$item['id']}}" class="{{$item['is_done']===true?'todo-item':'todo-item deleted'}}" onclick="onStartEditMode({{$item['id']}},'{{$item['bucket_list_item']}}','{{$item['is_done']}}')">{{$item['bucket_list_item']}}</p>
+							<p id="{{'todo_display_'.$item['id']}}" class="{{$item['is_done']===true?'todo-item deleted':'todo-item'}}" onclick="onStartEditMode({{$item['id']}},'{{$item['bucket_list_item']}}','{{$item['is_done']}}')">{{$item['bucket_list_item']}}</p>
 							</form>
 							</span>
 							</div>
@@ -53,7 +53,7 @@
 						<form method="post" class="" action="{{route('bucket-lists.delete',['bucket_list' => $item['id']])}}">
 							@csrf
 							@method('delete')
-							<button class="delete-btn" type="submit">Delete</button>
+							<button class="delete-btn d-inline-block" type="submit">Delete</button>
 						</form>
 						</div>
 						<!-- </label> -->
