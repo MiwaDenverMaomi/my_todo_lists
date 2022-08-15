@@ -166,6 +166,14 @@ main {
 
 .以前のメアドで新規登録できない->fixed
 
+コメントつける
+General Controller ->done
+ContactController ->done
+LoginController ->done	
+RegisterController ->done
+UserController ->done
+Bcket_lists_controller->done
+
 
 
 

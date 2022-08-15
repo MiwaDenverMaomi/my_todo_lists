@@ -14,7 +14,11 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserController extends Controller
 {
-
+/**
+* Gets page of each user's todo list and profile.
+* @param App\Models\User $user
+* @return Illuminate\View\View
+*/
 	public function index(User $user){
 		\Log::info('user/index');
 		$user_data=User::with(['profile','likes','bucket_lists'])->select('id','name','email')->find($user->id)->toArray();
@@ -29,6 +33,12 @@ class UserController extends Controller
 		 return  view('list_user')->with(['user_data'=>$user_data]);
 	}
 
+/**
+* Switches to the edit profile mode by returning boolean in profile page.
+* @param App\Models\User $user
+* @param Illuminate\Http\Request $request
+* @return Illuminate\Http\RedirectResponse
+*/
 	public function editProfileMode(User $user,Request $request){
 		\Log::info('editProfileMode');
 		$profile=Profile::where('user_id','=',$user->id)->first();
@@ -41,9 +51,7 @@ class UserController extends Controller
 			 \Log::info('user->id !==Auth::id()');
 			 abort(403);
 		 }
-
 		}
-
 
 		\Log::debug($request->edit_mode);
 		$edit_mode=((bool) $request->edit_mode)===true?true:false;
@@ -53,6 +61,12 @@ class UserController extends Controller
 		'edit_mode'=>$edit_mode]);
 	}
 
+/**
+* Show user's profile before edit.
+* @param App\Models\User $user
+* @param Illuminate\Http\Request $request
+* @return Illuminate\View\View
+*/
 	public function showProfile(User $user,Request $request){
 		\Log::info('showProfile');
 		$profile=Profile::where('user_id','=',$user->id)->first();
@@ -81,6 +95,13 @@ class UserController extends Controller
 		'edit_mode'=>$edit_mode]);
 	}
 
+/**
+* Posts edited profile data.
+* @param Illuminate\Http\Request $request
+* @param App\Models\User $user
+* @return Illuminate\View\View
+* @return Illuminate\Http\RedirectResponse
+*/
 	public function editProfile(Request $request,User $user){
 		 \Log::info('user/editProfile');
 		 \Log::debug('user->id:'.$user->id);
@@ -95,7 +116,7 @@ class UserController extends Controller
 			}
 		 }
 
-
+    //Validation messages
 		 $validator=Validator::make($request->all(),[
 		"photo"=>'nullable|image|mimes:jpeg,png,jpg|max:8192|dimensions:max_width=2448',//800万画素 8MB
 		"name"=>"nullable|string|max:255",
@@ -131,8 +152,8 @@ class UserController extends Controller
 		 $question_2=!empty($request->question_2)?$request->question_2:'No comment';
 		 $question_3=!empty($request->question_3)?$request->question_3:'No comment';
 
-
-		 if(!empty($request->file('photo'))){	//if photo was selected
+		 if(!empty($request->file('photo'))){
+			//if photo was selected
 			$dir='user_photo';
 			$file_name=$request->file('photo')->getClientOriginalName();
 		  $request->file('photo')->storeAs('public/img/uploads/'.$dir,$file_name);
@@ -167,6 +188,7 @@ class UserController extends Controller
 			}
 		 }
 
+    //Updates name
 		$result_name=User::find($user->id)->update([
 			'name'=>$name
 		]);
@@ -174,6 +196,7 @@ class UserController extends Controller
 		\Log::debug($result_profile);
 		\Log::debug($result_name);
 
+	  //Saving data is success
 		if(!empty($result_profile)&&$result_name===true){
 			\Log::debug(__METHOD__.':saving data success!');
 		 return redirect()->route('user.showProfile',[
@@ -181,6 +204,7 @@ class UserController extends Controller
 			'edit_mode'=>false]);
 
 		}else{
+		//Fails to save data
 			\Log::debug(__METHOD__.':saveing data failed!');
 			return back()
 			->with([
@@ -190,6 +214,11 @@ class UserController extends Controller
 		}
 	}
 
+/**
+* Updates favorites (delete/cerate records in Favorites table)
+* @param App\Models\User $user ->User's id who got favorite
+* @return \Illuminate\Http\JsonResponse
+*/
 	public function storeFavorite(User $user){
 		\Log::info('user/storeFavorite');
 		$is_favorite_by_auth=$user->is_favorite_by_auth($user->id);
@@ -220,7 +249,11 @@ class UserController extends Controller
 			],201);
 		}
 	}
-
+/**
+* Updates likes (delete/cerate records in Likes table)
+* @param App\Models\User $user ->User's id who got like
+* @return  \Illuminate\Http\JsonResponse
+*/
 	public function storeLike(User $user){
 		\Log::info('user/storeLike');
 		\Log::debug($user->id);
@@ -258,6 +291,12 @@ class UserController extends Controller
 		}
 	}
 
+/**
+* Shows page "Favorite" with user's data who got favorite by the auth user.
+*
+* @return Object
+* @return  Illuminate\View\View
+*/
 	public function getFavorites(){
 		\Log::info('getFavorites');
 		$favorites=Favorite::where('from_user','=',Auth::id())

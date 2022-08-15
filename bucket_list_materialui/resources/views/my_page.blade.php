@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="container-sm  col-md-5 p-3 mb-5">
+	@if(!empty($show_result))
+	  {{$show_result}}
+	@endif
 	@if(!empty($user_data))
  <div class="row mx-auto">
 		<div class="mx-auto w-70">

@@ -114,6 +114,12 @@ class PasswordController extends Controller
 		return redirect()->route('password_reset.edit_complete');
 	}
 
+	/**
+	* Gives the flash message when the email is sent
+	* @return \Illuminate\View\View
+	* @return \Illuminate\Http\RedirectResponse
+	*
+	*/
 	public function editComplete(){
 		if(session()->pull(self::UPDATE_PASSWORD_SESSION_KEY)!=='user_update_password'){
 			return redirect()->route('password_reset.email.form')->with('flash_message','Invalid request.');

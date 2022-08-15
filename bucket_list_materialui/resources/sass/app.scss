@@ -6,7 +6,6 @@ html{
 	height: 100%;
 }
 body {
-	/* padding-top: 3rem; */
 	margin:0;
 	padding:0;
 	color: #5a5a5a;
@@ -37,6 +36,32 @@ body {
 
 .featurette-divider {
 	margin: 5rem 0; /* Space out the Bootstrap <hr> more */
+}
+
+.list-content {
+	position: relateve;
+	height: auto;
+	max-height: 250px;
+	overflow: hidden;
+
+	&::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		display: block;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(to bottom,
+				transparent 0%,
+				#ffffff 100%);
+	}
+}
+
+.see-more {
+	position: relative;
+	z-index: 1;
 }
 
 /* Thin out the marketing headings */
@@ -220,32 +245,6 @@ body {
 	border:1px solid lightgrey;
 }
 
-//all_bucket_list.blade.php
-.list-content{
-	 position:relateve;
-	 height:auto;
-	 max-height:250px;
-	 overflow:hidden;
-	 &::after{
-		content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			z-index: 1;
-			display: block;
-			width: 100%;
-			height: 100%;
-			background: linear-gradient(to bottom,
-						transparent 0%,
-						#ffffff 100%);
-	 }
-}
-
-//all_bucket_lists.blade.php
-.see-more{
-	position:relative;
-	z-index:1;
-}
 
 //my_page.blade.php
 .delete-btn{

@@ -15,16 +15,6 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
 
     use AuthenticatesUsers;
 
@@ -45,19 +35,32 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+		/**
+     * Validation rules
+     */
 		private $RULES=[
 			'email'=>'required|string|email:filter,dns|max:255',
 			'password'=>'required|min:8|max:255'
 		];
 
+
+    /**
+     * Gets page "Login"
+     * @return Illuminate\View\View
+     */
    public function getLogin(){
 		return view('login');
 	}
-
+    /**
+     * Posts the email, apssword to log in.
+		 * @param Illuminate\Http\Request $request
+		 * @return Illuminate\Http\RedirectResponse
+     * @return Illuminate\View\View
+     */
 	public function postLogin(Request $request){
 		\Log::debug($request);
 
-		//validation
+		//validation messages
 		$validator=Validator::make($request->all(),$this->RULES,[
 			'email.required'=>'Input required.',
 			'email.email'=>'Input valid email address.',
@@ -81,10 +84,9 @@ class LoginController extends Controller
 				\Log::info('Login ok');
 				\Log::debug(Auth::id());
 				\Log::debug(Auth::user());
-				// session()->flash('status','You logged in');
 				return redirect()->route('bucket-lists.index');
-				}else{
 
+				}else{
 				throw new \Exception('Failed to Auth::attempt.');
 			}
 
@@ -94,10 +96,13 @@ class LoginController extends Controller
 			}
 		}
 	}
-
+    /**
+     * Log out
+		 * @param \Illuminate\Http\Request $request
+     * @return Illuminate\Http\RedirectResponse
+     */
 	public function logout(Request $request){
 		Auth::logout();
-		// session()->flash('status','You logged out.');
 		return redirect()->route('bucket-lists.index')->with('status','You logged out.');
 	}
 }

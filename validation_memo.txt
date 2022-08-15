@@ -49,6 +49,12 @@
 queryにキーと値を追加したい場合は、
 merge(['key'=>'sss'])を使う。$request->user_id=3とかやってはダメ。何も入らない。
 
+★
+  private $RULES=[
+            'email'=>'required|string|email:filter,dns|max:255|unique:users,email,NULL,id,deleted_at,NULL',//userテーブルでemailのカラムがidカラムがNULLのものを除き、deleted_atがNULLのものが存在するかを確認するという内容になる。
+            'password'=>'required|min:8|max:255|confirmed',
+        ];
+
 ★emailのバリデーション
 https://takuma-it.com/laravel-email-validation/
 https://qiita.com/hotate_chan/items/0cdfb490ee5cc6691c61
