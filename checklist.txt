@@ -138,8 +138,6 @@ success->OK
 ★レスポンシブ
 
 ＜バグ＞
-
-
 ・検索が正常にできない->fixed
 ・レスポンシブでのメニューが開かない->fixed
 
@@ -150,7 +148,16 @@ success->OK
 ・footer表示されない->fixed
 ・guest->favorite/like->グレーで表示でいいかも->fixed
 
-・footer位置固定->治らないので成功・失敗ページではフッター消した
+・footer位置固定->治らないので成功・失敗ページではフッター消した->flexboxで修正できた。
+body {
+  display: flex;
+  flex-flow: column;
+  min-height: 100vh;
+}
+main {
+  flex: 1;
+}
+
 ・like->cancel->top->list_user->自分のlikeが消えてない->cascade調整したが治らないので仕様とする
 ・favorite->cancel->top->list_user->自分のfavoriteが消えていない。クリックすると、undefinedと表示される。->現在この現象はないので仕様とする
 ・ログイン->top->favorite/likeを色付きで表示し、クリックできるようにしてほしい->fixedできていないが仕様とする
