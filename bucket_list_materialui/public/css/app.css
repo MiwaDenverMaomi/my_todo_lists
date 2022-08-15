@@ -29,6 +29,7 @@ body {
   height: 70px;
   position: absolute;
   bottom: 0;
+  width: 100%;
 }
 
 /* nav.blade.php */
@@ -120,6 +121,22 @@ body {
   color: grey;
 }
 
+.profile-dropdown {
+  display: none;
+}
+
+.profile-navbar {
+  display: block;
+}
+
+@media (min-width: 992px) {
+  .profile-dropdown {
+    display: block;
+  }
+  .profile-navbar {
+    display: none;
+  }
+}
 .textdecoration-linethrough {
   text-decoration: line-through;
 }

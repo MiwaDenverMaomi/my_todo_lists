@@ -2,9 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 	@include('parts.head')
 <body>
-	<!-- <div class=""> -->
 	@include('parts.nav')
-	@include('parts.user')
 	<main class="w-70 p-3 mb-5 main">
 		<h1 class="h3 mb-3 fw-normal mb-5 text-center">@yield('title')</h1>
 	 @yield('content')
@@ -15,6 +13,5 @@
 	@endif
 
 	@include('parts.scripts')
-<!-- </div> -->
 </body>
 </html>

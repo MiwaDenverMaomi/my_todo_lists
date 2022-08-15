@@ -40,6 +40,24 @@
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword" value="{{!empty($keyword)?$keyword:''}}">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
+          <div class="text-end ms-3 pe-3 d-inline-block">
+	@if(session('is_userinfo_hide')!==true)
+		@php
+		if(Auth::check()){
+     $photo=!empty(Auth::user()->profile->photo)?Auth::user()->profile->photo:asset('img/no_image.jpg');
+		 $name=!empty(Auth::user()->name)?Auth::user()->name:'No name';
+		}else{
+			$photo=asset('img/no_image.jpg');
+			 $name='No name';
+		}
+		@endphp
+		<div class="text-center">
+		<img src="{{$photo}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+		</div>
+	@endif
+
+</div>
+
         </div>
       </div>
     </div>
