@@ -34,6 +34,7 @@ class BucketListController extends Controller
 		for($i=0;$i<count($bucket_lists);$i++){
 			$bucket_lists[$i]['countLikes']=count($bucket_lists[$i]['likes']);
 			$bucket_lists[$i]['is_liked_by_auth']=User::find($bucket_lists[$i]['id'])->is_liked_by_auth($bucket_lists[$i]['id']);
+			$bucket_lists[$i]['is_favorite_by_auth']=User::find($bucket_lists[$i]['id'])->is_favorite_by_auth($bucket_lists[$i]['id']);
 			$bucket_lists[$i]['email']= substr($bucket_lists[$i]['email'],0,5).'***';
 		}
 
@@ -305,6 +306,7 @@ public function searchKeyword(Request $request){
 		for($i=0;$i<count($bucket_lists);$i++){
 			$bucket_lists[$i]['countLikes']=count($bucket_lists[$i]['likes']);
 			$bucket_lists[$i]['is_liked_by_auth']=User::find($bucket_lists[$i]['id'])->is_liked_by_auth($bucket_lists[$i]['id']);
+			$bucket_lists[$i]['is_favorite_by_auth']=User::find($bucket_lists[$i]['id'])->is_favorite_by_auth($bucket_lists[$i]['id']);
 		}
     //Sort the users into 2 groups. GroupA:users with no todo item,
 		//groupB: users with more than 1 item.

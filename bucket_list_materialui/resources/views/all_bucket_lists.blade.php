@@ -33,28 +33,30 @@
     </div>
    </div>
 				<div class="text-center mb-3">
-					@auth
-					@php
+					 @php
 					 $heart_class=$list['is_liked_by_auth']===true?'bi bi-heart-fill icon active':'bi bi-heart-fill icon';
-			   	@endphp
-					<i id="like-id_{{$list['id']}}" class="{{$heart_class}}"></i>
-					@endauth
-					@guest
-					<i class="bi bi-heart-fill icon-grey"></i>
-					@endguest
-				<strong>{{$list['countLikes']}}</strong>
+					@endphp
+				  	<i id="like-id_{{$list['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$list['id']}},{{$list['is_liked_by_auth']}})"></i><strong id="count_likes_{{$list['id']}}">{{count($list['likes'])}}</strong>
+					@php
+					 $star_class=$list['is_favorite_by_auth']===true?'bi bi-star-fill favorite-icon active':'bi bi-star-fill favorite-icon';
+			  	@endphp
+          <i id="favorite-id_{{$list['id']}}" class="{{$star_class}}" onclick="onToggleFavorite({{$list['id']}},{{$list['is_favorite_by_auth']}})"></i>
+						<div class="text-center text-danger" id="likes_result_{{$list['id']}}">
+						</div>
+            <div class="text-center text-danger" id="favorites_result_{{$list['id']}}">
+						</div>
 				</div>
 				<div class="text-center"><strong>{{!empty($list['bucket_lists'])?count($list['bucket_lists']):0}}</strong> todo(s)</div>
 				<div class="container">
+				@if(!empty($list['bucket_lists']))
 				<ul class="w-70 mb-3 list-content">
-					@if(!empty($list['bucket_lists']))
 						@foreach($list['bucket_lists'] as $item)
 							<li @class(['textdecoration-linethrough'=>$item['is_done']])>{{$item['bucket_list_item']}}</li>
 						@endforeach
-					@else
+       </ul>
+			    @else
 						<div class="text-center">No Bucket List</div>
 					@endif
-       </ul>
 			 </div>
 				<a href="{{route('user.index',['user'=>$list['id']])}}" class="icon-link d-inline-flex align-items-center see-more">
 					See more...
@@ -67,7 +69,7 @@
 	</div>
 </div>
 		@else
-			<div class="text-center mb-5 w-100">No Todo Lists</div>
+			<div class="text-center mb-5 w-100">No Lists</div>
 		@endif
 </div>
 @endsection

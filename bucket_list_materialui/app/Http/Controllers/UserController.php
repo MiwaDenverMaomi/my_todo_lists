@@ -87,8 +87,10 @@ class UserController extends Controller
 		$user_data=User::with(['profile','likes'])->select('id','name','email')->find($user->id)->toArray();
 		\Log::debug($user);
 		$is_liked_by_auth=$user->is_liked_by_auth($user->id);
+		$is_favorite_by_auth=$user->is_favorite_by_auth($user->id);
 		$user_data['countLikes']=count($user_data['likes']);
 		$user_data['is_liked_by_auth']=$is_liked_by_auth;
+		$user_data['is_favorite_by_auth']=$is_favorite_by_auth;
 		\Log::debug($user_data);
 		return view('my_profile')->with([
 		'user_data'=>$user_data,

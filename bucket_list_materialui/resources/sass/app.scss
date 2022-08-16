@@ -39,10 +39,11 @@ body {
 }
 
 .list-content {
-	position: relateve;
+	position: relative;
 	height: auto;
-	max-height: 250px;
+	max-height: 150px;
 	overflow: hidden;
+	z-index:0;
 
 	&::after {
 		content: '';
@@ -190,13 +191,17 @@ body {
 }
 
 .favorite-icon{
-		cursor: pointer;
+	position:relative;
+	bottom:2px;
+	color: grey;
+	&.active {
+			color: yellow;
+		}
+	&:hover{
+			cursor: pointer;
 			opacity: 0.8;
-			color: gray;
+	}
 
-			&.active {
-				color: yellow;
-			}
 }
 
 //button
