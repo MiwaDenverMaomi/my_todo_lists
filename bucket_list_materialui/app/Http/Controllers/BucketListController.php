@@ -66,7 +66,7 @@ class BucketListController extends Controller
 	/**
 	* Shows page of auth user's todo list .
 	* @param \App\Models\User $user
-	* @return \Illuminate\Http\JsonResponse
+	* @return \Illuminate\View\View
 	*/
 	public function show(User $user){
 		\Log::info('BucketListController show');
@@ -157,8 +157,7 @@ class BucketListController extends Controller
 	/**
 	* Updates the todo item is checked.
 	* @param \App\Models\Bucket_list $bucket_list
-	* @return Illuminate\Http\RedirectResponse
-	* @return \Illuminate\View\View
+	* @return Illuminate\Http\RedirectResponse|\Illuminate\View\View
 	*/
 	public function updateIsDone(Bucket_list $bucket_list){
 		\Log::info('updateIsDone');
@@ -178,9 +177,8 @@ class BucketListController extends Controller
 	/**
 	* Updates the todo item if it is editted.
 	* @param Illuminate\Http\Request $request
-	* @param \App\Models\Bucket_list $bucket_list
-	* @return Illuminate\Http\RedirectResponse
-	* @return \Illuminate\View\View
+	* @param App\Models\Bucket_list $bucket_list
+	* @return Illuminate\Http\RedirectResponse|Illuminate\View\View
 	*/
 	public function updateTitle(Request $request,Bucket_list $bucket_list){
 		\Log::info('update');

@@ -99,14 +99,14 @@ class UserController extends Controller
 * Posts edited profile data.
 * @param Illuminate\Http\Request $request
 * @param App\Models\User $user
-* @return Illuminate\View\View
-* @return Illuminate\Http\RedirectResponse
+* @return Illuminate\Http\RedirectResponse|Illuminate\View\View
 */
 	public function editProfile(Request $request,User $user){
 		 \Log::info('user/editProfile');
 		 \Log::debug('user->id:'.$user->id);
 		 \Log::debug(__METHOD__.'$request:'.$request);
 		 \Log::debug($request->all());
+
 		 $profile=Profile::where('user_id','=',$user->id)->first();
 		 if(!empty($profile)){
       $this->authorize('checkUser',$profile);
@@ -206,7 +206,7 @@ class UserController extends Controller
 		}else{
 		//Fails to save data
 			\Log::debug(__METHOD__.':saveing data failed!');
-			return back()
+			return view('my_profile')
 			->with([
 			'error_edit_profile'=>'Failed to save data. Please try again.',
 			'edit_mode'=>true]);
@@ -294,7 +294,6 @@ class UserController extends Controller
 /**
 * Shows page "Favorite" with user's data who got favorite by the auth user.
 *
-* @return Object
 * @return  Illuminate\View\View
 */
 	public function getFavorites(){

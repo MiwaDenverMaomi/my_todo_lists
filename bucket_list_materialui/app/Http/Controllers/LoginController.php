@@ -54,8 +54,7 @@ class LoginController extends Controller
     /**
      * Posts the email, apssword to log in.
 		 * @param Illuminate\Http\Request $request
-		 * @return Illuminate\Http\RedirectResponse
-     * @return Illuminate\View\View
+		 * @return Illuminate\Http\RedirectResponse|Illuminate\View\View
      */
 	public function postLogin(Request $request){
 		\Log::debug($request);

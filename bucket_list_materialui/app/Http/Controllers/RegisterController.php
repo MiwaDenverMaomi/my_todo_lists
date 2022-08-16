@@ -10,8 +10,10 @@ use \Symfony\Component\HttpFoundation\Response;
 
 class RegisterController extends Controller
 {
-    //Validation rules
-    private $RULES=[
+/**
+*Validation rules
+*/
+  private $RULES=[
             'email'=>'required|string|email:filter,dns|max:255|unique:users,email,NULL,id,deleted_at,NULL',
             'password'=>'required|min:8|max:255|confirmed',
         ];
