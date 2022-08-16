@@ -1,8 +1,0 @@
-★setUp():void関数を使おう。ここに記述した処理は、
-すべてのテストに適用される。
-protected $user;
-protected setUp():void{
-parent::setUp();//必要
-User::factory(1)->create();
-$user=User::find(4);
-}
