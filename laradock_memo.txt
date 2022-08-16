@@ -163,3 +163,9 @@ docker-compose.ymlに４行追記した。
 
 以下のように改行したら正常に動いた。※$user_data['profile']['photo']を改行せずに記述した。
 <img id="photo_preview_image" src="{{!empty($user_data['profile']['photo'])?asset($user_data['profile']['photo']):asset('img/no_image.jpg')}}" class="rounded-circle d-block mx-auto position-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100">
+
+★mysql パスワード変更※この後、.envのDB_PASSWORDも変更する必要あり。
+一般ユーザー
+SET PASSWORD FOR 'testuser'@'%' = 'hogehoge';
+root※rootにログインする
+SET PASSWORD ='XXXX'
