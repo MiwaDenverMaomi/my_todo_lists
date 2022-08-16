@@ -2069,7 +2069,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
 var axios = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
-  baseURL: 'http://localhost',
+  baseURL: 'http://share-my-todo-list.herokuapp.com',
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
     'Accept': 'application/json',
@@ -2324,7 +2324,7 @@ var onToggleLike = function onToggleLike(user, is_liked_by_auth) {
         switch (_context.prev = _context.next) {
           case 0:
             console.log('onToggleLike');
-            fetch("http://localhost/user/store-like/".concat(user), {
+            fetch("http://share-my-todo-list.herokuapp.com/user/store-like/".concat(user), {
               method: 'POST',
               headers: {
                 'X-Requested-With': 'XMLHttpRequest',
@@ -2383,7 +2383,7 @@ var onToggleLike = function onToggleLike(user, is_liked_by_auth) {
 };
 var onToggleFavorite = function onToggleFavorite(user, is_favorite_by_auth) {
   console.log('onToggleFavorite');
-  fetch("http://localhost/user/store-favorite/".concat(user), {
+  fetch("http://share-my-todo-list.herokuapp.com/user/store-favorite/".concat(user), {
     method: 'POST',
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
