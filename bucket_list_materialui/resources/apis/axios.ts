@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const axios = Axios.create({
-  baseURL: 'http://share-my-todo-list.herokuapp.com',
+  baseURL: 'https://share-my-todo-list.herokuapp.com',
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
     'Accept': 'application/json',
