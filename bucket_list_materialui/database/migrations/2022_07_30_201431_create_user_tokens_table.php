@@ -20,7 +20,7 @@ class CreateUserTokensTable extends Migration
             $table->dateTime('expire_at')->nullable()->comment('experation data for token');
             $table->timestamps();
         });
-          DB::statement("alter table user_tokens comment 'user token'");
+        //   DB::statement("alter table user_tokens comment 'user token'");
     }
 
     /**
