@@ -104,11 +104,14 @@
 			<div class="text-end ms-3 pe-3 d-inline-block">
 	@if(session('is_userinfo_hide')!==true)
 
-		<div class="text-center profile-dropdown d-flex flex-column">
+		<div class="text-center profile-dropdown d-flex flex-column" style="width:40px;">
 			@auth
 			<a href="{{route('user.showProfile',['user'=>Auth::id()])}}">
 		    <img src="{{!empty(Auth::user()->profile->photo)?Auth::user()->profile->photo:asset('img/no_image.jpg')}}" alt="{{!empty(Auth::user()->name)?Auth::user()->name:'No name'}}" width="32" height="32" class="rounded-circle flex-shrink-0 me-3" style="border:1px solid lightgrey;position:absolute;right:0;">
 				 <p style="font-size:0.8rem; color:#fff;">{{!empty(Auth::user()->name)?Auth::user()->name:'No name'}}</p>
+				<p class="font-size:0.8rem; color:#fff;" style="font-size:0.8rem;">
+					 {{'('.substr(Auth::user()->email,0,5).'***'.')'}}
+				</p>
 		  </a>
 			@endauth
 			@guest
