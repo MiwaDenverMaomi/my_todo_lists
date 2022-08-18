@@ -59,7 +59,7 @@ class ContactController extends Controller
 	//  );
 	 //old codes using without sendGrid
 		Mail::to($contactRequest->input('email'))->send(new Inquiry($contactRequest));
-		Mail::to(config('mail.mailers.smtp.username'))->send(new Notice($contactRequest));
+		Mail::to(config('MAIL_FROM_ADDRESS'))->send(new Notice($contactRequest));
 
 		if(count(Mail::failures())>0){
 		 //if email is sent
