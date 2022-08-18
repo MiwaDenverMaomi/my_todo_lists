@@ -29,7 +29,7 @@ class Inquiry extends Mailable
      */
     public function build()
     {
-        \Log::info('inquiry');
+        \Log::info('inquiry!!!!!!!!!!!');
         \Log::debug($this->data);
         return $this->view('emails.inquiry')
         ->subject('Thank you for your inquiry.')
