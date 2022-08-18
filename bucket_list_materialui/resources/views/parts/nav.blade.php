@@ -103,6 +103,7 @@
 			</form>
 			<div class="text-end ms-3 pe-3 d-inline-block">
 	@if(session('is_userinfo_hide')!==true)
+
 		<div class="text-center profile-dropdown">
 			@auth
 			<a href="{{route('user.showProfile',['user'=>Auth::id()])}}">
@@ -111,13 +112,13 @@
 		  </a>
 			@endauth
 			@guest
+
 		    <img src="{{asset('img/no_image.jpg')}}" alt="No name" width="32" height="32" class="rounded-circle flex-shrink-0 me-3" style="border:1px solid lightgrey;position:absolute;right:0;">
 				<p style="font-size:0.8rem; color:#fff;">Guest</p>
 			@endguest
 		</div>
 	@endif
 </div>
-
 		</div>
 	</div>
 </nav>
