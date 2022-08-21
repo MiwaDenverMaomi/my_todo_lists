@@ -22,7 +22,6 @@
 					<img src="{{$photo}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
 				</div>
 				<p class="mb-0 ms-3 me-3" style="font-size:0.8rem;">
-					Hi,
 				 @auth
 					 {{!empty(Auth::user()->name)?Auth::user()->name:'No name'}}
 				 @endauth
@@ -101,15 +100,14 @@
 				 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword" value="{{!empty($keyword)?$keyword:''}}">
 				<button class="btn btn-outline-success" type="submit">Search</button>
 			</form>
-			<div class="text-end ms-3 pe-3 d-inline-block">
+			<div class="text-end ms-3 pe-3 d-inline-block" style="position:absolute; right:0; font-size:.8rem;">
 	@if(session('is_userinfo_hide')!==true)
-
-		<div class="text-center profile-dropdown d-flex flex-column" style="width:40px;">
+		<div class="text-center profile-dropdown d-flex flex-row" style="width:40px;">
 			<div class="text-center">
 					<img src="{{$photo}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
 				</div>
+				<div>
 				<p class="mb-0 ms-3 me-3" style="font-size:0.8rem;">
-					Hi,
 				 @auth
 					 {{!empty(Auth::user()->name)?Auth::user()->name:'No name'}}
 				 @endauth
@@ -122,6 +120,7 @@
 					 {{'('.substr(Auth::user()->email,0,5).'***'.')'}}
 					@endauth
 				</p>
+				</div>
 		</div>
 	@endif
 </div>
