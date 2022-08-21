@@ -203,7 +203,7 @@ export const onSubmitProfile=()=>{
 
 export const onToggleLike =async (user: number, is_liked_by_auth: number) => {
 	console.log('onToggleLike');
-	fetch(`https://share-my-todo-list.herokuapp.com/user/store-like/${user}`, {
+	fetch(`https://www.share-my-todo-list.com/user/store-like/${user}`, {
 		method: 'POST',
 		headers: {
 			'X-Requested-With': 'XMLHttpRequest',
@@ -251,7 +251,7 @@ export const onToggleLike =async (user: number, is_liked_by_auth: number) => {
 
 export const onToggleFavorite=(user:number,is_favorite_by_auth:boolean)=>{
 	console.log('onToggleFavorite');
-	fetch(`https://share-my-todo-list.herokuapp.com/user/store-favorite/${user}`, {
+	fetch(`https://www.share-my-todo-list.com/user/store-favorite/${user}`, {
 		method: 'POST',
 		headers: {
 			'X-Requested-With': 'XMLHttpRequest',
