@@ -1,7 +1,7 @@
 
 @extends('layouts.common')
 @section('title')
-{{!empty($user_data['name'])?$user_data['name']:'No name'}}'s Todo List</div>
+{{!empty($user_data['name'])?$user_data['name']:'No name'}}'s Todo List
 @endsection
 
 @section('content')
@@ -9,16 +9,18 @@
 	@if(!empty($user_data))
  <div class="row mx-auto">
 			<div class="col-sm-4 mx-auto">
-				@php
-					 $heart_class=$user_data['is_liked_by_auth']===true?'bi bi-heart-fill icon active':'bi bi-heart-fill icon';
-				@endphp
 				<div class="text-center">
 					<div class="mb-3">
-					<i id="like-id_{{$user_data['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$user_data['id']}},{{$user_data['is_liked_by_auth']}})"></i><strong style="font-size:1.5rem;" id="count_likes_{{$user_data['id']}}">{{$user_data['countLikes']}}</strong>
-					@php
-					 $star_class=$user_data['is_favorite_by_auth']===true?'bi bi-star-fill favorite-icon active':'bi bi-star-fill favorite-icon';
-	 				@endphp
-					<i id="favorite-id_{{$user_data['id']}}" class="{{$star_class}}" onclick="onToggleFavorite({{$user_data['id']}},{{$user_data['is_favorite_by_auth']}})"></i>
+          @auth
+						<i id="like-id_{{$user_data['id']}}" class="{{$user_data['is_liked_by_auth']===true?'bi bi-heart-fill icon active':'bi bi-heart-fill icon'}}" onclick="onToggleLike({{$user_data['id']}},{{$user_data['is_liked_by_auth']}})"></i><strong style="font-size:1.5rem;" id="count_likes_{{$user_data['id']}}">{{$user_data['countLikes']}}</strong>
+						<i id="favorite-id_{{$user_data['id']}}" class="{{$user_data['is_favorite_by_auth']===true?'bi bi-star-fill favorite-icon active':'bi bi-star-fill favorite-icon'}}" onclick="onToggleFavorite({{$user_data['id']}},{{$user_data['is_favorite_by_auth']}})"></i>
+					@endauth
+					@guest
+					<a class="text-decoration-none">
+					  <i id="like-id_{{$user_data['id']}}" class="bi bi-heart-fill icon-grey"></i><strong style="font-size:1.5rem; text-decoration:none;" id="count_likes_{{$user_data['id']}}">{{$user_data['countLikes']}}</strong>
+					 <i id="favorite-id_{{$user_data['id']}}" class="bi bi-star-fill icon-grey" style="position:absolute; bottom:2px;"></i>
+					</a>
+					@endguest
 					</div>
 						<div class="text-center text-danger" id="likes_result_{{$user_data['id']}}">
 						</div>
