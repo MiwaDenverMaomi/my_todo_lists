@@ -2157,7 +2157,7 @@ var __awaiter = undefined && undefined.__awaiter || function (thisArg, _argument
 //is_done:any->because the value passed from blade is 1 or 0. Convert them into string in php by wrapping '', and cast them to boolean in JavaScript.
 
 var onHandleIsDone = function onHandleIsDone($todo_id, route) {
-  console.log('onHandleIsDone');
+  //console.log('onHandleIsDone');
   var $todo_form_element = document.querySelector("#todo_form");
   var $check_todo_element = document.querySelector("#check_todo_id");
   $check_todo_element.value = $todo_id;
@@ -2166,41 +2166,37 @@ var onHandleIsDone = function onHandleIsDone($todo_id, route) {
   $todo_form_element.submit();
 };
 var onStartEditMode = function onStartEditMode(todo_id, prev_title, is_done) {
-  console.log('onStartEditMode');
+  //console.log('onStartEditMode');
   is_done === '1' ? true : false;
   document.querySelector("#todo_display_".concat(todo_id)).outerHTML = "<input id=todo_title_".concat(todo_id, " class=\"todo-item-input\" name=\"title\" type=\"text\" onblur=\"onEndEditMode(").concat(todo_id, ",'").concat(prev_title, "','").concat(is_done, "')\"></input>");
-  var $todo_title_element = document.querySelector("#todo_title_".concat(todo_id));
-  console.log($todo_title_element);
+  var $todo_title_element = document.querySelector("#todo_title_".concat(todo_id)); //console.log($todo_title_element);
+
   onChangeTitle(todo_id, prev_title, is_done);
 };
 var onEndEditMode = function onEndEditMode(todo_id, prev_title, is_done) {
-  console.log('onEndEditMode');
+  //console.log('onEndEditMode');
   is_done === '1' ? true : false;
-  var $todo_title_element = document.querySelector("#todo_title_".concat(todo_id));
-  console.log($todo_title_element);
-  $todo_title_element.innerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onclick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "','").concat(is_done, "')\">").concat(prev_title, "</p>"); //outerHTMLじゃダメなのでinnerHTMLにしたらエラー解決。<input><p></p>となっているがこれでOK？
+  var $todo_title_element = document.querySelector("#todo_title_".concat(todo_id)); //console.log($todo_title_element);
+
+  $todo_title_element.innerHTML = "<p id=\"todo_display_".concat(todo_id, "\" class=\"").concat(is_done ? 'textdecoration-linethrough' : '', "\" onclick=\"onStartEditMode(").concat(todo_id, ",'").concat(prev_title, "','").concat(is_done, "')\">").concat(prev_title, "</p>");
 };
 var onChangeTitle = function onChangeTitle(todo_id, prev_title, is_done) {
-  console.log('onChangeTitle');
+  //console.log('onChangeTitle');
   var $todo_title_element = document.querySelector("#todo_title_".concat(todo_id));
 
   $todo_title_element.onkeypress = function (e) {
     is_done === '1' ? true : false;
-    var key = e.keyCode || e.charCode || 0;
-    console.log(e.keyCode);
+    var key = e.keyCode || e.charCode || 0; //console.log(e.keyCode);
 
     if (e.keyCode == 13) {
-      //ひとつもキー入力しないでEnter->submitにいく。ひとつでもキー入力してEnter->e.keyCode==13判定
-      //ここにpreventDefault()を入れると、submitされてもnameに値が入っておらず（気がする）エラーとなる。
-      $todo_title_element.value = sanitize($todo_title_element.value);
-      console.log('enter pressed!');
+      $todo_title_element.value = sanitize($todo_title_element.value); //console.log('enter pressed!');
 
       if ($todo_title_element.value.length === 0 || $todo_title_element.value === prev_title || $todo_title_element === undefined) {
-        e.preventDefault();
-        console.log('$todo_title_element.value:' + $todo_title_element.value);
-        console.log('$todo_title_element.value.length:' + $todo_title_element.value.length);
-        console.log('prev.title===$todo_title_form_element.value:' + $todo_title_element.value === prev_title);
-        console.log($todo_title_element);
+        e.preventDefault(); //console.log('$todo_title_element.value:'+$todo_title_element.value);
+        //console.log('$todo_title_element.value.length:'+$todo_title_element.value.length);
+        //console.log('prev.title===$todo_title_form_element.value:'+$todo_title_element.value===prev_title);
+        //console.log($todo_title_element);
+
         onEndEditMode(todo_id, prev_title, is_done);
       } else {
         onSubmitTitle(todo_id);
@@ -2209,7 +2205,7 @@ var onChangeTitle = function onChangeTitle(todo_id, prev_title, is_done) {
   };
 };
 var onSubmitTitle = function onSubmitTitle(todo_id) {
-  console.log('onSubmit');
+  //console.log('onSubmit');
   var $todo_title_form_element = document.querySelector("#todo_title_form");
   $todo_title_form_element.method = "post";
   $todo_title_form_element.action = "/todo-list/update-title/".concat(todo_id); //Not working?
@@ -2221,25 +2217,25 @@ var sanitize = function sanitize(str) {
   return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 };
 var onHandleSelectPhoto = function onHandleSelectPhoto(name) {
-  var sizeLimit = 3264 * 2448 * 1; //800万画素
-  // const sizeLimit = 3968 * 2976 * 1; //iphone SE=>1200万画素->3968 * 2976 pixels.
+  var sizeLimit = 3264 * 2448 * 1; //800k
+  // const sizeLimit = 3968 * 2976 * 1; //iphone SE=>1200k->3968 * 2976 pixels.
 
   var $inputPhoto = document.querySelector('#input_photo');
   var $photoFrame = document.querySelector('#photo_frame'); // const $photoPreview = document.querySelector<any>('#photo_preview');
 
-  var $photoPreviewImage = document.querySelector('#photo_preview_image');
-  console.log($inputPhoto.files); // const photos=$inputPhoto.files!==null?$inputPhoto.files:[
+  var $photoPreviewImage = document.querySelector('#photo_preview_image'); //console.log($inputPhoto.files);
+  // const photos=$inputPhoto.files!==null?$inputPhoto.files:[
   // 	'storage/img/no_image.jpg'
   // ];
 
-  var photos = Array.from($inputPhoto.files);
-  console.log(photos); // if(photos!==null){
+  var photos = Array.from($inputPhoto.files); //console.log(photos);
+  // if(photos!==null){
 
   var $photo_err_element = document.querySelector('#photo_err');
   var photoErrMsgs = checkPhoto(photos);
   photos.map(function (photo) {
     if (photoErrMsgs.length > 0) {
-      console.log('file is too big');
+      //console.log('file is too big');
       $inputPhoto.value = '';
       $photo_err_element.innerText = photoErrMsgs[0];
       return;
@@ -2312,8 +2308,8 @@ var onSubmitProfile = function onSubmitProfile() {
       comment1: [],
       comment2: [],
       comment3: []
-    };
-    console.log('submit');
+    }; //console.log('submit');
+
     $profile_form_element.submit();
   }
 };
@@ -2323,7 +2319,7 @@ var onToggleLike = function onToggleLike(user, is_liked_by_auth) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log('onToggleLike');
+            //console.log('onToggleLike');
             fetch("https://www.share-my-todo-list.com/user/store-like/".concat(user), {
               method: 'POST',
               headers: {
@@ -2373,7 +2369,7 @@ var onToggleLike = function onToggleLike(user, is_liked_by_auth) {
               $likes_result_element.innerText = err.responseerr.response;
             });
 
-          case 2:
+          case 1:
           case "end":
             return _context.stop();
         }
@@ -2382,7 +2378,7 @@ var onToggleLike = function onToggleLike(user, is_liked_by_auth) {
   }));
 };
 var onToggleFavorite = function onToggleFavorite(user, is_favorite_by_auth) {
-  console.log('onToggleFavorite');
+  //console.log('onToggleFavorite');
   fetch("https://www.share-my-todo-list.com/user/store-favorite/".concat(user), {
     method: 'POST',
     headers: {
@@ -2404,29 +2400,29 @@ var onToggleFavorite = function onToggleFavorite(user, is_favorite_by_auth) {
 
     return res.json();
   }).then(function (data) {
-    console.log(0);
-    var result = data;
-    console.log(data);
+    //console.log(0);
+    var result = data; //console.log(data);
+
     var $favorites_result_element = document.querySelector("#favorites_result_".concat(user));
 
     if (result.is_favorite_by_auth === true || result.is_favorite_by_auth === false) {
-      console.log(1);
+      //console.log(1);
       var _is_favorite_by_auth = result.is_favorite_by_auth;
       var $star_element = document.querySelector("#favorite-id_".concat(user));
       var $count_favorites_element = document.querySelector("#count_favorites_".concat(user));
 
       if (_is_favorite_by_auth === true) {
-        console.log(2);
+        //console.log(2);
         $star_element.classList.add('active');
       } else {
-        console.log(3);
+        //console.log(3);
         $star_element.classList.remove('active');
       }
     } else if (result === undefined) {
-      console.log(4);
+      //console.log(4);
       $favorites_result_element.innerText = 'Failed to update favorite...sorry!';
     } else {
-      console.log(5);
+      //console.log(5);
       $favorites_result_element.innerText = result.error;
     }
   })["catch"](function (err) {
@@ -2463,7 +2459,7 @@ var searchKeyword = function searchKeyword(str) {
   }
 };
 var onToggleDescription = function onToggleDescription() {
-  console.log('onOpenDescription');
+  //console.log('onOpenDescription');
   var $description_element = document.querySelector('#description');
 
   if ($description_element.classList.contains('d-none')) {
@@ -2538,10 +2534,10 @@ var checkValidEmail = function checkValidEmail(email) {
 var checkValidPhoto = function checkValidPhoto(photo) {
   var sizeLimit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2560 * 1920 * 1;
   var mb = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5;
-  console.log('checkValidPhoto');
 
+  //console.log('checkValidPhoto');
   if (photo !== null && photo.size > sizeLimit) {
-    console.log('photo !== null && photo.size > sizeLimit');
+    //console.log('photo !== null && photo.size > sizeLimit');
     return "Upload less than ".concat(mb, " MB.");
   }
 };
@@ -2622,14 +2618,14 @@ var checkName = function checkName(name) {
   return errs;
 };
 var checkPhoto = function checkPhoto(photo) {
-  console.log('checkPhoto');
+  //console.log('checkPhoto');
   var errs = [];
   var checkValidPhotoResult = checkValidPhoto(photo); // if(checkValidPhotoResult?.length>0){
   // 	errs.push(checkValidPhotoResult);
   // }
 
   if (checkValidPhotoResult !== undefined && checkValidPhotoResult.length > 0) {
-    console.log('checkphoto error');
+    //console.log('checkphoto error');
     errs.push(checkValidPhotoResult);
   }
 
