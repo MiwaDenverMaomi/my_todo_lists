@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://share-my-todo-list.herokuapp.com'),
+    'url' => env('APP_URL', 'http://www.share-my-todo-list.com'),
 
     'asset_url' => env('ASSET_URL', null),
 
