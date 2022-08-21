@@ -33,21 +33,22 @@
     </div>
    </div>
 				<div class="text-center mb-3">
-					 @php
-					 $heart_class=$list['is_liked_by_auth']===true?'bi bi-heart-fill icon active':'bi bi-heart-fill icon';
-					@endphp
 					@auth
-				  	<i id="like-id_{{$list['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$list['id']}},{{$list['is_liked_by_auth']}})"></i><strong id="count_likes_{{$list['id']}}">{{count($list['likes'])}}</strong>
+				  	<i id="like-id_{{$list['id']}}" class="{{$list['is_liked_by_auth']===true?'bi bi-heart-fill icon active':'bi bi-heart-fill icon'}}" onclick="onToggleLike({{$list['id']}},{{$list['is_liked_by_auth']}})"></i><strong id="count_likes_{{$list['id']}}">{{count($list['likes'])}}</strong>
 					@endauth
 					@guest
 					<a href="{{route('login.getLogin')}}" class="text-decoration-none">
-					<i id="like-id_{{$list['id']}}" class="{{$heart_class}}"></i><strong id="count_likes_{{$list['id']}}" class="text-decoration-none">{{count($list['likes'])}}</strong>
+					<i id="like-id_{{$list['id']}}" class="bi bi-heart-fill icon-grey"></i><strong id="count_likes_{{$list['id']}}" style="color:grey;">{{count($list['likes'])}}</strong>
           </a>
 					@endguest
-					@php
-					 $star_class=$list['is_favorite_by_auth']===true?'bi bi-star-fill favorite-icon active':'bi bi-star-fill favorite-icon';
-			  	@endphp
-          <i id="favorite-id_{{$list['id']}}" class="{{$star_class}}" onclick="onToggleFavorite({{$list['id']}},{{$list['is_favorite_by_auth']}})"></i>
+					@auth
+          <i id="favorite-id_{{$list['id']}}" class="{{$list['is_favorite_by_auth']===true?'bi bi-star-fill favorite-icon active':'bi bi-star-fill favorite-icon'}}" onclick="onToggleFavorite({{$list['id']}},{{$list['is_favorite_by_auth']}})"></i>
+					@endauth
+					<a href="{{route('login.getLogin')}}" class="text-decoration-none">
+					<i id="favorite-id_{{$list['id']}}" class="bi bi-star-fill icon-grey"></i>
+					</a>
+					@guest
+					@endguest
 						<div class="text-center text-danger" id="likes_result_{{$list['id']}}">
 						</div>
             <div class="text-center text-danger" id="favorites_result_{{$list['id']}}">
