@@ -102,7 +102,7 @@
 			</form>
 			<div class="text-end ms-3 pe-3 d-inline-block" style="position:absolute; right:0; font-size:.8rem;">
 	@if(session('is_userinfo_hide')!==true)
-		<div class="text-center profile-dropdown d-flex flex-row">
+		<div class="text-center profile-dropdown d-flex flex-column">
 			<div class="text-center">
 					<img src="{{$photo}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
 				</div>
