@@ -227,7 +227,7 @@ const MenuBar = (props: Props) => {//★？
         aria-label="mailbox folders"
       >
         <Drawer
-          container={container}//Works without it,,,,?
+          container={container}
           variant="temporary"
           open={mobileDrawerOpen}
           onClose={handleDrawerToggle}

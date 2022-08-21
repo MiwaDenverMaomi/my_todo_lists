@@ -36,11 +36,13 @@
 					 @php
 					 $heart_class=$list['is_liked_by_auth']===true?'bi bi-heart-fill icon active':'bi bi-heart-fill icon';
 					@endphp
+					<a class="{{Auth::check()===true?'d-none':'d-block text-decoration-none'}}" href="{{route('login.getLogin')}}">
 				  	<i id="like-id_{{$list['id']}}" class="{{$heart_class}}" onclick="onToggleLike({{$list['id']}},{{$list['is_liked_by_auth']}})"></i><strong id="count_likes_{{$list['id']}}">{{count($list['likes'])}}</strong>
 					@php
 					 $star_class=$list['is_favorite_by_auth']===true?'bi bi-star-fill favorite-icon active':'bi bi-star-fill favorite-icon';
 			  	@endphp
           <i id="favorite-id_{{$list['id']}}" class="{{$star_class}}" onclick="onToggleFavorite({{$list['id']}},{{$list['is_favorite_by_auth']}})"></i>
+					</a>
 						<div class="text-center text-danger" id="likes_result_{{$list['id']}}">
 						</div>
             <div class="text-center text-danger" id="favorites_result_{{$list['id']}}">
