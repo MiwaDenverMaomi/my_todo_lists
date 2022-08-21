@@ -1,7 +1,7 @@
 
 @extends('layouts.common')
 @section('title')
-{{!empty($user_data['name'])?$user_data['name']:'No name'}}'s Todo List</div>
+{{!empty($user_data['name'])?$user_data['name']:'No name'}}'s Todo List
 @endsection
 
 @section('content')
@@ -16,7 +16,7 @@
 					@endauth
 					@guest
 					<a class="text-decoration-none" href="{{route('login.getLogin')}}">
-					  <i id="like-id_{{$user_data['id']}}" class="bi bi-heart-fill icon-grey"></i><strong style="font-size:1.5rem;" id="count_likes_{{$user_data['id']}}">{{$user_data['countLikes']}}</strong>
+					  <i id="like-id_{{$user_data['id']}}" class="bi bi-heart-fill icon-grey"></i><strong style="font-size:1.5rem; text-decoration:none;" id="count_likes_{{$user_data['id']}}">{{$user_data['countLikes']}}</strong>
 					</a>
 					@endguest
 					@auth
