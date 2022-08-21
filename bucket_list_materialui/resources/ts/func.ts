@@ -6,7 +6,7 @@ import axios from '../apis/axios';
 //is_done:any->because the value passed from blade is 1 or 0. Convert them into string in php by wrapping '', and cast them to boolean in JavaScript.
 
 export const onHandleIsDone=($todo_id:number,route:string)=>{
-	console.log('onHandleIsDone');
+	//console.log('onHandleIsDone');
 
 	const $todo_form_element=document.querySelector<any>("#todo_form");
 	const $check_todo_element=document.querySelector<any>("#check_todo_id");
@@ -18,27 +18,27 @@ export const onHandleIsDone=($todo_id:number,route:string)=>{
 };
 
 export const onStartEditMode=(todo_id:number,prev_title:string,is_done:any)=>{
-	console.log('onStartEditMode');
+	//console.log('onStartEditMode');
 
 	is_done==='1'?true:false;
 
 	document.querySelector<any>(`#todo_display_${todo_id}`).outerHTML=`<input id=todo_title_${todo_id} class="todo-item-input" name="title" type="text" onblur="onEndEditMode(${todo_id},'${prev_title}','${is_done}')"></input>`;
 
 	const $todo_title_element=document.querySelector<any>(`#todo_title_${todo_id}`);
-	console.log($todo_title_element);
+	//console.log($todo_title_element);
 	onChangeTitle(todo_id,prev_title,is_done);
 };
 
 export const onEndEditMode=(todo_id:number,prev_title:string,is_done:any)=>{
-	console.log('onEndEditMode');
+	//console.log('onEndEditMode');
 
 	is_done==='1'?true:false;
 	const $todo_title_element=document.querySelector<any>(`#todo_title_${todo_id}`);
-	console.log($todo_title_element);
-	$todo_title_element.innerHTML=`<p id="todo_display_${todo_id}" class="${is_done?'textdecoration-linethrough':''}" onclick="onStartEditMode(${todo_id},'${prev_title}','${is_done}')">${prev_title}</p>`;//outerHTMLじゃダメなのでinnerHTMLにしたらエラー解決。<input><p></p>となっているがこれでOK？
+	//console.log($todo_title_element);
+	$todo_title_element.innerHTML=`<p id="todo_display_${todo_id}" class="${is_done?'textdecoration-linethrough':''}" onclick="onStartEditMode(${todo_id},'${prev_title}','${is_done}')">${prev_title}</p>`;
 };
 export const onChangeTitle=(todo_id:number,prev_title:string,is_done:any)=>{
-	console.log('onChangeTitle');
+	//console.log('onChangeTitle');
 	const $todo_title_element=document.querySelector<any>(`#todo_title_${todo_id}`);
 
 
@@ -46,19 +46,18 @@ export const onChangeTitle=(todo_id:number,prev_title:string,is_done:any)=>{
 	is_done==='1'?true:false;
 
 	const key=e.keyCode||e.charCode||0;
-	console.log(e.keyCode);
+	//console.log(e.keyCode);
 
-	if(e.keyCode==13){//ひとつもキー入力しないでEnter->submitにいく。ひとつでもキー入力してEnter->e.keyCode==13判定
-	//ここにpreventDefault()を入れると、submitされてもnameに値が入っておらず（気がする）エラーとなる。
+	if(e.keyCode==13){
 	$todo_title_element.value=sanitize($todo_title_element.value);
-	console.log('enter pressed!');
+	//console.log('enter pressed!');
 
 	 if($todo_title_element.value.length===0||$todo_title_element.value===prev_title||$todo_title_element===undefined){
 		e.preventDefault();
-			console.log('$todo_title_element.value:'+$todo_title_element.value);
-			console.log('$todo_title_element.value.length:'+$todo_title_element.value.length);
-			console.log('prev.title===$todo_title_form_element.value:'+$todo_title_element.value===prev_title);
-			console.log($todo_title_element);
+			//console.log('$todo_title_element.value:'+$todo_title_element.value);
+			//console.log('$todo_title_element.value.length:'+$todo_title_element.value.length);
+			//console.log('prev.title===$todo_title_form_element.value:'+$todo_title_element.value===prev_title);
+			//console.log($todo_title_element);
 
 			onEndEditMode(todo_id,prev_title,is_done);
 
@@ -70,7 +69,7 @@ export const onChangeTitle=(todo_id:number,prev_title:string,is_done:any)=>{
 };
 
 export const onSubmitTitle=(todo_id:number)=>{
-	console.log('onSubmit');
+	//console.log('onSubmit');
 	const $todo_title_form_element=document.querySelector<any>("#todo_title_form");
 			$todo_title_form_element.method="post";
 			$todo_title_form_element.action=`/todo-list/update-title/${todo_id}`;//Not working?
@@ -86,8 +85,8 @@ export const sanitize=(str:any)=>{
 }
 
 export const onHandleSelectPhoto=(name:string|null)=>{
-	const sizeLimit = 3264 * 2448 * 1; //800万画素
-	// const sizeLimit = 3968 * 2976 * 1; //iphone SE=>1200万画素->3968 * 2976 pixels.
+	const sizeLimit = 3264 * 2448 * 1; //800k
+	// const sizeLimit = 3968 * 2976 * 1; //iphone SE=>1200k->3968 * 2976 pixels.
 
 
 	const $inputPhoto=document.querySelector<any>('#input_photo');
@@ -95,19 +94,19 @@ export const onHandleSelectPhoto=(name:string|null)=>{
 	// const $photoPreview = document.querySelector<any>('#photo_preview');
 	const $photoPreviewImage = document.querySelector<any>('#photo_preview_image');
 
-	console.log($inputPhoto.files);
+	//console.log($inputPhoto.files);
 	// const photos=$inputPhoto.files!==null?$inputPhoto.files:[
 	// 	'storage/img/no_image.jpg'
 	// ];
 	const photos = Array.from($inputPhoto.files);
-	console.log(photos);
+	//console.log(photos);
 	// if(photos!==null){
 	const $photo_err_element=document.querySelector<any>('#photo_err');
 	let photoErrMsgs: string[] = checkPhoto(photos);
 
 	photos.map((photo:any)=>{
 		if (photoErrMsgs.length > 0) {
-			console.log('file is too big');
+			//console.log('file is too big');
 			$inputPhoto.value='';
 			$photo_err_element.innerText = photoErrMsgs[0];
 			return;
@@ -196,13 +195,13 @@ export const onSubmitProfile=()=>{
 			comment3:[],
 		};
 
-		console.log('submit');
+		//console.log('submit');
 		$profile_form_element.submit();
 	}
 };
 
 export const onToggleLike =async (user: number, is_liked_by_auth: number) => {
-	console.log('onToggleLike');
+	//console.log('onToggleLike');
 	fetch(`https://www.share-my-todo-list.com/user/store-like/${user}`, {
 		method: 'POST',
 		headers: {
@@ -250,7 +249,7 @@ export const onToggleLike =async (user: number, is_liked_by_auth: number) => {
 }
 
 export const onToggleFavorite=(user:number,is_favorite_by_auth:boolean)=>{
-	console.log('onToggleFavorite');
+	//console.log('onToggleFavorite');
 	fetch(`https://www.share-my-todo-list.com/user/store-favorite/${user}`, {
 		method: 'POST',
 		headers: {
@@ -271,29 +270,29 @@ export const onToggleFavorite=(user:number,is_favorite_by_auth:boolean)=>{
 		}
 		return res.json();
 	}).then((data: any) => {
-		console.log(0);
+		//console.log(0);
 			const result = data;
-			console.log(data);
+			//console.log(data);
 			const $favorites_result_element = document.querySelector<any>(`#favorites_result_${user}`);
 			if (result.is_favorite_by_auth === true || result.is_favorite_by_auth === false) {
-				console.log(1);
+				//console.log(1);
 				const { is_favorite_by_auth} = result;
 				const $star_element = document.querySelector<any>(`#favorite-id_${user}`);
 				const $count_favorites_element = document.querySelector<any>(`#count_favorites_${user}`);
 
 				if (is_favorite_by_auth === true) {
-					console.log(2);
+					//console.log(2);
 					$star_element.classList.add('active');
 				} else {
-					console.log(3);
+					//console.log(3);
 					$star_element.classList.remove('active');
 				}
 
 			} else if (result === undefined) {
-				console.log(4);
+				//console.log(4);
 				$favorites_result_element.innerText = 'Failed to update favorite...sorry!';
 			} else {
-				console.log(5);
+				//console.log(5);
 				$favorites_result_element.innerText = result.error;
 			}
 		 })
@@ -329,7 +328,7 @@ export const searchKeyword=(str:string)=>{
 };
 
 export const onToggleDescription=()=>{
-	console.log('onOpenDescription');
+	//console.log('onOpenDescription');
 	const $description_element = document.querySelector<any>('#description');
 	if ($description_element.classList.contains('d-none')) {
 		$description_element.classList.remove('d-none');
@@ -402,9 +401,9 @@ export const checkValidEmail=(email:string)=>{
 // };
 
 export const checkValidPhoto = (photo: any, sizeLimit: number = 2560 * 1920 * 1, mb: number = 5) => {
-	console.log('checkValidPhoto');
+	//console.log('checkValidPhoto');
 	if (photo !== null && photo.size > sizeLimit) {
-		console.log('photo !== null && photo.size > sizeLimit');
+		//console.log('photo !== null && photo.size > sizeLimit');
 		return `Upload less than ${mb} MB.`;
 	}
 };
@@ -501,7 +500,7 @@ export const checkName=(name:string)=>{
 
 
 export const checkPhoto = (photo: any) => {
-	console.log('checkPhoto');
+	//console.log('checkPhoto');
 	let errs:string[]=[];
 	const checkValidPhotoResult=checkValidPhoto(photo);
 	// if(checkValidPhotoResult?.length>0){
@@ -509,7 +508,7 @@ export const checkPhoto = (photo: any) => {
 	// }
 
 	if (checkValidPhotoResult !== undefined && checkValidPhotoResult.length > 0) {
-		console.log('checkphoto error');
+		//console.log('checkphoto error');
 		errs.push(checkValidPhotoResult);
 	}
 	return errs;
