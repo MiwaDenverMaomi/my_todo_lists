@@ -44,10 +44,10 @@
 					@auth
           <i id="favorite-id_{{$list['id']}}" class="{{$list['is_favorite_by_auth']===true?'bi bi-star-fill favorite-icon active':'bi bi-star-fill favorite-icon'}}" onclick="onToggleFavorite({{$list['id']}},{{$list['is_favorite_by_auth']}})"></i>
 					@endauth
-					<a href="{{route('login.getLogin')}}" class="text-decoration-none">
-					<i id="favorite-id_{{$list['id']}}" class="bi bi-star-fill icon-grey"></i>
-					</a>
 					@guest
+					<a href="{{route('login.getLogin')}}" class="text-decoration-none">
+					<i id="favorite-id_{{$list['id']}}" class="bi bi-star-fill icon-grey" style="position:relative; bottom:2px;"></i>
+					</a>
 					@endguest
 						<div class="text-center text-danger" id="likes_result_{{$list['id']}}">
 						</div>
