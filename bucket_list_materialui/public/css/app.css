@@ -10,9 +10,6 @@ body {
   padding: 0;
   color: #5a5a5a;
   height: 100%;
-  display: flex;
-  flex-flow: column;
-  min-height: 100vh;
 }
 
 .main {
