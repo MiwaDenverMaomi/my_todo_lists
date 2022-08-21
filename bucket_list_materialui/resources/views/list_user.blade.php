@@ -16,7 +16,7 @@
 					@endauth
 					@guest
 					<a class="text-decoration-none" href="{{route('login.getLogin')}}">
-					  <i id="like-id_{{$user_data['id']}}" class="bi bi-heart-fill icon-grey"></i><strong style="font-size:1.5rem; text-decoration:none;" id="count_likes_{{$user_data['id']}}">{{$user_data['countLikes']}}</strong>
+					  <i id="like-id_{{$user_data['id']}}" class="bi bi-heart-fill icon-grey"></i><strong style="font-size:1.5rem; color:grey;" id="count_likes_{{$user_data['id']}}">{{$user_data['countLikes']}}</strong>
 					</a>
 					@endguest
 					@auth
