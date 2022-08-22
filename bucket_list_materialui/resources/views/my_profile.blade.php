@@ -84,7 +84,7 @@
 			<div class="col-lg-4 mx-auto">
 				<div class="mx-auto mb-2">
 				@if(!empty($user_data['profile']['photo']))
-				<img src="`data:image/png;base64,<?= ${$user_data['profile']['photo']} ?>`" class="rounded-circle mx-auto d-block position-pic  border-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
+				<img src="data:image/png;base64,<?= $user_data['profile']['photo'] ?>" class="rounded-circle mx-auto d-block position-pic  border-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
 				@else
 				<img src="{{asset('img/no_image.jpg')}}" class="rounded-circle mx-auto d-block position-pic  border-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
 				@endif
