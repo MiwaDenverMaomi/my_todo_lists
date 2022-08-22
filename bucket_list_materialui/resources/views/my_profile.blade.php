@@ -83,7 +83,7 @@
  <div class="row ">
 			<div class="col-lg-4 mx-auto">
 				<div class="mx-auto mb-2">
-				<img src="{{ !empty($user_data['profile']['photo'])?'data:image/png;base64,<?= $user_data['profile']['photo']?>':asset('img/no_image.jpg')}}" class="rounded-circle mx-auto d-block position-pic  border-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
+				<img src="{{ !empty($user_data['profile']['photo'])}}?data:image/png;base64,<?= $user_data['profile']['photo']?>:asset('img/no_image.jpg')}}" class="rounded-circle mx-auto d-block position-pic  border-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
 				</div>
 				<h3 class="fw-normal text-center mb-4">{{!empty($user_data['name'])?$user_data['name']:'No name'}}</h3>
         <div class="text-center mb-3">
