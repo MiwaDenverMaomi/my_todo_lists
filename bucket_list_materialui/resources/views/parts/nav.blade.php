@@ -9,17 +9,19 @@
 	@if(session('is_userinfo_hide')!==true)
 		@php
 		if(Auth::check()){
-		 $photo=!empty(Auth::user()->profile->photo)?Auth::user()->profile->photo:asset('img/no_image.jpg');
 		 $name=!empty(Auth::user()->name)?Auth::user()->name:'No name';
 		}else{
-			$photo=asset('img/no_image.jpg');
-			 $name='No name';
+		 $name='No name';
 		}
 		@endphp
 		<div class="mb-3">
 			<div class="text-center mx-auto profile-navbar">
 				<div class="text-center">
-					<img src="{{$photo}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+				@if(Auth::check()&&!empty(Auth::user()->profile->photo))
+				<img src="data:image/png;base64,<?= Auth::user()->profile->photo ?>" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+				@else
+				<img src="{{asset('img/no_image.jpg')}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+				@endif
 				</div>
 				<p class="mb-0 ms-3 me-3" style="font-size:0.8rem;">
 				 @auth
@@ -104,7 +106,11 @@
 	@if(session('is_userinfo_hide')!==true)
 		<div class="text-center profile-dropdown d-flex flex-column">
 			<div class="text-center">
-					<img src="{{$photo}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+	      @if(Auth::check()&&!empty(Auth::user()->profile->photo))
+				<img src="data:image/png;base64,<?= Auth::user()->profile->photo ?>" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+				@else
+				<img src="{{asset('img/no_image.jpg')}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+				@endif
 				</div>
 				<div>
 				<p class="mb-0 ms-3 me-3" style="font-size:0.8rem;">
