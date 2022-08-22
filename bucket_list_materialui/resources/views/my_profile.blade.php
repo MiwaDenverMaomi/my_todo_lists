@@ -84,7 +84,7 @@
 			<div class="col-lg-4 mx-auto">
 				<div class="mx-auto mb-2">
 				@php
-				$src=!empty($user_data['profile']['photo'])?"data:image/png;base64,<?= $user_data['profile']['photo']?>":asset('img/no_image.jpg');
+				$src=!empty($user_data['profile']['photo'])?`data:image/png;base64,<?= ${$user_data['profile']['photo']}?>`:asset('img/no_image.jpg');
 				@endphp
 				<img src="{{$src}}" class="rounded-circle mx-auto d-block position-pic  border-pic" alt="{{$user_data['name'].'_photo'}}" width="100" height="100" >
 				</div>
