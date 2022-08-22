@@ -19,7 +19,11 @@
 				<div class="mx-auto mb-2 round-circle" id="photo_frame" width="100" height="100" >
 				<label class="btn" style="display:block;width:100px; height:100px; margin:0 auto 24px; border-radius:50%;";>
 					<input type="file" name="photo" accept=".png, .jpeg, .jpg" id="input_photo" onchange="onHandleSelectPhoto('{{$user_data['name']}}')" width="100" height="100" class="round-circle opacity-0" style="position:relative; bottom:24px" >
-			 	<img id="photo_preview_image" src="{{!empty($user_data['profile']['photo'])?asset($user_data['profile']['photo']):asset('img/no_image.jpg')}}" class="rounded-circle mx-auto d-block position-pic border-pic" style="position:relative; bottom:37px;right:13px;" alt="{{$user_data['name'].'_photo'}}" width="100" height="100">
+				@if(!empty($user_data['profile']['photo']))
+				<img id="photo_preview_image" src="data:image/png;base64,<?= $user_data['profile']['photo'] ?>" class="rounded-circle mx-auto d-block position-pic border-pic" style="position:relative; bottom:37px;right:13px;" alt="{{$user_data['name'].'_photo'}}" width="100" height="100">
+				@else
+				<img id="photo_preview_image" src="{{asset('img/no_image.jpg')}}" class="rounded-circle mx-auto d-block position-pic border-pic" style="position:relative; bottom:37px;right:13px;" alt="{{$user_data['name'].'_photo'}}" width="100" height="100">
+				@endif
 				</label>
 				</div>
 				<div class="mb-3">
