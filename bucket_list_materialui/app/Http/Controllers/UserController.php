@@ -156,10 +156,11 @@ class UserController extends Controller
 
 		 if(!empty($request->file('photo'))){
 			//if photo was selected
-			$dir='user_photo';
-			$file_name=$request->file('photo')->getClientOriginalName();
-		  $request->file('photo')->storeAs('public/img/uploads/'.$dir,$file_name);
-		  $photo_path='storage/img/uploads/'.$dir.'/'.$file_name;
+			// $dir='user_photo';
+			// $file_name=$request->file('photo')->getClientOriginalName();
+		  // $request->file('photo')->storeAs('public/img/uploads/'.$dir,$file_name);
+		  // $photo_path='storage/img/uploads/'.$dir.'/'.$file_name;
+			$photo_path = base64_encode(file_get_contents($request->image->getRealPath()));
 			$result_profile=Profile::updateOrCreate([
 			'user_id'=>$user->id],[
       'photo'=>$photo_path,
@@ -170,6 +171,7 @@ class UserController extends Controller
 
 		 }else{//if photo was not selected
 			$photo_in_db=Profile::where('user_id','=',$user->id)->first();
+
 			if(empty($photo_in_db)){//if profile table has data in 'photo'
 			 $photo_path=null;
 			 $result_profile=Profile::updateOrCreate([
