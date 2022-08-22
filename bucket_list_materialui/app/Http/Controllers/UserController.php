@@ -160,7 +160,7 @@ class UserController extends Controller
 			// $file_name=$request->file('photo')->getClientOriginalName();
 		  // $request->file('photo')->storeAs('public/img/uploads/'.$dir,$file_name);
 		  // $photo_path='storage/img/uploads/'.$dir.'/'.$file_name;
-			$photo_path = base64_encode(file_get_contents($request->image->getRealPath()));
+			$photo_path = base64_encode(file_get_contents($request->photo->getRealPath()));
 			$result_profile=Profile::updateOrCreate([
 			'user_id'=>$user->id],[
       'photo'=>$photo_path,
