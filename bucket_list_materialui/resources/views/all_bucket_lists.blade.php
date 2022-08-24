@@ -26,9 +26,8 @@
     @if(!empty($list['profile']['photo']))
 				<img src="data:image/png;base64,<?= $list['profile']['photo'] ?>" alt="{{!empty($list['name'])?$list['name']:'No name'}}" width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
 		@else
-				<img src="{{asset('img/no_image.jpg')}}" alt="{{!empty($list['name'])?$list['name']:'No name'}}" width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+				<img src="{{asset('img/no_image.jpg')}}" alt="{{!empty($list['name'])?$list['name']:'No name'}}" width="32" height="32" class="rounded-circle flex-shrink-0 position-pic" style="border:1px solid lightgrey">
 		@endif
-
     <div class="d-flex gap-2 w-100 justify-content-between">
       <div>
         <h6 class="mb-0">{{!empty($list['name'])?$list['name']:'No name'}}</h6>
@@ -68,7 +67,7 @@
 						@endforeach
        </ul>
 			    @else
-						<div class="text-center">No Bucket List</div>
+						<div class="text-center">No Todo List</div>
 					@endif
 			 </div>
 				<a href="{{route('user.index',['user'=>$list['id']])}}" class="icon-link d-inline-flex align-items-center see-more">

@@ -18,9 +18,9 @@
 			<div class="text-center mx-auto profile-navbar">
 				<div class="text-center">
 				@if(Auth::check()&&!empty(Auth::user()->profile->photo))
-				<img src="data:image/png;base64,<?= Auth::user()->profile->photo ?>" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+				<img src="data:image/png;base64,<?= Auth::user()->profile->photo ?>" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0 position-pic" style="border:1px solid lightgrey">
 				@else
-				<img src="{{asset('img/no_image.jpg')}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+				<img src="{{asset('img/no_image.jpg')}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0 position-pic" style="border:1px solid lightgrey">
 				@endif
 				</div>
 				<p class="mb-0 ms-3 me-3" style="font-size:0.8rem;">
@@ -102,14 +102,14 @@
 				 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword" value="{{!empty($keyword)?$keyword:''}}">
 				<button class="btn btn-outline-success" type="submit">Search</button>
 			</form>
-			<div class="text-end ms-3 pe-3 d-inline-block" style="position:absolute; right:0; font-size:.8rem;">
+			<div class="text-end ms-3 pe-3 d-inline-block profile-dropdown" style="position:absolute; right:0; font-size:.8rem;">
 	@if(session('is_userinfo_hide')!==true)
-		<div class="text-center profile-dropdown d-flex flex-column">
+		<div class="text-center d-flex flex-column">
 			<div class="text-center">
 	      @if(Auth::check()&&!empty(Auth::user()->profile->photo))
-				<img src="data:image/png;base64,<?= Auth::user()->profile->photo ?>" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+				<img src="data:image/png;base64,<?= Auth::user()->profile->photo ?>" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0 position-pic" style="border:1px solid lightgrey">
 				@else
-				<img src="{{asset('img/no_image.jpg')}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+				<img src="{{asset('img/no_image.jpg')}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0 position-pic" style="border:1px solid lightgrey">
 				@endif
 				</div>
 				<div>
@@ -121,7 +121,7 @@
 					 Guest
 				 @endguest
 			 </p>
-				</div>
+			</div>
 		</div>
 	@endif
 </div>
