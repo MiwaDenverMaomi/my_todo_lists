@@ -19,7 +19,7 @@
 		<div class="mb-3">
 			<div class="text-center mx-auto profile-navbar">
 				<div class="text-center">
-					<img src="{{$photo}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+					<img src="{{$photo}}" alt={{$name}} width="32" height="32" class="rounded-circle flex-shrink-0 position-pic" style="border:1px solid lightgrey">
 				</div>
 				<p class="mb-0 ms-3 me-3" style="font-size:0.8rem;">
 				 @auth

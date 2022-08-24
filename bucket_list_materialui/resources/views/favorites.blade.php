@@ -16,7 +16,7 @@
 			@foreach($favorites as $list)
 			<div class="card pt-3 pb-3  ps-4 pe-4 g-col-4">
 	 <div class="mb-3">
-    <img src="{{!empty($list['user']['profile']['photo'])?asset($list['user']['profile']['photo']):asset('img/no_image.jpg')}}" alt="{{!empty($list['user']['name'])?$list['user']['name']:'No name'}}" width="32" height="32" class="rounded-circle flex-shrink-0" style="border:1px solid lightgrey">
+    <img src="{{!empty($list['user']['profile']['photo'])?asset($list['user']['profile']['photo']):asset('img/no_image.jpg')}}" alt="{{!empty($list['user']['name'])?$list['user']['name']:'No name'}}" width="32" height="32" class="rounded-circle flex-shrink-0 position-pic" style="border:1px solid lightgrey">
     <div class="d-flex gap-2 w-100 justify-content-between">
       <div>
         <h6 class="mb-0">{{!empty($list['user']['name'])?$list['user']['name']:'No name'}}</h6>
