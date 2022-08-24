@@ -43,7 +43,7 @@
 							</span>
 						@endforeach
 					@else
-						<p class="text-center">No Bucket List</p>
+						<p class="text-center">No Todos</p>
 					@endif
 			 </ul>
 			 </div>

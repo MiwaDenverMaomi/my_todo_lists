@@ -63,7 +63,7 @@
 						@endforeach
        </ul>
 			    @else
-						<div class="text-center">No Bucket List</div>
+						<div class="text-center">No Todo List</div>
 					@endif
 			 </div>
 				<a href="{{route('user.index',['user'=>$list['id']])}}" class="icon-link d-inline-flex align-items-center see-more">
