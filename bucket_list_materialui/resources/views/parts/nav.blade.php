@@ -112,7 +112,7 @@
 				@endif
 				</div>
 				<div>
-				<p class="mb-0 ms-3 me-3" style="font-size:0.8rem;">
+				<p class="mb-0 ms-3 me-3" style="font-size:0.8rem;color:white">
 				 @auth
 					 {{!empty(Auth::user()->name)?Auth::user()->name:'No name'}}
 				 @endauth
