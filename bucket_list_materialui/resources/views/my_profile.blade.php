@@ -12,7 +12,7 @@
 				@csrf
 				@method('patch')
 				@error('photo')
-			 <div id="photo_result" class="text-danger">
+			 <div id="photo_result" class="text-danger text-center">
 				 {{$message}}
 			 </div>
 			 @enderror
@@ -25,6 +25,9 @@
 				<img id="photo_preview_image" src="{{asset('img/no_image.jpg')}}" class="rounded-circle mx-auto d-block position-pic border-pic" style="position:relative; bottom:37px;right:13px;" alt="{{$user_data['name'].'_photo'}}" width="100" height="100">
 				@endif
 				</label>
+				<div class="text-center" style="font-size:0.8rem;">
+				 *Upload less than 2MB.
+			 </div>
 				</div>
 				<div class="mb-3">
 				<label for="name" class="form-label">Name</label>
