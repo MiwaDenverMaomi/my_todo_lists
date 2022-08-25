@@ -129,7 +129,12 @@ class UserController extends Controller
 		 ],[
 		"photo.image"=>"Upload image file.",
 		"photo.mimes"=>"Upload jpg or png file.",
+<<<<<<< HEAD
 		"photo.max"=>"Upload the photo within 8MB.",
+=======
+		"photo.dimensions"=>"Maximum width is 2448 px",
+		"photo.max"=>"Upload the photo within 8MB bytes.",
+>>>>>>> intervention
 		"name.string"=>"Data type for name is not valid. ",
 		"name.max"=>"Input name within 255 letters. ",
 		"question_1.string"=>"Data type for answers are not valid. ",
@@ -160,8 +165,9 @@ class UserController extends Controller
 			// $file_name=$request->file('photo')->getClientOriginalName();
 		  // $request->file('photo')->storeAs('public/img/uploads/'.$dir,$file_name);
 		  // $photo_path='storage/img/uploads/'.$dir.'/'.$file_name;
-			$photo_path = base64_encode(file_get_contents($request->photo->getRealPath()));
-			// InterventionImage::make($request->photo)->resize(8192,null,function($constraint){$constraint->aspectRatio();})->save;
+			// $photo_path = base64_encode(file_get_contents($request->photo->getRealPath()));
+			$interventionImage=InterventionImage::make($request->photo)->resize(8192,null,function($constraint){$constraint->aspectRatio();});
+			$photo_path=base64_encode(file_get_coentents($interventionImage->getRealPath()));
 			$result_profile=Profile::updateOrCreate([
 			'user_id'=>$user->id],[
       'photo'=>$photo_path,
