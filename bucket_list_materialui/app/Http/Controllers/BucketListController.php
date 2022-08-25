@@ -272,9 +272,9 @@ public function searchKeyword(Request $request){
 	 $bucket_lists_searched_in_bucket_lists_table=User::with('profile','bucket_lists','likes')->whereHas('bucket_lists',function($q) use($word_array_searched){
 			for($i=0;$i<count($word_array_searched);$i++) {
 				if($i===0){
-					 $q->where('bucket_list_item', 'LIKE', '%'.$word_array_searched[$i].'%');
+					 $q->where('bucket_list_item', 'iLIKE', '%'.$word_array_searched[$i].'%');
 				}else{
-					 $q->orWhere('bucket_list_item', 'LIKE', '%'.$word_array_searched[$i].'%');
+					 $q->orWhere('bucket_list_item', 'iLIKE', '%'.$word_array_searched[$i].'%');
 				}
 
 						}
