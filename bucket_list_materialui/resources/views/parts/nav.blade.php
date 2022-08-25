@@ -40,7 +40,6 @@
 		</div>
 	@endif
 </div>
-
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 				@guest
 				<li class="nav-item">
@@ -102,7 +101,8 @@
 				 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword" value="{{!empty($keyword)?$keyword:''}}">
 				<button class="btn btn-outline-success" type="submit">Search</button>
 			</form>
-			<div class="text-end ms-3 pe-3 d-inline-block" style="position:absolute; right:0; font-size:.8rem; display:none;@media (min-width: 992px) {display: block;}">
+    </div>
+		<div class="text-end ms-3 pe-3 d-inline-block profile-dropdown" style="position:absolute; right:0; font-size:.8rem;">
 	@if(session('is_userinfo_hide')!==true)
 		<div class="text-center d-flex flex-column">
 			<div class="text-center">
@@ -124,7 +124,6 @@
 			</div>
 		</div>
 	@endif
-</div>
 		</div>
 	</div>
 </nav>
