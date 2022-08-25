@@ -283,7 +283,7 @@ public function searchKeyword(Request $request){
 
 	 $query=User::query();
 	 foreach($word_array_searched as $value){
-		$query->orWhere('name','LIKE','%'.$value.'%');
+		$query->orWhere('name','iLIKE','%'.$value.'%');
 	 }
 
 	 $bucket_lists_searched_in_users_table=$query->with('profile','bucket_lists','likes')->select('id','name','email')->get()->sortByDesc('updated_at')->toArray();
