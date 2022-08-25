@@ -102,7 +102,8 @@
 				<button class="btn btn-outline-success" type="submit">Search</button>
 			</form>
     </div>
-		<div class="text-end ms-3 pe-3 d-inline-block profile-dropdown" style="position:absolute; right:0; font-size:.8rem;">
+	</div>
+	<div class="text-end ms-3 pe-3 d-inline-block profile-dropdown" style="position:absolute; right:0; font-size:.8rem;">
 	@if(session('is_userinfo_hide')!==true)
 		<div class="text-center d-flex flex-column">
 			<div class="text-center">
@@ -125,5 +126,4 @@
 		</div>
 	@endif
 		</div>
-	</div>
 </nav>
