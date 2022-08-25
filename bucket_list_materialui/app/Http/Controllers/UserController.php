@@ -11,6 +11,7 @@ use Validator;
 use Auth;
 use App\Models\Bucket_list;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use \InterventionImage;
 
 class UserController extends Controller
 {
@@ -161,6 +162,7 @@ class UserController extends Controller
 		  // $request->file('photo')->storeAs('public/img/uploads/'.$dir,$file_name);
 		  // $photo_path='storage/img/uploads/'.$dir.'/'.$file_name;
 			$photo_path = base64_encode(file_get_contents($request->photo->getRealPath()));
+			// InterventionImage::make($request->photo)->resize(8192,null,function($constraint){$constraint->aspectRatio();})->save;
 			$result_profile=Profile::updateOrCreate([
 			'user_id'=>$user->id],[
       'photo'=>$photo_path,
