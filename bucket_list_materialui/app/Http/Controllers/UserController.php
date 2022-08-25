@@ -121,7 +121,7 @@ class UserController extends Controller
 
     //Validation messages
 		 $validator=Validator::make($request->all(),[
-		"photo"=>'nullable|image|mimes:jpeg,png,jpg|max:8192|dimensions:max_width=2448',//800万画素 8MB
+		"photo"=>'nullable|image|mimes:jpeg,png,jpg|max:8192',//800万画素 8MB
 		"name"=>"nullable|string|max:255",
 		"question_1"=>"nullable|string |max:500",
 		"question_2"=>"nullable|string |max:500",
@@ -129,8 +129,7 @@ class UserController extends Controller
 		 ],[
 		"photo.image"=>"Upload image file.",
 		"photo.mimes"=>"Upload jpg or png file.",
-		"photo.dimensions"=>"Maximum width is 2448 px",
-		"photo.max"=>"Upload the photo within 8192 bytes.",
+		"photo.max"=>"Upload the photo within 8MB.",
 		"name.string"=>"Data type for name is not valid. ",
 		"name.max"=>"Input name within 255 letters. ",
 		"question_1.string"=>"Data type for answers are not valid. ",
