@@ -121,7 +121,7 @@ class UserController extends Controller
 
     //Validation messages
 		 $validator=Validator::make($request->all(),[
-		"photo"=>'nullable|image|mimes:jpeg,png,jpg|max:2048',//800万画素->8MB
+		"photo"=>'max:2048|nullable|image|mimes:jpeg,png,jpg',//800万画素->8MB
 		"name"=>"nullable|string|max:255",
 		"question_1"=>"nullable|string |max:500",
 		"question_2"=>"nullable|string |max:500",
