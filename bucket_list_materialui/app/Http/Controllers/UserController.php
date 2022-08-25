@@ -129,12 +129,8 @@ class UserController extends Controller
 		 ],[
 		"photo.image"=>"Upload image file.",
 		"photo.mimes"=>"Upload jpg or png file.",
-<<<<<<< HEAD
 		"photo.max"=>"Upload the photo within 8MB.",
-=======
-		"photo.dimensions"=>"Maximum width is 2448 px",
 		"photo.max"=>"Upload the photo within 8MB bytes.",
->>>>>>> intervention
 		"name.string"=>"Data type for name is not valid. ",
 		"name.max"=>"Input name within 255 letters. ",
 		"question_1.string"=>"Data type for answers are not valid. ",
